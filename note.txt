@@ -1,0 +1,157 @@
+##Dashboard##
+
+#Lokasi
+ - Kode Lokasi
+ - Nama Lokasi
+ - Alamat
+ - Desa
+ - Kecamatan
+ - Kabupaten
+ - Peruntukan
+ - Kondisi Lahan
+ - Kondisi Pasar
+ - Luas target
+ - Luas Teridentifikasi
+ - Luas Deal
+ - Status (Survey, Pembahasan, Proses Pembahasan, Selesai, Ditolak, Ditunda)
+ - Catatan
+ - Dibuat
+ - Terakhir Diubah
+    #Step 2 - Batas Lokasi (Peta)
+      - Pemetaan Area
+      - Luas Induk 
+      - Total Luas Bidang
+      - Sisa Luas
+      - Bidang Terpetakan
+ 
+#Bidang Tanah
+ - Lokasi Induk
+ - Kode Tanah
+ - Nomor Bidang
+ - Luas
+ - Jenis Hak
+ - Nomor Hak
+ - Status Pembebasan (Teridentifikasi, Deal, Legal Check, Negosiasi, Transaksi, Siap Transaksi, Selesai, Ditunda, Ditolak)
+ - Harga Penawaran
+ - Harga Kesepakatan
+ - Tanggal Kesepakatan
+ - Catatan
+    #Step 2 - Polygon Bidang (Peta)
+      - Checklist Legalitas
+      - Luas Induk 
+      - Total Luas Bidang
+      - Sisa Luas
+      - Bidang Terpetakan
+
+#Pihak/Pemilik
+ - Nama
+ - NIK
+ - Nomor Telp
+ - Tipe Pihak (Pemegang Hak, Ahli Waris, Kuasa, Penguasa, Pihak Lain)
+
+#Project
+ - Kode Project
+ - Nama Project
+ - Lokasi
+ - Desa
+ - Kecamatan
+ - Kabupaten
+ - Status (Perencanaan, Berjalan, Selesai, Dibatalkan)
+ - Keterangan
+
+#Survey
+ - Target Survey (Lokasi, Bidang)
+ - Lokasi (Konek ke lokasi bidang)
+ - Tanggal Survey
+ - PIC Survey
+ - Hasil Survey
+ - Koordinat Lokasi
+ - Catatan
+
+#Pembahasan
+ - Target (Lokasi, Bidang)
+ - Lokasi (Konek ke lokasi bidang)
+ - Tanggal
+ - Peserta
+ - Hasil Pembahasan
+ - Keputusan (Layak, Perlu Kajian, Tidak Layak)
+
+#Legalitas Tanah
+ - Bidang Tanah (Konek ke bidang tanah)
+ - Jenis Dokumen (Sertifikat, SHM, SHGB, AJB, KTP, KK, PBB, SPPT, Girik, Letter C, Surat Waris, Akta Waris, Surat Kuasa, Dokumen Lainnya)
+ - Status (Ada, Belum Ada, Proses, Tidak Relevan, Perlu Verifikasi)
+ - Nomor Dokumen
+ - Tanggal Dokumen
+ - Penerbit
+ - Pihak Terkait (Konek ke pihak/pemilik)
+ - Catatan
+
+#Pembebasan
+ - Rekap Pembebasan
+
+#Arsip
+ - Kode Arsip
+ - Nama Dokumen
+ - Kategori
+ - Jenis Dokumen
+ - Nomor Dokumen
+ - Tanggal Dokumen
+ - Tipe Relasi (Lokasi, Bidang, Project, Umum)
+    #Lokasi Fisik
+      - Gudang
+      - Rak
+      - Box
+      - Folder
+      - Status (Tersedia, Dipinjam, Hilang, Diarsipkan)
+      - Catatan
+
+#Serah Terima
+ - Rekap Peminjaman & Pengembalian serta Cetak STB (Surat Tanda Terima Berkas)
+
+#Pemetaan
+ - Import & Export GeoJSON, SHP ZIP, KML, DXF (Integrasikan Data Berdasarkan Kategori)
+ - Menampilkan Layer Induk
+ - Menampilkan Layer Batas Bidang
+ - Menampilkan Layer Status Pembayaran (Merah)
+ - Menampilkan Layer KKPR (Kesesuaian Kegiatan Pemanfaatan Ruang)
+
+#Laporan
+ - Laporan Progress Pembebasan (PDF)
+ - Laporan Rekapitulasi Bidang
+ - Laporan Rekapitulasi Pihak/Pemilik
+ - Laporan Rekapitulasi Legalitas Tanah
+ - Laporan Rekapitulasi Pembebasan
+ - Laporan Rekapitulasi Arsip
+ - Laporan Rekapitulasi Serah Terima
+ - Laporan Rekapitulasi Pemetaan
+ - Laporan Rekapitulasi Project
+ - Laporan Rekapitulasi Survey
+ - Laporan Rekapitulasi Pembahasan
+
+#Audit Log
+
+#Pengaturan
+ - Profil Saya
+ - Management User (Nama, Email, Password, Role)
+ - Management Akses User Berdasarkan Role dan Menu
+
+
+
+### PROMPT ###
+
+Buatkan issue.md, berisi planning untuk membuat ini:
+
+Buat project baru di folder ini
+
+Menggunakan Buatkan
+
+Dan gunakan dependensi :
+- ElysiaJS
+- Drizzle
+- PostgreSQL
+
+jangan terlalu low level atau detail
+
+Cukup intruksikan secara high level
+
+Nanti documen planning nya akan digunakan oleh Programmer atau model yang lebih murah untuk diimplementasikan
