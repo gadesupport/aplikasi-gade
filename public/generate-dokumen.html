@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Dokumen & Mail Merge - Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --accent: #6366f1;
+      --accent-light: #e0e7ff;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Nav */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1600px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Sub-menu Tabs Header */
+    .submenu-tabs-container {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Card Panels */
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #ffffff;
+    }
+
+    .card-title h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-success:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .btn-outline:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    /* Template Cards Grid */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.25rem;
+      padding: 1.5rem;
+    }
+
+    .tpl-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tpl-card:hover {
+      border-color: #93c5fd;
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .tpl-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-primary { background: #dbeafe; color: #1e40af; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-purple { background: #ede9fe; color: #6d28d9; }
+    .badge-gray { background: #f1f5f9; color: #475569; }
+
+    .tpl-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.35rem;
+    }
+
+    .tpl-code {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .tpl-preview-snippet {
+      font-size: 0.8rem;
+      color: #475569;
+      background: #f8fafc;
+      padding: 0.65rem;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
+      height: 75px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .tpl-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    /* Form Layout */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .col-span-2 {
+      grid-column: span 2;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .form-control {
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    textarea.form-control {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825rem;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    /* Variable Tags Sidebar */
+    .vars-container {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .var-group-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      margin: 0.75rem 0 0.4rem 0;
+      letter-spacing: 0.03em;
+    }
+
+    .var-group-title:first-child {
+      margin-top: 0;
+    }
+
+    .var-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .var-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #1e40af;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.725rem;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .var-chip:hover {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      transform: translateY(-1px);
+    }
+
+    /* Cetak Dokumen Live Split View */
+    .cetak-container {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    /* Two-Page Book Preview Simulator */
+    .book-simulator {
+      background: #334155;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 520px;
+    }
+
+    .book-title-bar {
+      color: #94a3b8;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .book-spread {
+      background: #ffffff;
+      width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      overflow: hidden;
+      min-height: 480px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .book-page {
+      flex: 1;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: #1e293b;
+      overflow-y: auto;
+      background: #ffffff;
+    }
+
+    .book-gutter {
+      width: 24px;
+      background: linear-gradient(to right, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.15);
+      border-left: 1px dashed #94a3b8;
+      border-right: 1px dashed #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .single-page-preview {
+      background: #ffffff;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      padding: 2rem;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #1e293b;
+      min-height: 500px;
+      overflow-y: auto;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn 0.2s ease-out;
+      overflow: hidden;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafafa;
+    }
+
+    .modal-body {
+      padding: 1.5rem 1.75rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #fafafa;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #toast.success { background: #065f46; border: 1px solid #10b981; }
+    #toast.error { background: #991b1b; border: 1px solid #ef4444; }
+
+    @media (max-width: 1024px) {
+      .cetak-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">G</div>
+        <div class="brand-title">
+          <h1>Aplikasi Gade</h1>
+          <p>Generate Dokumen, Mail Merge & Custom Template Surat</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Bidang</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-secondary">⚖️ Legalitas</a>
+        <a href="/pembebasan.html" class="nav-btn nav-btn-secondary">💰 Pembebasan</a>
+        <a href="/pemetaan.html" class="nav-btn nav-btn-secondary">🗺️ Pemetaan</a>
+        <a href="/project.html" class="nav-btn nav-btn-secondary">🏗️ Project</a>
+        <a href="/arsip-legal.html" class="nav-btn nav-btn-secondary">📂 Arsip Legal</a>
+        <a href="/bast.html" class="nav-btn nav-btn-secondary">📑 BAST</a>
+        <a href="/laporan.html" class="nav-btn nav-btn-secondary">📊 Laporan</a>
+        <a href="/generate-dokumen.html" class="nav-btn nav-btn-active">📄 Dokumen</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Sub-menu Tabs -->
+    <div class="submenu-tabs-container">
+      <button class="tab-btn active" data-tab="tab-cetak">
+        <span>🖨️</span> Cetak Dokumen (Mail Merge)
+      </button>
+      <button class="tab-btn" data-tab="tab-templates">
+        <span>📑</span> Template Dokumen (Desain Surat)
+      </button>
+      <button class="tab-btn" data-tab="tab-fields">
+        <span>➕</span> Tambah Data (Custom Fields)
+      </button>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- TAB 1: CETAK DOKUMEN (SUB MENU CETAK) -->
+    <!-- ======================================================= -->
+    <div class="panel active" id="tab-cetak">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2><span>🖨️</span> Cetak Dokumen & Surat Resmi</h2>
+            <p>Pilih template, pilih referensi bidang/lokasi untuk auto-fill data otomatis, dan cetak PDF.</p>
+          </div>
+          <button class="btn btn-success" id="btnProsesCetak">
+            <span>🖨️</span> Cetak PDF Sekarang
+          </button>
+        </div>
+
+        <div class="cetak-container">
+          <!-- Left Column: Selection & Variables Form -->
+          <div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Pilih Template Dokumen</label>
+              <select class="form-control" id="selectCetakTemplate">
+                <!-- Injected dynamically -->
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label>Pilih Data Referensi Bidang Tanah (Auto-Fill)</label>
+              <select class="form-control" id="selectCetakReferensi">
+                <option value="">-- Tanpa Referensi (Isi Manual) --</option>
+                <!-- Injected dynamically -->
+              </select>
+            </div>
+
+            <div style="border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1rem;">
+              <h4 style="font-size: 0.85rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem;">
+                Sesuaikan Nilai Variabel Surat
+              </h4>
+              <div id="dynamicFormFields" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 420px; overflow-y: auto; padding-right: 0.5rem;">
+                <!-- Injected dynamically based on template -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Live Simulator Preview -->
+          <div class="book-simulator">
+            <div class="book-title-bar" id="previewTitleBar">
+              PRATINJAU DOKUMEN: [A4 PORTRAIT]
+            </div>
+
+            <!-- Two-Page Spread View (Shown when TwoPageBook) -->
+            <div class="book-spread" id="twoPageSpread" style="display: none;">
+              <div class="book-page" id="bookLeftPage">
+                <!-- Left page content -->
+              </div>
+              <div class="book-gutter"></div>
+              <div class="book-page" id="bookRightPage">
+                <!-- Right page content -->
+              </div>
+            </div>
+
+            <!-- Single Page View (Standard) -->
+            <div class="single-page-preview" id="singlePageSpread">
+              <!-- Single page content -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- TAB 2: TEMPLATE DOKUMEN (SUB MENU TEMPLATE) -->
+    <!-- ======================================================= -->
+    <div class="panel" id="tab-templates">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2><span>📑</span> Kelola Template Surat & Dokumen</h2>
+            <p>Rancang custom template surat dengan ukuran portrait atau landscape (mendukung mode 2 halaman buku).</p>
+          </div>
+          <button class="btn btn-primary" id="btnTambahTemplate">
+            <span>➕</span> Buat Template Baru
+          </button>
+        </div>
+
+        <div class="template-grid" id="templateGrid">
+          <!-- Template cards injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- TAB 3: TAMBAH DATA (CUSTOM FIELDS) -->
+    <!-- ======================================================= -->
+    <div class="panel" id="tab-fields">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2><span>➕</span> Tambah Data & Referensi Field Kustom</h2>
+            <p>Simpan data baru yang belum ada di database sistem (misal: Nama Lurah, No SK, Penilai) agar dapat disisipkan ke template dokumen.</p>
+          </div>
+          <button class="btn btn-primary" id="btnTambahField">
+            <span>➕</span> Tambah Field Baru
+          </button>
+        </div>
+
+        <div style="padding: 1.5rem;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.75rem; text-transform: uppercase;">
+                <th style="padding: 0.75rem 1rem;">Kode Field (Variabel)</th>
+                <th style="padding: 0.75rem 1rem;">Nama Field</th>
+                <th style="padding: 0.75rem 1rem;">Tipe Data</th>
+                <th style="padding: 0.75rem 1rem;">Nilai Default</th>
+                <th style="padding: 0.75rem 1rem;">Keterangan</th>
+                <th style="padding: 0.75rem 1rem; text-align: right;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="fieldTableBody">
+              <!-- Custom fields injected dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Buat/Edit Template -->
+  <div class="modal-backdrop" id="templateModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="tplModalTitle">Buat Template Dokumen Baru</h3>
+        <button class="btn-outline" style="padding: 0.2rem 0.5rem;" onclick="closeModal('templateModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="templateForm">
+          <input type="hidden" id="tplId">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Kode Template (Unik)</label>
+              <input type="text" class="form-control" id="tplKode" placeholder="cth: TPL-SPPHT-02" required>
+            </div>
+            <div class="form-group">
+              <label>Nama Template Surat</label>
+              <input type="text" class="form-control" id="tplNama" placeholder="cth: Surat Pernyataan Pelepasan Hak" required>
+            </div>
+            <div class="form-group">
+              <label>Kategori</label>
+              <input type="text" class="form-control" id="tplKategori" placeholder="cth: Surat Pernyataan / Berita Acara">
+            </div>
+            <div class="form-group">
+              <label>Ukuran Kertas</label>
+              <select class="form-control" id="tplUkuran">
+                <option value="A4">A4 (210 x 297 mm)</option>
+                <option value="F4">F4 / Folio (215 x 330 mm)</option>
+                <option value="Legal">Legal (216 x 356 mm)</option>
+                <option value="Letter">Letter</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Orientasi Cetak</label>
+              <select class="form-control" id="tplOrientasi">
+                <option value="Portrait">Portrait (Tegak)</option>
+                <option value="Landscape">Landscape (Mendatar)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Model Layout Halaman</label>
+              <select class="form-control" id="tplLayoutMode">
+                <option value="Single">Single Page (Standar 1 Halaman Berurutan)</option>
+                <option value="TwoPageBook">2 Halaman Buku (Format Landscape Side-by-Side)</option>
+              </select>
+            </div>
+
+            <!-- Kop / Header -->
+            <div class="form-group col-span-2">
+              <label>Header / Kop Surat (Opsional)</label>
+              <input type="text" class="form-control" id="tplHeader" placeholder="cth: PEMERINTAH KABUPATEN BOGOR - TIM PENGADAAN TANAH">
+            </div>
+
+            <!-- Variable Placeholder Chips Helper -->
+            <div class="form-group col-span-2">
+              <label>Daftar Variabel Tersedia (Klik untuk Menempelkan ke Teks):</label>
+              <div class="vars-container" id="modalVarsContainer">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <!-- Isi Halaman 1 / Kiri -->
+            <div class="form-group col-span-2" id="groupHalaman1">
+              <label id="lblHalaman1">Isi Dokumen Template</label>
+              <textarea class="form-control" id="tplIsi1" rows="9" placeholder="Tulis isi surat di sini. Gunakan {{namaPemilik}}, {{luas}}, dll..." required></textarea>
+            </div>
+
+            <!-- Isi Halaman 2 / Kanan (Khusus TwoPageBook) -->
+            <div class="form-group col-span-2" id="groupHalaman2" style="display: none;">
+              <label style="color: #1e40af; font-weight: 700;">Isi Dokumen Halaman Kanan (Halaman 2 Buku)</label>
+              <textarea class="form-control" id="tplIsi2" rows="9" placeholder="Tulis kelanjutan isi surat untuk halaman kanan buku..."></textarea>
+            </div>
+
+            <!-- Footer -->
+            <div class="form-group col-span-2">
+              <label>Footer / Catatan Kaki (Opsional)</label>
+              <input type="text" class="form-control" id="tplFooter" placeholder="cth: Dicetak oleh Sistem Aplikasi Gade">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('templateModal')">Batal</button>
+        <button class="btn btn-primary" id="btnSimpanTemplate">Simpan Template</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Custom Field -->
+  <div class="modal-backdrop" id="fieldModal">
+    <div class="modal-box" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>Tambah Data / Field Kustom Baru</h3>
+        <button class="btn-outline" style="padding: 0.2rem 0.5rem;" onclick="closeModal('fieldModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="fieldForm">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Kode Field (Nama Variabel)</label>
+            <input type="text" class="form-control" id="fieldKode" placeholder="cth: custom_nama_lurah" required>
+            <small style="color: var(--text-muted); font-size: 0.725rem;">Otomatis akan menjadi placeholder {{kode_field}}</small>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Nama / Label Field</label>
+            <input type="text" class="form-control" id="fieldNama" placeholder="cth: Nama Kepala Kelurahan / Desa" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Tipe Data</label>
+            <select class="form-control" id="fieldTipe">
+              <option value="text">Teks Singkat</option>
+              <option value="textarea">Teks Panjang</option>
+              <option value="number">Angka</option>
+              <option value="date">Tanggal</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Nilai Default (Opsional)</label>
+            <input type="text" class="form-control" id="fieldDefault" placeholder="cth: Drs. H. Ahmad Subarkah">
+          </div>
+          <div class="form-group">
+            <label>Keterangan Field</label>
+            <input type="text" class="form-control" id="fieldKet" placeholder="cth: Pejabat penandatangan berkas">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('fieldModal')">Batal</button>
+        <button class="btn btn-primary" id="btnSimpanField">Simpan Field</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast">Notifikasi</div>
+
+  <script>
+    let allTemplates = [];
+    let allFields = [];
+    let referenceData = { lokasi: [], bidang: [], projects: [] };
+    let currentActiveFieldTarget = 'tplIsi1';
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = type;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    // Submenu Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.getAttribute('data-tab');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    // Load All Data
+    async function init() {
+      await loadFields();
+      await loadTemplates();
+      await loadReferenceData();
+      await loadPlaceholdersHelper();
+      updateCetakView();
+    }
+
+    // Load Custom Fields
+    async function loadFields() {
+      try {
+        const res = await fetch('/api/generate-dokumen/fields');
+        const json = await res.json();
+        if (json.success) {
+          allFields = json.data;
+          renderFieldTable(allFields);
+        }
+      } catch (err) {
+        console.error('Error loading fields:', err);
+      }
+    }
+
+    function renderFieldTable(fields) {
+      const tbody = document.getElementById('fieldTableBody');
+      if (fields.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #64748b;">Belum ada field custom. Klik "Tambah Field Baru" untuk membuat field.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = fields.map(f => `
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 0.85rem 1rem;"><code>{{${f.kodeField}}}</code></td>
+          <td style="padding: 0.85rem 1rem;"><strong>${f.namaField}</strong></td>
+          <td style="padding: 0.85rem 1rem;"><span class="badge badge-gray">${f.tipeData}</span></td>
+          <td style="padding: 0.85rem 1rem;">${f.defaultValue || '-'}</td>
+          <td style="padding: 0.85rem 1rem; color: #64748b;">${f.keterangan || '-'}</td>
+          <td style="padding: 0.85rem 1rem; text-align: right;">
+            <button class="btn btn-danger" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="deleteField(${f.id})">Hapus</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Load Templates
+    async function loadTemplates() {
+      try {
+        const res = await fetch('/api/generate-dokumen/templates');
+        const json = await res.json();
+        if (json.success) {
+          allTemplates = json.data;
+          renderTemplateGrid(allTemplates);
+          renderCetakTemplateOptions(allTemplates);
+        }
+      } catch (err) {
+        console.error('Error loading templates:', err);
+      }
+    }
+
+    function renderTemplateGrid(templates) {
+      const grid = document.getElementById('templateGrid');
+      if (templates.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">Belum ada template dokumen.</div>`;
+        return;
+      }
+
+      grid.innerHTML = templates.map(t => {
+        const isBook = t.orientasi === 'Landscape' && t.layoutMode === 'TwoPageBook';
+        return `
+          <div class="tpl-card">
+            <div>
+              <div class="tpl-badge-row">
+                <span class="badge badge-primary">${t.ukuranKertas}</span>
+                <span class="badge ${t.orientasi === 'Landscape' ? 'badge-purple' : 'badge-gray'}">${t.orientasi}</span>
+                ${isBook ? '<span class="badge badge-success">📖 2 Halaman Buku</span>' : '<span class="badge badge-gray">Single</span>'}
+              </div>
+              <div class="tpl-name">${t.namaTemplate}</div>
+              <div class="tpl-code">${t.kodeTemplate}</div>
+              <div class="tpl-preview-snippet">${t.isiTemplate.replace(/</g, '&lt;')}</div>
+            </div>
+            <div class="tpl-actions">
+              <button class="btn btn-outline" onclick="selectAndPrintTemplate(${t.id})">🖨️ Cetak</button>
+              <button class="btn btn-danger" style="padding: 0.4rem 0.7rem;" onclick="deleteTemplate(${t.id})">Hapus</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCetakTemplateOptions(templates) {
+      const select = document.getElementById('selectCetakTemplate');
+      select.innerHTML = templates.map(t => `
+        <option value="${t.id}">${t.namaTemplate} (${t.ukuranKertas} - ${t.orientasi}${t.layoutMode === 'TwoPageBook' ? ' - 2 Halaman Buku' : ''})</option>
+      `).join('');
+    }
+
+    // Load Reference Data
+    async function loadReferenceData() {
+      try {
+        const res = await fetch('/api/generate-dokumen/reference-data');
+        const json = await res.json();
+        if (json.success) {
+          referenceData = json.data;
+          renderReferenceOptions(referenceData.bidang);
+        }
+      } catch (err) {
+        console.error('Error loading reference data:', err);
+      }
+    }
+
+    function renderReferenceOptions(bidangList) {
+      const select = document.getElementById('selectCetakReferensi');
+      select.innerHTML = `<option value="">-- Tanpa Referensi (Isi Manual) --</option>` +
+        bidangList.map(b => `
+          <option value="${b.kodeTanah}">${b.kodeTanah} - ${b.nomorBidang} (${b.namaPemilik} - ${b.namaLokasi})</option>
+        `).join('');
+    }
+
+    // Load Available Placeholders in Modal Helper
+    async function loadPlaceholdersHelper() {
+      try {
+        const res = await fetch('/api/generate-dokumen/available-placeholders');
+        const json = await res.json();
+        if (json.success) {
+          const container = document.getElementById('modalVarsContainer');
+          container.innerHTML = json.data.map(group => `
+            <div class="var-group-title">${group.category}</div>
+            <div class="var-chips">
+              ${group.items.map(item => `
+                <span class="var-chip" onclick="insertPlaceholderToEditor('{{${item.key}}}')" title="${item.label}">
+                  {{${item.key}}}
+                </span>
+              `).join('')}
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error loading placeholders:', err);
+      }
+    }
+
+    // Helper: Insert placeholder at cursor into textarea
+    function insertPlaceholderToEditor(text) {
+      const textarea = document.getElementById(currentActiveFieldTarget);
+      if (!textarea) return;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const val = textarea.value;
+      textarea.value = val.substring(0, start) + text + val.substring(end);
+      textarea.focus();
+      textarea.selectionStart = textarea.selectionEnd = start + text.length;
+    }
+
+    document.getElementById('tplIsi1').addEventListener('focus', () => { currentActiveFieldTarget = 'tplIsi1'; });
+    document.getElementById('tplIsi2').addEventListener('focus', () => { currentActiveFieldTarget = 'tplIsi2'; });
+
+    // Handle Layout Mode & Orientation change in Modal
+    function updateLayoutModeVisibility() {
+      const orientasi = document.getElementById('tplOrientasi').value;
+      const layoutMode = document.getElementById('tplLayoutMode').value;
+      const group2 = document.getElementById('groupHalaman2');
+      const lbl1 = document.getElementById('lblHalaman1');
+
+      if (orientasi === 'Landscape' && layoutMode === 'TwoPageBook') {
+        group2.style.display = 'block';
+        lbl1.textContent = 'Isi Dokumen Halaman Kiri (Halaman 1 Buku)';
+      } else {
+        group2.style.display = 'none';
+        lbl1.textContent = 'Isi Dokumen Template';
+      }
+    }
+
+    document.getElementById('tplOrientasi').addEventListener('change', updateLayoutModeVisibility);
+    document.getElementById('tplLayoutMode').addEventListener('change', updateLayoutModeVisibility);
+
+    // Save New Template
+    document.getElementById('btnTambahTemplate').addEventListener('click', () => {
+      document.getElementById('templateForm').reset();
+      document.getElementById('tplId').value = '';
+      document.getElementById('tplKode').value = `TPL-${Date.now().toString().slice(-4)}`;
+      updateLayoutModeVisibility();
+      openModal('templateModal');
+    });
+
+    document.getElementById('btnSimpanTemplate').addEventListener('click', async () => {
+      const payload = {
+        kodeTemplate: document.getElementById('tplKode').value.trim(),
+        namaTemplate: document.getElementById('tplNama').value.trim(),
+        kategori: document.getElementById('tplKategori').value.trim() || 'Umum',
+        ukuranKertas: document.getElementById('tplUkuran').value,
+        orientasi: document.getElementById('tplOrientasi').value,
+        layoutMode: document.getElementById('tplLayoutMode').value,
+        headerText: document.getElementById('tplHeader').value.trim() || null,
+        isiTemplate: document.getElementById('tplIsi1').value.trim(),
+        isiTemplateHalaman2: document.getElementById('tplIsi2').value.trim() || null,
+        footerText: document.getElementById('tplFooter').value.trim() || null,
+      };
+
+      if (!payload.kodeTemplate || !payload.namaTemplate || !payload.isiTemplate) {
+        showToast('Lengkapi Kode, Nama, dan Isi Template!', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/generate-dokumen/templates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Template berhasil disimpan');
+          closeModal('templateModal');
+          loadTemplates();
+        } else {
+          showToast(json.message || 'Gagal menyimpan template', 'error');
+        }
+      } catch (err) {
+        showToast('Terjadi kesalahan koneksi', 'error');
+      }
+    });
+
+    async function deleteTemplate(id) {
+      if (!confirm('Yakin ingin menghapus template dokumen ini?')) return;
+      try {
+        const res = await fetch(`/api/generate-dokumen/templates/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Template berhasil dihapus');
+          loadTemplates();
+        }
+      } catch (err) {
+        showToast('Gagal menghapus template', 'error');
+      }
+    }
+
+    // Save Custom Field
+    document.getElementById('btnTambahField').addEventListener('click', () => {
+      document.getElementById('fieldForm').reset();
+      openModal('fieldModal');
+    });
+
+    document.getElementById('btnSimpanField').addEventListener('click', async () => {
+      const payload = {
+        kodeField: document.getElementById('fieldKode').value.trim(),
+        namaField: document.getElementById('fieldNama').value.trim(),
+        tipeData: document.getElementById('fieldTipe').value,
+        defaultValue: document.getElementById('fieldDefault').value.trim(),
+        keterangan: document.getElementById('fieldKet').value.trim(),
+      };
+
+      if (!payload.kodeField || !payload.namaField) {
+        showToast('Kode dan Nama Field wajib diisi!', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/generate-dokumen/fields', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Custom field berhasil ditambahkan');
+          closeModal('fieldModal');
+          loadFields();
+          loadPlaceholdersHelper();
+        } else {
+          showToast(json.message || 'Gagal menyimpan field', 'error');
+        }
+      } catch (err) {
+        showToast('Terjadi kesalahan koneksi', 'error');
+      }
+    });
+
+    async function deleteField(id) {
+      if (!confirm('Hapus custom field ini?')) return;
+      try {
+        const res = await fetch(`/api/generate-dokumen/fields/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Field berhasil dihapus');
+          loadFields();
+          loadPlaceholdersHelper();
+        }
+      } catch (err) {
+        showToast('Gagal menghapus field', 'error');
+      }
+    }
+
+    // =======================================================
+    // CETAK DOKUMEN & LIVE PREVIEW ENGINE
+    // =======================================================
+    let currentFieldValues = {};
+
+    function selectAndPrintTemplate(tplId) {
+      document.querySelector('[data-tab="tab-cetak"]').click();
+      document.getElementById('selectCetakTemplate').value = tplId;
+      updateCetakView();
+    }
+
+    document.getElementById('selectCetakTemplate').addEventListener('change', updateCetakView);
+    document.getElementById('selectCetakReferensi').addEventListener('change', autoFillFromReference);
+
+    function autoFillFromReference() {
+      const kodeTanah = document.getElementById('selectCetakReferensi').value;
+      if (!kodeTanah) {
+        updateCetakView();
+        return;
+      }
+
+      const match = referenceData.bidang.find(b => b.kodeTanah === kodeTanah);
+      if (match) {
+        Object.keys(match).forEach(k => {
+          currentFieldValues[k] = match[k];
+        });
+      }
+      updateCetakView();
+    }
+
+    async function updateCetakView() {
+      const tplId = Number(document.getElementById('selectCetakTemplate').value);
+      if (!tplId) return;
+
+      const template = allTemplates.find(t => t.id === tplId);
+      if (!template) return;
+
+      const isTwoPage = template.orientasi === 'Landscape' && template.layoutMode === 'TwoPageBook';
+      document.getElementById('previewTitleBar').textContent = `PRATINJAU DOKUMEN: [${template.ukuranKertas.toUpperCase()} ${template.orientasi.toUpperCase()}${isTwoPage ? ' - MODEL BUKU 2 HALAMAN' : ''}]`;
+
+      // Extract all placeholders {{xyz}} from isiTemplate & isiTemplateHalaman2 & footerText
+      const allText = `${template.headerText || ''} ${template.isiTemplate} ${template.isiTemplateHalaman2 || ''} ${template.footerText || ''}`;
+      const matches = Array.from(allText.matchAll(/\{\{\s*([a-zA-Z0-9_\-]+)\s*\}\}/g)).map(m => m[1]);
+      const uniqueKeys = Array.from(new Set(matches));
+
+      // Inject into dynamicFormFields
+      const formContainer = document.getElementById('dynamicFormFields');
+      formContainer.innerHTML = uniqueKeys.map(key => {
+        const val = currentFieldValues[key] !== undefined ? currentFieldValues[key] : '';
+        return `
+          <div class="form-group">
+            <label style="font-size: 0.75rem; color: #475569;">{{${key}}}</label>
+            <input type="text" class="form-control dynamic-input" data-key="${key}" value="${val}" placeholder="Isi nilai untuk {{${key}}}">
+          </div>
+        `;
+      }).join('');
+
+      // Attach event listeners to live update preview
+      document.querySelectorAll('.dynamic-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const k = e.target.getAttribute('data-key');
+          currentFieldValues[k] = e.target.value;
+          triggerLivePreview(template);
+        });
+      });
+
+      triggerLivePreview(template);
+    }
+
+    async function triggerLivePreview(template) {
+      const isTwoPage = template.orientasi === 'Landscape' && template.layoutMode === 'TwoPageBook';
+
+      try {
+        const res = await fetch('/api/generate-dokumen/preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idTemplate: template.id,
+            fieldValues: currentFieldValues,
+          }),
+        });
+
+        const json = await res.json();
+        if (json.success && json.data) {
+          const { compiledHeader, compiledPage1, compiledPage2, compiledFooter } = json.data;
+
+          if (isTwoPage) {
+            document.getElementById('twoPageSpread').style.display = 'flex';
+            document.getElementById('singlePageSpread').style.display = 'none';
+
+            document.getElementById('bookLeftPage').innerHTML = `
+              <div style="font-weight: 700; color: #1e40af; border-bottom: 1px solid #bfdbfe; padding-bottom: 0.4rem; margin-bottom: 0.75rem;">
+                ${compiledHeader ? compiledHeader.split('\n')[0] : template.namaTemplate}
+              </div>
+              <div style="white-space: pre-wrap; flex: 1;">${compiledPage1}</div>
+              <div style="font-size: 0.7rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 0.4rem; margin-top: 0.75rem;">
+                Halaman 1 (Kiri)
+              </div>
+            `;
+
+            document.getElementById('bookRightPage').innerHTML = `
+              <div style="font-weight: 700; color: #1e40af; border-bottom: 1px solid #bfdbfe; padding-bottom: 0.4rem; margin-bottom: 0.75rem;">
+                Lanjutan Risalah / Halaman Kanan
+              </div>
+              <div style="white-space: pre-wrap; flex: 1;">${compiledPage2 || compiledPage1}</div>
+              <div style="font-size: 0.7rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 0.4rem; margin-top: 0.75rem; text-align: right;">
+                Halaman 2 (Kanan)
+              </div>
+            `;
+          } else {
+            document.getElementById('twoPageSpread').style.display = 'none';
+            document.getElementById('singlePageSpread').style.display = 'block';
+
+            document.getElementById('singlePageSpread').innerHTML = `
+              ${compiledHeader ? `<div style="text-align: center; font-weight: 700; color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 0.75rem; margin-bottom: 1.25rem; white-space: pre-wrap;">${compiledHeader}</div>` : ''}
+              <div style="white-space: pre-wrap; margin-bottom: 1.5rem;">${compiledPage1}</div>
+              ${compiledFooter ? `<div style="text-align: center; font-size: 0.75rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 0.75rem; white-space: pre-wrap;">${compiledFooter}</div>` : ''}
+            `;
+          }
+        }
+      } catch (err) {
+        console.error('Error generating preview:', err);
+      }
+    }
+
+    // Process Cetak PDF
+    document.getElementById('btnProsesCetak').addEventListener('click', async () => {
+      const tplId = Number(document.getElementById('selectCetakTemplate').value);
+      if (!tplId) {
+        showToast('Pilih template terlebih dahulu', 'error');
+        return;
+      }
+
+      const template = allTemplates.find(t => t.id === tplId);
+      const docName = template ? template.namaTemplate : 'Cetak_Dokumen';
+
+      showToast('Membuat file PDF dokumen...');
+
+      try {
+        const res = await fetch('/api/generate-dokumen/cetak', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idTemplate: tplId,
+            namaDokumen: docName,
+            referensiTipe: 'Bidang',
+            referensiId: currentFieldValues['kodeTanah'] || null,
+            fieldValues: currentFieldValues,
+          }),
+        });
+
+        if (res.ok) {
+          const blob = await res.blob();
+          const pdfUrl = URL.createObjectURL(blob);
+          window.open(pdfUrl, '_blank');
+          showToast('Dokumen PDF berhasil dicetak!');
+        } else {
+          showToast('Gagal mencetak dokumen PDF', 'error');
+        }
+      } catch (err) {
+        showToast('Gagal memproses cetak', 'error');
+      }
+    });
+
+    // Start App
+    init();
+  </script>
+</body>
+</html>
