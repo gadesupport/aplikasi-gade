@@ -68,7 +68,18 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
   bun run db:studio
   ```
 
-## 🌐 Endpoint Dasar
-- `GET /` - Status API & pesan selamat datang
-- `GET /health` - Health check status
-- `GET /api/users` - Contoh query list user via Drizzle
+## 🌐 Endpoint & Antarmuka Tersedia
+
+### Antarmuka Web & Dokumentasi
+- `GET /` & `GET /lokasi.html` - Antarmuka Web interaktif Menu Lokasi (Step 1 Formulir + Step 2 Peta Leaflet Polygon)
+- `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
+- `GET /health` - Health check status API
+
+### Endpoint API Lokasi (`/api/lokasi`)
+- `GET /api/lokasi` - Daftar lokasi (mendukung query `?search=` dan `?status=`)
+- `GET /api/lokasi/:kodeLokasi` - Detail data lokasi berdasarkan Kode Lokasi
+- `POST /api/lokasi` - Tambah lokasi baru (Step 1)
+- `PUT /api/lokasi/:kodeLokasi` - Perbarui informasi lokasi (Step 1)
+- `PATCH /api/lokasi/:kodeLokasi/batas` - Perbarui batas pemetaan polygon, luas induk, dan bidang terpetakan (Step 2)
+- `DELETE /api/lokasi/:kodeLokasi` - Hapus data lokasi
+

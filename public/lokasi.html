@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Lokasi & Pemetaan Batas - Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Leaflet Draw CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+  
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #10b981;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .nav-btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Wizard Steps Bar */
+    .wizard-steps {
+      display: flex;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      gap: 1rem;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-right: 1px solid var(--border);
+      user-select: none;
+    }
+
+    .step-item:last-child {
+      border-right: none;
+    }
+
+    .step-item.active {
+      background: #f0fdf4;
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .step-item.completed {
+      background: #f8fafc;
+    }
+
+    .step-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .step-item.active .step-badge {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .step-item.completed .step-badge {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .step-info h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .step-info p {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+    }
+
+    /* Grid Layout */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    /* Card Box */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafbfc;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge-pill {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+
+    .badge-integration {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* Form Styles */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .label-req {
+      color: #ef4444;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    .form-control[readonly] {
+      background: #f8fafc;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .input-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Actions Bar */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1.5rem;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-light {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .btn-light:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-accent:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.775rem;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .btn-danger:hover {
+      background: #fca5a5;
+    }
+
+    /* Map Interface (Step 2) */
+    #step2-section {
+      display: none;
+    }
+
+    .map-wrapper {
+      position: relative;
+      height: 520px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-stats-bar {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .stat-value {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .stat-value.primary {
+      color: var(--primary);
+    }
+
+    .stat-value.accent {
+      color: var(--accent);
+    }
+
+    .stat-value.warning {
+      color: #d97706;
+    }
+
+    /* Bidang Sub-table in Step 2 */
+    .bidang-table-wrapper {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    .custom-table th {
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .custom-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .custom-table tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-Survey { background: #fef3c7; color: #b45309; }
+    .status-Pembahasan { background: #e0e7ff; color: #3730a3; }
+    .status-Proses-Pembahasan { background: #cffafe; color: #155e75; }
+    .status-Selesai { background: #dcfce7; color: #166534; }
+    .status-Ditolak { background: #fee2e2; color: #991b1b; }
+    .status-Ditunda { background: #f1f5f9; color: #475569; }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Lokasi List View Table */
+    .table-card {
+      margin-top: 2rem;
+    }
+
+    .table-filter-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      min-width: 260px;
+      max-width: 380px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">G</div>
+        <div class="brand-title">
+          <h1>Aplikasi Gade</h1>
+          <p>Sistem Pengadaan & Manajemen Lahan</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary">API Docs (Swagger)</a>
+        <button id="btnNewLokasi" class="nav-btn nav-btn-primary">+ Lokasi Baru</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Step Progress Bar -->
+    <div class="wizard-steps">
+      <div id="stepTab1" class="step-item active" onclick="goToStep(1)">
+        <div class="step-badge" id="badgeStep1">1</div>
+        <div class="step-info">
+          <h3>Step 1 - Informasi Lokasi</h3>
+          <p>Pengisian data identitas & parameter lahan</p>
+        </div>
+      </div>
+      <div id="stepTab2" class="step-item" onclick="goToStep(2)">
+        <div class="step-badge" id="badgeStep2">2</div>
+        <div class="step-info">
+          <h3>Step 2 - Batas Lokasi (Peta)</h3>
+          <p>Pemetaan visual polygon & kalkulasi bidang</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1 SECTION -->
+    <section id="step1-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>Formulir Pendataan Lokasi</span>
+            <span class="badge-pill badge-integration">Kunci Integrasi: Kode Lokasi</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);" id="auditInfo">
+            Mode: Lokasi Baru
+          </div>
+        </div>
+        <div class="card-body">
+          <form id="lokasiForm" onsubmit="event.preventDefault();">
+            <!-- Row 1: Kode, Nama, Status -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="kodeLokasi">Kode Lokasi <span class="label-req">*</span></label>
+                <div style="display: flex; gap: 0.5rem;">
+                  <input type="text" id="kodeLokasi" class="form-control" placeholder="Contoh: LOK-2026-001" required>
+                  <button type="button" class="btn btn-light btn-sm" onclick="generateKode()" title="Generate Kode Otomatis">Auto</button>
+                </div>
+                <span class="input-hint">Kunci unik yang menghubungkan dengan modul Bidang & Pembebasan.</span>
+              </div>
+              <div class="form-group">
+                <label for="namaLokasi">Nama Lokasi <span class="label-req">*</span></label>
+                <input type="text" id="namaLokasi" class="form-control" placeholder="Contoh: Kawasan Pengembangan Sentosa" required>
+              </div>
+              <div class="form-group">
+                <label for="status">Status Progres</label>
+                <select id="status" class="form-control">
+                  <option value="Survey">Survey</option>
+                  <option value="Pembahasan">Pembahasan</option>
+                  <option value="Proses Pembahasan" selected>Proses Pembahasan</option>
+                  <option value="Selesai">Selesai</option>
+                  <option value="Ditolak">Ditolak</option>
+                  <option value="Ditunda">Ditunda</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 2: Alamat, Wilayah -->
+            <div class="form-row">
+              <div class="form-group" style="grid-column: span 1;">
+                <label for="alamat">Alamat Lengkap</label>
+                <input type="text" id="alamat" class="form-control" placeholder="Nama jalan, nomor, RT/RW">
+              </div>
+              <div class="form-group">
+                <label for="desa">Desa / Kelurahan</label>
+                <input type="text" id="desa" class="form-control" placeholder="Contoh: Sukamaju">
+              </div>
+              <div class="form-group">
+                <label for="kecamatan">Kecamatan</label>
+                <input type="text" id="kecamatan" class="form-control" placeholder="Contoh: Cilodong">
+              </div>
+              <div class="form-group">
+                <label for="kabupaten">Kabupaten / Kota</label>
+                <input type="text" id="kabupaten" class="form-control" placeholder="Contoh: Depok">
+              </div>
+            </div>
+
+            <!-- Row 3: Peruntukan, Kondisi Lahan, Kondisi Pasar -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="peruntukan">Peruntukan</label>
+                <input type="text" id="peruntukan" class="form-control" placeholder="Contoh: Komersial, Pergudangan, Perumahan">
+              </div>
+              <div class="form-group">
+                <label for="kondisiLahan">Kondisi Lahan</label>
+                <input type="text" id="kondisiLahan" class="form-control" placeholder="Contoh: Lahan darat datar, siap bangun">
+              </div>
+              <div class="form-group">
+                <label for="kondisiPasar">Kondisi Pasar</label>
+                <input type="text" id="kondisiPasar" class="form-control" placeholder="Contoh: Permintaan tinggi di koridor utama">
+              </div>
+            </div>
+
+            <!-- Row 4: Luas Parameter (Target, Teridentifikasi, Deal) -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="luasTarget">Luas Target (m²)</label>
+                <input type="number" step="0.01" id="luasTarget" class="form-control" placeholder="Contoh: 15000">
+              </div>
+              <div class="form-group">
+                <label for="luasTeridentifikasi">Luas Teridentifikasi (m²)</label>
+                <input type="number" step="0.01" id="luasTeridentifikasi" class="form-control" placeholder="Contoh: 14500">
+              </div>
+              <div class="form-group">
+                <label for="luasDeal">Luas Deal (m²)</label>
+                <input type="number" step="0.01" id="luasDeal" class="form-control" placeholder="Contoh: 12000">
+              </div>
+            </div>
+
+            <!-- Row 5: Catatan -->
+            <div class="form-group">
+              <label for="catatan">Catatan / Keterangan Tambahan</label>
+              <textarea id="catatan" class="form-control" placeholder="Catatan analisa, kendala lapangan, atau pertimbangan tim..."></textarea>
+            </div>
+
+            <!-- Step 1 Actions -->
+            <div class="form-actions">
+              <button type="button" class="btn btn-light" onclick="resetForm()">Reset</button>
+              <button type="button" class="btn btn-primary" onclick="saveLokasi(false)">💾 Simpan (Draft)</button>
+              <button type="button" class="btn btn-accent" onclick="saveLokasi(true)">Lanjut ke Step 2 (Peta) ➔</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2 SECTION (Peta Batas Lokasi) -->
+    <section id="step2-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>Pemetaan Batas Area Lokasi</span>
+            <span id="activeLokasiBadge" class="badge-pill badge-integration">Lokasi: -</span>
+          </div>
+          <div>
+            <button class="btn btn-light btn-sm" onclick="goToStep(1)">⬅ Kembali ke Step 1</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Interactive Map Container -->
+          <div class="map-wrapper">
+            <div id="map"></div>
+            <!-- Dynamic Floating Stats Widget -->
+            <div class="map-stats-bar">
+              <div class="stat-box">
+                <span class="stat-label">Luas Induk</span>
+                <span class="stat-value primary" id="mapLuasInduk">0 m²</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Total Luas Bidang</span>
+                <span class="stat-value accent" id="mapTotalLuasBidang">0 m²</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Sisa Luas</span>
+                <span class="stat-value warning" id="mapSisaLuas">0 m²</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guidance and Drawing Toolbar help -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              💡 <b>Panduan:</b> Gunakan ikon polygon di toolbar sebelah kiri peta untuk mulai menggambar batas area. Luas Induk akan terkalkulasi otomatis.
+            </p>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-light btn-sm" onclick="clearPolygon()">Hapus Polygon</button>
+              <button class="btn btn-light btn-sm" onclick="createSamplePolygon()">Gunakan Contoh Area</button>
+            </div>
+          </div>
+
+          <!-- Sub-Bidang Terpetakan Section -->
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e293b;">Daftar Bidang Terpetakan di Dalam Lokasi</h4>
+              <button class="btn btn-light btn-sm" onclick="toggleAddBidangModal()">+ Tambah Bidang Terpetakan</button>
+            </div>
+
+            <!-- Bidang Input Inline Box (Hidden by default) -->
+            <div id="inlineBidangForm" style="display:none; background: #f8fafc; border: 1px solid var(--border); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+              <div class="form-row" style="margin-bottom: 0.75rem;">
+                <div class="form-group">
+                  <label for="inputKodeBidang">Kode Bidang</label>
+                  <input type="text" id="inputKodeBidang" class="form-control" placeholder="Contoh: BDG-001">
+                </div>
+                <div class="form-group">
+                  <label for="inputNomorBidang">Nomor Bidang / Persil</label>
+                  <input type="text" id="inputNomorBidang" class="form-control" placeholder="Contoh: 001/SKM/2026">
+                </div>
+                <div class="form-group">
+                  <label for="inputLuasBidang">Luas (m²)</label>
+                  <input type="number" id="inputLuasBidang" class="form-control" placeholder="Contoh: 2500">
+                </div>
+                <div class="form-group">
+                  <label for="inputKetBidang">Keterangan</label>
+                  <input type="text" id="inputKetBidang" class="form-control" placeholder="Contoh: Pemilik H. Ahmad">
+                </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button class="btn btn-light btn-sm" onclick="toggleAddBidangModal()">Batal</button>
+                <button class="btn btn-primary btn-sm" onclick="addBidangToList()">Simpan Bidang</button>
+              </div>
+            </div>
+
+            <div class="bidang-table-wrapper">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Kode Bidang</th>
+                    <th>Nomor Bidang</th>
+                    <th>Luas (m²)</th>
+                    <th>Keterangan</th>
+                    <th style="width: 80px; text-align: center;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="bidangTableBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                      Belum ada bidang terpetakan. Klik tombol '+ Tambah Bidang Terpetakan' untuk menambahkan bidang.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step 2 Actions -->
+          <div class="form-actions">
+            <button type="button" class="btn btn-light" onclick="goToStep(1)">⬅ Edit Data Step 1</button>
+            <button type="button" class="btn btn-primary" onclick="saveStep2Batas()">💾 Simpan Pemetaan Batas Lokasi</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLE LIST OF ALL LOKASI -->
+    <div class="card table-card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>Daftar Data Lokasi</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);" id="lokasiCountBadge">
+          Memuat data...
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-filter-bar">
+          <input type="text" id="searchInput" class="form-control search-input" placeholder="🔍 Cari nama lokasi, kode, atau kota..." oninput="debounceSearch()">
+          <select id="filterStatus" class="form-control" style="width: 200px;" onchange="loadLokasiList()">
+            <option value="Semua">Semua Status</option>
+            <option value="Survey">Survey</option>
+            <option value="Pembahasan">Pembahasan</option>
+            <option value="Proses Pembahasan">Proses Pembahasan</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Ditolak">Ditolak</option>
+            <option value="Ditunda">Ditunda</option>
+          </select>
+        </div>
+
+        <div class="bidang-table-wrapper">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Kode Lokasi</th>
+                <th>Nama Lokasi</th>
+                <th>Wilayah</th>
+                <th>Target / Deal</th>
+                <th>Status</th>
+                <th>Batas Peta</th>
+                <th style="width: 150px; text-align: center;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="lokasiTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">Notifikasi berhasil</div>
+
+  <!-- Leaflet JS & Leaflet Draw JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+  <script>
+    // State
+    let currentLokasiKode = '';
+    let isEditMode = false;
+    let currentGeoJson = null;
+    let currentLuasInduk = 0;
+    let bidangList = [];
+    let mapInstance = null;
+    let drawnItemsLayer = null;
+    let drawControl = null;
+
+    // Toast helper
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.background = isError ? '#dc2626' : '#059669';
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    // Step switching
+    function goToStep(step) {
+      if (step === 2 && !currentLokasiKode) {
+        showToast('Silakan isi dan simpan Step 1 terlebih dahulu.', true);
+        return;
+      }
+
+      document.getElementById('step1-section').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('step2-section').style.display = step === 2 ? 'block' : 'none';
+
+      document.getElementById('stepTab1').className = step === 1 ? 'step-item active' : 'step-item completed';
+      document.getElementById('stepTab2').className = step === 2 ? 'step-item active' : 'step-item';
+
+      if (step === 2) {
+        setTimeout(initMapIfNeeded, 200);
+      }
+    }
+
+    // Generate automatic unique Kode Lokasi
+    function generateKode() {
+      const now = new Date();
+      const yr = now.getFullYear();
+      const rand = Math.floor(100 + Math.random() * 900);
+      document.getElementById('kodeLokasi').value = `LOK-${yr}-${rand}`;
+    }
+
+    // Save Lokasi (Step 1)
+    async function saveLokasi(advanceToStep2 = false) {
+      const kode = document.getElementById('kodeLokasi').value.trim();
+      const nama = document.getElementById('namaLokasi').value.trim();
+
+      if (!kode) {
+        showToast('Kode Lokasi wajib diisi.', true);
+        document.getElementById('kodeLokasi').focus();
+        return;
+      }
+      if (!nama) {
+        showToast('Nama Lokasi wajib diisi.', true);
+        document.getElementById('namaLokasi').focus();
+        return;
+      }
+
+      const payload = {
+        kodeLokasi: kode,
+        namaLokasi: nama,
+        alamat: document.getElementById('alamat').value || null,
+        desa: document.getElementById('desa').value || null,
+        kecamatan: document.getElementById('kecamatan').value || null,
+        kabupaten: document.getElementById('kabupaten').value || null,
+        peruntukan: document.getElementById('peruntukan').value || null,
+        kondisiLahan: document.getElementById('kondisiLahan').value || null,
+        kondisiPasar: document.getElementById('kondisiPasar').value || null,
+        luasTarget: document.getElementById('luasTarget').value ? parseFloat(document.getElementById('luasTarget').value) : null,
+        luasTeridentifikasi: document.getElementById('luasTeridentifikasi').value ? parseFloat(document.getElementById('luasTeridentifikasi').value) : null,
+        luasDeal: document.getElementById('luasDeal').value ? parseFloat(document.getElementById('luasDeal').value) : null,
+        status: document.getElementById('status').value,
+        catatan: document.getElementById('catatan').value || null,
+      };
+
+      try {
+        let res;
+        if (isEditMode) {
+          res = await fetch(`/api/lokasi/${encodeURIComponent(kode)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        } else {
+          res = await fetch('/api/lokasi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        }
+
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+          showToast(json.message || 'Gagal menyimpan data lokasi', true);
+          return;
+        }
+
+        showToast(json.message || 'Data lokasi berhasil disimpan');
+        currentLokasiKode = kode;
+        document.getElementById('activeLokasiBadge').textContent = `Lokasi: ${kode} - ${nama}`;
+        document.getElementById('kodeLokasi').setAttribute('readonly', true);
+        isEditMode = true;
+
+        loadLokasiList();
+
+        if (advanceToStep2) {
+          goToStep(2);
+        }
+      } catch (err) {
+        showToast('Error koneksi ke API server: ' + err.message, true);
+      }
+    }
+
+    // Reset Form
+    function resetForm() {
+      document.getElementById('lokasiForm').reset();
+      document.getElementById('kodeLokasi').removeAttribute('readonly');
+      currentLokasiKode = '';
+      isEditMode = false;
+      document.getElementById('auditInfo').textContent = 'Mode: Lokasi Baru';
+      generateKode();
+    }
+
+    // Load list of Lokasi
+    async function loadLokasiList() {
+      const search = document.getElementById('searchInput').value.trim();
+      const status = document.getElementById('filterStatus').value;
+
+      let url = '/api/lokasi?';
+      if (search) url += `search=${encodeURIComponent(search)}&`;
+      if (status) url += `status=${encodeURIComponent(status)}&`;
+
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        if (json.success && json.data) {
+          renderLokasiTable(json.data);
+          document.getElementById('lokasiCountBadge').textContent = `Total: ${json.data.length} lokasi`;
+        }
+      } catch (e) {
+        console.error('Failed to load list:', e);
+      }
+    }
+
+    function renderLokasiTable(list) {
+      const tbody = document.getElementById('lokasiTableBody');
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Tidak ada data lokasi ditemukan.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(item => {
+        const wil = [item.desa, item.kecamatan, item.kabupaten].filter(Boolean).join(', ') || '-';
+        const targetDeal = `${item.luasTarget ? Number(item.luasTarget).toLocaleString('id-ID') : 0} / ${item.luasDeal ? Number(item.luasDeal).toLocaleString('id-ID') : 0} m²`;
+        const hasMap = item.geojson ? '<span style="color:#059669; font-weight:600;">✓ Terpetakan</span>' : '<span style="color:#94a3b8;">- Belum</span>';
+        const statusClass = 'status-' + (item.status || 'Survey').replace(/\s+/g, '-');
+
+        return `
+          <tr>
+            <td style="font-weight:700; color: #0f172a;">${item.kodeLokasi}</td>
+            <td style="font-weight:600;">${item.namaLokasi}</td>
+            <td><small>${wil}</small></td>
+            <td><small>${targetDeal}</small></td>
+            <td><span class="status-badge ${statusClass}">${item.status || 'Survey'}</span></td>
+            <td>${hasMap}</td>
+            <td style="text-align: center;">
+              <button class="btn btn-light btn-sm" onclick="editLokasi('${item.kodeLokasi}')">Edit</button>
+              <button class="btn btn-accent btn-sm" onclick="openMapFor('${item.kodeLokasi}')">Peta</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteLokasi('${item.kodeLokasi}')">Hapus</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function editLokasi(kode) {
+      try {
+        const res = await fetch(`/api/lokasi/${encodeURIComponent(kode)}`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          const item = json.data;
+          document.getElementById('kodeLokasi').value = item.kodeLokasi;
+          document.getElementById('kodeLokasi').setAttribute('readonly', true);
+          document.getElementById('namaLokasi').value = item.namaLokasi || '';
+          document.getElementById('alamat').value = item.alamat || '';
+          document.getElementById('desa').value = item.desa || '';
+          document.getElementById('kecamatan').value = item.kecamatan || '';
+          document.getElementById('kabupaten').value = item.kabupaten || '';
+          document.getElementById('peruntukan').value = item.peruntukan || '';
+          document.getElementById('kondisiLahan').value = item.kondisiLahan || '';
+          document.getElementById('kondisiPasar').value = item.kondisiPasar || '';
+          document.getElementById('luasTarget').value = item.luasTarget || '';
+          document.getElementById('luasTeridentifikasi').value = item.luasTeridentifikasi || '';
+          document.getElementById('luasDeal').value = item.luasDeal || '';
+          document.getElementById('status').value = item.status || 'Survey';
+          document.getElementById('catatan').value = item.catatan || '';
+
+          currentLokasiKode = item.kodeLokasi;
+          isEditMode = true;
+          document.getElementById('auditInfo').textContent = `Dibuat: ${new Date(item.createdAt).toLocaleString('id-ID')}`;
+          document.getElementById('activeLokasiBadge').textContent = `Lokasi: ${item.kodeLokasi} - ${item.namaLokasi}`;
+
+          // Set Step 2 map data
+          currentGeoJson = item.geojson || null;
+          currentLuasInduk = item.luasInduk ? parseFloat(item.luasInduk) : 0;
+          bidangList = item.bidangTerpetakan || [];
+
+          goToStep(1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } catch (err) {
+        showToast('Gagal memuat data lokasi: ' + err.message, true);
+      }
+    }
+
+    async function openMapFor(kode) {
+      await editLokasi(kode);
+      goToStep(2);
+    }
+
+    async function deleteLokasi(kode) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus data lokasi '${kode}'?`)) return;
+
+      try {
+        const res = await fetch(`/api/lokasi/${encodeURIComponent(kode)}`, { method: 'DELETE' });
+        const json = await res.json();
+        showToast(json.message || 'Lokasi berhasil dihapus');
+        if (currentLokasiKode === kode) {
+          resetForm();
+        }
+        loadLokasiList();
+      } catch (err) {
+        showToast('Gagal menghapus: ' + err.message, true);
+      }
+    }
+
+    let searchTimeout = null;
+    function debounceSearch() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(loadLokasiList, 300);
+    }
+
+    // ================= STEP 2: MAP & LEAFLET =================
+    function initMapIfNeeded() {
+      if (mapInstance) {
+        mapInstance.invalidateSize();
+        loadExistingPolygon();
+        updateBidangDisplay();
+        return;
+      }
+
+      // Center map around Jakarta/Depok/Indonesia
+      mapInstance = L.map('map').setView([-6.4160, 106.8300], 15);
+
+      // OpenStreetMap Tile Layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(mapInstance);
+
+      // FeatureGroup for editable items
+      drawnItemsLayer = new L.FeatureGroup();
+      mapInstance.addLayer(drawnItemsLayer);
+
+      // Draw Control
+      drawControl = new L.Control.Draw({
+        edit: {
+          featureGroup: drawnItemsLayer,
+        },
+        draw: {
+          polygon: {
+            allowIntersection: false,
+            showArea: true,
+            drawError: {
+              color: '#e11d48',
+              message: '<strong>Error:</strong> Batas polygon tidak boleh saling berpotongan!'
+            },
+            shapeOptions: {
+              color: '#059669',
+              fillColor: '#10b981',
+              fillOpacity: 0.35,
+            }
+          },
+          rectangle: {
+            shapeOptions: {
+              color: '#059669',
+              fillColor: '#10b981',
+              fillOpacity: 0.35,
+            }
+          },
+          circle: false,
+          circlemarker: false,
+          marker: false,
+          polyline: false,
+        }
+      });
+      mapInstance.addControl(drawControl);
+
+      // Map Draw Events
+      mapInstance.on(L.Draw.Event.CREATED, function (e) {
+        drawnItemsLayer.clearLayers();
+        const layer = e.layer;
+        drawnItemsLayer.addLayer(layer);
+
+        currentGeoJson = layer.toGeoJSON();
+        calculatePolygonArea(layer);
+      });
+
+      mapInstance.on(L.Draw.Event.EDITED, function (e) {
+        const layers = e.layers;
+        layers.eachLayer(function (layer) {
+          currentGeoJson = layer.toGeoJSON();
+          calculatePolygonArea(layer);
+        });
+      });
+
+      mapInstance.on(L.Draw.Event.DELETED, function () {
+        currentGeoJson = null;
+        currentLuasInduk = 0;
+        updateStats();
+      });
+
+      loadExistingPolygon();
+      updateBidangDisplay();
+    }
+
+    // Load existing polygon onto map
+    function loadExistingPolygon() {
+      if (!drawnItemsLayer) return;
+      drawnItemsLayer.clearLayers();
+
+      if (currentGeoJson) {
+        try {
+          const geoLayer = L.geoJSON(currentGeoJson, {
+            style: {
+              color: '#059669',
+              fillColor: '#10b981',
+              fillOpacity: 0.35,
+              weight: 2
+            }
+          });
+          geoLayer.eachLayer(l => drawnItemsLayer.addLayer(l));
+          mapInstance.fitBounds(geoLayer.getBounds(), { padding: [30, 30] });
+          updateStats();
+        } catch (e) {
+          console.warn('Failed to parse saved geojson:', e);
+        }
+      }
+    }
+
+    // Geodesic Area Calculation (Spherical polygon area in m2)
+    function calculatePolygonArea(layer) {
+      let latlngs = layer.getLatLngs();
+      if (Array.isArray(latlngs[0])) {
+        latlngs = latlngs[0];
+      }
+
+      // Calculate area in square meters using spherical polygon formula
+      const areaM2 = computeArea(latlngs);
+      currentLuasInduk = Math.round(areaM2 * 100) / 100;
+      updateStats();
+    }
+
+    function computeArea(latlngs) {
+      const radius = 6378137; // WGS84 earth radius
+      if (latlngs.length < 3) return 0;
+      let area = 0;
+      const d2r = Math.PI / 180;
+
+      for (let i = 0; i < latlngs.length; i++) {
+        const p1 = latlngs[i];
+        const p2 = latlngs[(i + 1) % latlngs.length];
+        area += (p2.lng - p1.lng) * d2r * (2 + Math.sin(p1.lat * d2r) + Math.sin(p2.lat * d2r));
+      }
+      area = Math.abs(area * radius * radius / 2.0);
+      return area;
+    }
+
+    function updateStats() {
+      const totalLuasBidang = bidangList.reduce((acc, b) => acc + (parseFloat(b.luas) || 0), 0);
+      const sisaLuas = Math.max(0, currentLuasInduk - totalLuasBidang);
+
+      document.getElementById('mapLuasInduk').textContent = `${currentLuasInduk.toLocaleString('id-ID')} m²`;
+      document.getElementById('mapTotalLuasBidang').textContent = `${totalLuasBidang.toLocaleString('id-ID')} m²`;
+      document.getElementById('mapSisaLuas').textContent = `${sisaLuas.toLocaleString('id-ID')} m²`;
+    }
+
+    function clearPolygon() {
+      if (drawnItemsLayer) drawnItemsLayer.clearLayers();
+      currentGeoJson = null;
+      currentLuasInduk = 0;
+      updateStats();
+      showToast('Polygon batas area telah dihapus.');
+    }
+
+    function createSamplePolygon() {
+      if (!mapInstance) return;
+      const coords = [
+        [-6.4150, 106.8285],
+        [-6.4150, 106.8325],
+        [-6.4185, 106.8325],
+        [-6.4185, 106.8285],
+      ];
+      const poly = L.polygon(coords, {
+        color: '#059669',
+        fillColor: '#10b981',
+        fillOpacity: 0.35,
+      });
+
+      drawnItemsLayer.clearLayers();
+      drawnItemsLayer.addLayer(poly);
+      currentGeoJson = poly.toGeoJSON();
+      calculatePolygonArea(poly);
+      mapInstance.fitBounds(poly.getBounds(), { padding: [30, 30] });
+      showToast('Contoh area polygon berhasil dimuat.');
+    }
+
+    // Bidang List Management
+    function toggleAddBidangModal() {
+      const box = document.getElementById('inlineBidangForm');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addBidangToList() {
+      const kode = document.getElementById('inputKodeBidang').value.trim();
+      const nomor = document.getElementById('inputNomorBidang').value.trim();
+      const luas = parseFloat(document.getElementById('inputLuasBidang').value);
+      const ket = document.getElementById('inputKetBidang').value.trim();
+
+      if (!luas || luas <= 0) {
+        showToast('Luas bidang harus diisi dengan angka valid (> 0).', true);
+        return;
+      }
+
+      bidangList.push({
+        id: 'bdg-' + Date.now(),
+        kodeBidang: kode || `BDG-${bidangList.length + 1}`,
+        nomorBidang: nomor || '-',
+        luas: luas,
+        keterangan: ket || '-',
+      });
+
+      // Clear inputs
+      document.getElementById('inputKodeBidang').value = '';
+      document.getElementById('inputNomorBidang').value = '';
+      document.getElementById('inputLuasBidang').value = '';
+      document.getElementById('inputKetBidang').value = '';
+      toggleAddBidangModal();
+
+      updateBidangDisplay();
+      showToast('Bidang berhasil ditambahkan.');
+    }
+
+    function removeBidang(index) {
+      bidangList.splice(index, 1);
+      updateBidangDisplay();
+    }
+
+    function updateBidangDisplay() {
+      const tbody = document.getElementById('bidangTableBody');
+      if (!bidangList.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+              Belum ada bidang terpetakan. Klik tombol '+ Tambah Bidang Terpetakan' untuk menambahkan bidang.
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = bidangList.map((b, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td style="font-weight:600;">${b.kodeBidang || '-'}</td>
+            <td>${b.nomorBidang || '-'}</td>
+            <td style="font-weight:700; color:#059669;">${Number(b.luas).toLocaleString('id-ID')} m²</td>
+            <td><small>${b.keterangan || '-'}</small></td>
+            <td style="text-align:center;">
+              <button class="btn btn-danger btn-sm" onclick="removeBidang(${i})">Hapus</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      updateStats();
+    }
+
+    // Save Step 2 Map & Boundaries
+    async function saveStep2Batas() {
+      if (!currentLokasiKode) {
+        showToast('Tidak ada data lokasi aktif. Kembali ke Step 1.', true);
+        return;
+      }
+
+      const totalLuasBidang = bidangList.reduce((acc, b) => acc + (parseFloat(b.luas) || 0), 0);
+      const sisaLuas = Math.max(0, currentLuasInduk - totalLuasBidang);
+
+      const payload = {
+        geojson: currentGeoJson,
+        luasInduk: currentLuasInduk,
+        totalLuasBidang: totalLuasBidang,
+        sisaLuas: sisaLuas,
+        bidangTerpetakan: bidangList,
+      };
+
+      try {
+        const res = await fetch(`/api/lokasi/${encodeURIComponent(currentLokasiKode)}/batas`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Batas lokasi dan pemetaan berhasil disimpan!');
+          loadLokasiList();
+        } else {
+          showToast(json.message || 'Gagal menyimpan batas pemetaan', true);
+        }
+      } catch (err) {
+        showToast('Error koneksi API: ' + err.message, true);
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      generateKode();
+      loadLokasiList();
+
+      document.getElementById('btnNewLokasi').addEventListener('click', () => {
+        resetForm();
+        goToStep(1);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -8,6 +8,13 @@
       "when": 1790412805343,
       "tag": "0000_demonic_landau",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790669258343,
+      "tag": "0001_stiff_the_hood",
+      "breakpoints": true
     }
   ]
 }
