@@ -439,3 +439,68 @@ export const bastDetail = pgTable('bast_detail', {
 export type BastDetail = typeof bastDetail.$inferSelect;
 export type NewBastDetail = typeof bastDetail.$inferInsert;
 
+// ==========================================
+// MODUL GENERATE DOKUMEN
+// ==========================================
+
+export const tipeDataCustomFieldValues = ['text', 'number', 'date', 'textarea'] as const;
+export type TipeDataCustomField = (typeof tipeDataCustomFieldValues)[number];
+
+export const dokumenCustomField = pgTable('dokumen_custom_field', {
+  id: serial('id').primaryKey(),
+  kodeField: varchar('kode_field', { length: 100 }).notNull().unique(),
+  namaField: varchar('nama_field', { length: 255 }).notNull(),
+  tipeData: varchar('tipe_data', { length: 50 }).notNull().default('text'),
+  defaultValue: text('default_value'),
+  keterangan: text('keterangan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type DokumenCustomField = typeof dokumenCustomField.$inferSelect;
+export type NewDokumenCustomField = typeof dokumenCustomField.$inferInsert;
+
+export const ukuranKertasValues = ['A4', 'Legal', 'F4', 'Letter'] as const;
+export type UkuranKertas = (typeof ukuranKertasValues)[number];
+
+export const orientasiDokumenValues = ['Portrait', 'Landscape'] as const;
+export type OrientasiDokumen = (typeof orientasiDokumenValues)[number];
+
+export const layoutModeValues = ['Single', 'TwoPageBook'] as const;
+export type LayoutMode = (typeof layoutModeValues)[number];
+
+export const dokumenTemplate = pgTable('dokumen_template', {
+  id: serial('id').primaryKey(),
+  kodeTemplate: varchar('kode_template', { length: 100 }).notNull().unique(),
+  namaTemplate: varchar('nama_template', { length: 255 }).notNull(),
+  kategori: varchar('kategori', { length: 100 }).notNull().default('Umum'),
+  ukuranKertas: varchar('ukuran_kertas', { length: 50 }).notNull().default('A4'),
+  orientasi: varchar('orientasi', { length: 50 }).notNull().default('Portrait'),
+  layoutMode: varchar('layout_mode', { length: 50 }).notNull().default('Single'), // 'Single' | 'TwoPageBook' (2 halaman buku landscape)
+  headerText: text('header_text'),
+  isiTemplate: text('isi_template').notNull(),
+  isiTemplateHalaman2: text('isi_template_halaman_2'), // Halaman kanan untuk layout buku landscape
+  footerText: text('footer_text'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type DokumenTemplate = typeof dokumenTemplate.$inferSelect;
+export type NewDokumenTemplate = typeof dokumenTemplate.$inferInsert;
+
+export const dokumenCetakLog = pgTable('dokumen_cetak_log', {
+  id: serial('id').primaryKey(),
+  idTemplate: integer('id_template')
+    .notNull()
+    .references(() => dokumenTemplate.id, { onDelete: 'cascade' }),
+  namaDokumen: varchar('nama_dokumen', { length: 255 }).notNull(),
+  referensiTipe: varchar('referensi_tipe', { length: 50 }).notNull().default('Umum'),
+  referensiId: varchar('referensi_id', { length: 100 }),
+  fieldValues: jsonb('field_values'),
+  printedAt: timestamp('printed_at').defaultNow().notNull(),
+});
+
+export type DokumenCetakLog = typeof dokumenCetakLog.$inferSelect;
+export type NewDokumenCetakLog = typeof dokumenCetakLog.$inferInsert;
+
+

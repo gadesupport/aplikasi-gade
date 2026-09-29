@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pusat Laporan & Rekapitulasi - Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success: #059669;
+      --success-dark: #047857;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --accent: #6366f1;
+      --accent-light: #e0e7ff;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Nav */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1600px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+    .stat-info h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    .stat-info p {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 0.15rem;
+    }
+
+    /* Category Nav Tabs */
+    .report-tabs-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .report-tab {
+      padding: 0.55rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #475569;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+
+    .report-tab:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .report-tab.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Report Card Panel */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #ffffff;
+    }
+
+    .card-title h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-pdf {
+      background: #dc2626;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+    }
+
+    .btn-pdf:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+    }
+
+    .btn-excel {
+      background: #059669;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+    }
+
+    .btn-excel:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .btn-outline:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Filter Toolbar */
+    .toolbar {
+      padding: 0.9rem 1.5rem;
+      background: #fafafa;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.5rem 1rem 0.5rem 2.2rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .summary-strip {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.825rem;
+      color: #475569;
+      flex-wrap: wrap;
+    }
+
+    .summary-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .summary-item strong {
+      color: #0f172a;
+    }
+
+    /* Data Table */
+    .table-container {
+      overflow-x: auto;
+      max-height: 600px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    thead th {
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      color: #475569;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      color: #334155;
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-primary { background: #dbeafe; color: #1e40af; }
+    .badge-success { background: #d1fae5; color: #065f46; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-gray { background: #f1f5f9; color: #475569; }
+
+    /* Empty state */
+    .empty-state {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #toast.success { background: #065f46; border: 1px solid #10b981; }
+    #toast.error { background: #991b1b; border: 1px solid #ef4444; }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .card-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">G</div>
+        <div class="brand-title">
+          <h1>Aplikasi Gade</h1>
+          <p>Pusat Laporan, Analisis & Ekspor Data Terpadu</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Bidang</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-secondary">⚖️ Legalitas</a>
+        <a href="/pembebasan.html" class="nav-btn nav-btn-secondary">💰 Pembebasan</a>
+        <a href="/pemetaan.html" class="nav-btn nav-btn-secondary">🗺️ Pemetaan</a>
+        <a href="/project.html" class="nav-btn nav-btn-secondary">🏗️ Project</a>
+        <a href="/arsip-legal.html" class="nav-btn nav-btn-secondary">📂 Arsip Legal</a>
+        <a href="/bast.html" class="nav-btn nav-btn-secondary">📑 BAST</a>
+        <a href="/laporan.html" class="nav-btn nav-btn-active">📊 Laporan</a>
+        <a href="/generate-dokumen.html" class="nav-btn nav-btn-secondary">📄 Dokumen</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Stats Overview Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #e0f2fe; color: #0284c7;">📍</div>
+        <div class="stat-info">
+          <h4>Total Lokasi</h4>
+          <p id="statLokasi">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">🏞️</div>
+        <div class="stat-info">
+          <h4>Total Bidang</h4>
+          <p id="statBidang">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fef3c7; color: #d97706;">👥</div>
+        <div class="stat-info">
+          <h4>Pihak / Pemilik</h4>
+          <p id="statPihak">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #f3e8ff; color: #9333ea;">📂</div>
+        <div class="stat-info">
+          <h4>Arsip Legal</h4>
+          <p id="statArsip">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">💰</div>
+        <div class="stat-info">
+          <h4>Realisasi Dana</h4>
+          <p id="statRealisasi" style="font-size: 1.05rem;">Rp 0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Type Tabs (11 Types) -->
+    <div class="report-tabs-wrapper" id="reportTabs">
+      <button class="report-tab active" data-type="progress-pembebasan">💰 Progress Pembebasan</button>
+      <button class="report-tab" data-type="rekap-lokasi">📍 Rekap Lokasi</button>
+      <button class="report-tab" data-type="rekap-bidang">🏞️ Rekap Bidang</button>
+      <button class="report-tab" data-type="rekap-pihak">👥 Rekap Pihak/Pemilik</button>
+      <button class="report-tab" data-type="rekap-survey">📋 Rekap Survey</button>
+      <button class="report-tab" data-type="rekap-legalitas">⚖️ Rekap Legalitas</button>
+      <button class="report-tab" data-type="rekap-pembahasan">🤝 Rekap Pembahasan</button>
+      <button class="report-tab" data-type="rekap-pemetaan">🗺️ Rekap Pemetaan/KKPR</button>
+      <button class="report-tab" data-type="rekap-project">🏗️ Rekap Project</button>
+      <button class="report-tab" data-type="rekap-arsip">📂 Rekap Arsip Legal</button>
+      <button class="report-tab" data-type="rekap-bast">📑 Rekap Serah Terima (BAST)</button>
+    </div>
+
+    <!-- Main Report Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <h2 id="reportTitle">Laporan Progress Pembebasan Tanah</h2>
+          <p id="reportDesc">Ringkasan realisasi fisik luas lahan, pagu kesepakatan, dan tracking pembayaran pembebasan tanah.</p>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-pdf" id="btnDownloadPdf">
+            <span>📄</span> Cetak PDF
+          </button>
+          <button class="btn btn-excel" id="btnDownloadExcel">
+            <span>📊</span> Export Excel
+          </button>
+          <button class="btn btn-outline" id="btnRefresh">
+            <span>🔄</span> Segarkan
+          </button>
+        </div>
+      </div>
+
+      <!-- Toolbar Search & Summary -->
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Cari data laporan...">
+        </div>
+        <div class="summary-strip" id="summaryStrip">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Data Table View -->
+      <div class="table-container">
+        <table id="reportTable">
+          <thead id="tableHead">
+            <!-- Headers injected dynamically -->
+          </thead>
+          <tbody id="tableBody">
+            <!-- Rows injected dynamically -->
+          </tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="empty-state-icon">📭</div>
+          <h3>Data Laporan Tidak Ditemukan</h3>
+          <p>Belum ada data atau kriteria pencarian tidak cocok.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast">Notifikasi</div>
+
+  <script>
+    let currentReport = 'progress-pembebasan';
+    let currentSearch = '';
+    let reportData = [];
+
+    const reportMeta = {
+      'progress-pembebasan': {
+        title: 'Laporan Progress Pembebasan Tanah',
+        desc: 'Monitoring target vs realisasi luas bidang, pagu anggaran kesepakatan, realisasi pembayaran & sisa kewajiban.',
+        columns: ['Kode Bidang', 'Lokasi Pengadaan', 'No Bidang', 'Luas (m²)', 'Jenis Hak', 'Status', 'Kesepakatan (Rp)', 'Realisasi Bayar (Rp)', 'Sisa (Rp)'],
+      },
+      'rekap-lokasi': {
+        title: 'Laporan Rekapitulasi Lokasi',
+        desc: 'Daftar master seluruh lokasi pengadaan, status tahapan, target luas, dan total bidang terpetakan.',
+        columns: ['Kode Lokasi', 'Nama Lokasi', 'Wilayah (Kec/Kab)', 'Peruntukan', 'Luas Target (m²)', 'Luas Deal (m²)', 'Status', 'Jml Bidang'],
+      },
+      'rekap-bidang': {
+        title: 'Laporan Rekapitulasi Bidang Tanah',
+        desc: 'Inventarisasi seluruh bidang tanah, alas hak kepemilikan, nomor sertifikat, dan harga penawaran.',
+        columns: ['Kode Bidang', 'Lokasi', 'No Bidang', 'Luas (m²)', 'Jenis Hak', 'Nomor Hak', 'Status Pembebasan', 'Pagu Kesepakatan (Rp)'],
+      },
+      'rekap-pihak': {
+        title: 'Laporan Rekapitulasi Pihak / Pemilik Tanah',
+        desc: 'Data pemilik hak, ahli waris, kuasa, identitas NIK, dan relasi kepemilikan bidang tanah.',
+        columns: ['No', 'Nama Pihak / Pemilik', 'NIK / NPWP', 'No. Telepon', 'Tipe Pihak', 'Kode Bidang', 'Lokasi Proyek'],
+      },
+      'rekap-survey': {
+        title: 'Laporan Rekapitulasi Hasil Survey Lapangan',
+        desc: 'Catatan hasil peninjauan fisik lapangan, kondisi patok batas, dan person in charge (PIC) survey.',
+        columns: ['No', 'Target', 'Referensi ID', 'Tanggal Survey', 'Petugas PIC', 'Koordinat GPS', 'Hasil Catatan Survey'],
+      },
+      'rekap-legalitas': {
+        title: 'Laporan Rekapitulasi Legalitas Dokumen Tanah',
+        desc: 'Status kelengkapan warkah, sertifikat asli, AJB, girik, dan instansi penerbit.',
+        columns: ['No', 'Kode Bidang', 'Jenis Dokumen', 'Status Keberadaan', 'Nomor Dokumen', 'Instansi Penerbit', 'Catatan Dokumen'],
+      },
+      'rekap-pembahasan': {
+        title: 'Laporan Rekapitulasi Pembahasan Lahan',
+        desc: 'Riwayat rapat musyawarah, peserta yang hadir, keputusan kelayakan, dan notulensi.',
+        columns: ['No', 'Target', 'Referensi ID', 'Tanggal Rapat', 'Keputusan', 'Peserta Rapat', 'Hasil & Notulensi'],
+      },
+      'rekap-pemetaan': {
+        title: 'Laporan Rekapitulasi Pemetaan & Izin KKPR',
+        desc: 'Rekapitulasi penetapan kesesuaian ruang (KKPR) untuk proses izin berusaha OSS dan batas digitasi.',
+        columns: ['No', 'Kode KKPR', 'Nama Kegiatan / Pemanfaatan', 'Pemohon', 'No Izin OSS', 'Kategori Ruang', 'Luas Rencana (m²)', 'Status KKPR'],
+      },
+      'rekap-project': {
+        title: 'Laporan Rekapitulasi Monitoring Project',
+        desc: 'Daftar seluruh project pengadaan lahan perusahaan, lokasi wilayah, dan target sasaran.',
+        columns: ['No', 'Kode Project', 'Nama Project Lahan', 'Lokasi Wilayah', 'Status Project', 'Keterangan Sasaran'],
+      },
+      'rekap-arsip': {
+        title: 'Laporan Rekapitulasi Arsip Legal & Fisik',
+        desc: 'Master arsip dokumen hukum, lokasi fisik penyimpanan (lemari, rak, bantek, map) dan status ketersediaan.',
+        columns: ['No', 'Kode Arsip', 'Nama Dokumen', 'Kategori', 'Jenis', 'Nomor Dokumen', 'Lokasi Fisik (Lemari/Rak/Bantek)', 'Status Fisik'],
+      },
+      'rekap-bast': {
+        title: 'Laporan Rekapitulasi Serah Terima Dokumen (BAST)',
+        desc: 'Riwayat transaksi peminjaman & pengembalian berkas asli, pihak penyerah, pihak penerima, dan kuantitas dokumen.',
+        columns: ['No', 'Nomor BAST', 'Tanggal', 'Jenis BAST', 'Pihak Penyerah', 'Pihak Penerima', 'Jml Dokumen', 'Keterangan'],
+      },
+    };
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = type;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function formatRupiah(num) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
+    }
+
+    async function loadDashboardStats() {
+      try {
+        const res = await fetch('/api/laporan/dashboard-stats');
+        const json = await res.json();
+        if (json.success && json.stats) {
+          document.getElementById('statLokasi').textContent = json.stats.lokasi;
+          document.getElementById('statBidang').textContent = json.stats.bidang;
+          document.getElementById('statPihak').textContent = json.stats.pihak;
+          document.getElementById('statArsip').textContent = json.stats.arsip;
+          document.getElementById('statRealisasi').textContent = formatRupiah(json.stats.totalRealisasiDana);
+        }
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    async function loadReport(reportType, search = '') {
+      currentReport = reportType;
+      const meta = reportMeta[reportType] || reportMeta['progress-pembebasan'];
+      document.getElementById('reportTitle').textContent = meta.title;
+      document.getElementById('reportDesc').textContent = meta.desc;
+
+      // Update table headers
+      const thead = document.getElementById('tableHead');
+      thead.innerHTML = `<tr>${meta.columns.map(c => `<th>${c}</th>`).join('')}</tr>`;
+
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = `<tr><td colspan="${meta.columns.length}" style="text-align: center; padding: 2rem;">Memuat data laporan...</td></tr>`;
+
+      try {
+        const url = `/api/laporan/${reportType}?format=json${search ? `&search=${encodeURIComponent(search)}` : ''}`;
+        const res = await fetch(url);
+        const json = await res.json();
+
+        if (json.success && Array.isArray(json.data)) {
+          reportData = json.data;
+          renderReportData(reportType, json);
+        } else {
+          tbody.innerHTML = '';
+          document.getElementById('emptyState').style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Error fetching report:', err);
+        tbody.innerHTML = `<tr><td colspan="${meta.columns.length}" style="text-align: center; color: #dc2626; padding: 2rem;">Gagal memuat data laporan.</td></tr>`;
+      }
+    }
+
+    function renderReportData(type, json) {
+      const data = json.data || [];
+      const tbody = document.getElementById('tableBody');
+      const emptyState = document.getElementById('emptyState');
+      const summaryStrip = document.getElementById('summaryStrip');
+
+      if (data.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.style.display = 'block';
+        summaryStrip.innerHTML = '';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      // Summary strip details
+      if (type === 'progress-pembebasan' && json.summary) {
+        summaryStrip.innerHTML = `
+          <div class="summary-item">Total Bidang: <strong>${json.summary.totalBidang}</strong></div>
+          <div class="summary-item">Total Luas: <strong>${Number(json.summary.totalLuas).toLocaleString('id-ID')} m²</strong></div>
+          <div class="summary-item">Pagu Kesepakatan: <strong>${formatRupiah(json.summary.totalAnggaran)}</strong></div>
+          <div class="summary-item">Realisasi: <strong style="color: #059669;">${formatRupiah(json.summary.totalTerbayar)} (${json.summary.persenBayar}%)</strong></div>
+          <div class="summary-item">Sisa: <strong style="color: #dc2626;">${formatRupiah(json.summary.totalSisa)}</strong></div>
+        `;
+      } else {
+        summaryStrip.innerHTML = `<div class="summary-item">Total Rekap: <strong>${data.length} data</strong></div>`;
+      }
+
+      let html = '';
+
+      if (type === 'progress-pembebasan') {
+        html = data.map(d => `
+          <tr>
+            <td><strong>${d.kodeTanah}</strong></td>
+            <td>${d.namaLokasi}</td>
+            <td>${d.nomorBidang}</td>
+            <td>${Number(d.luas).toLocaleString('id-ID')}</td>
+            <td><span class="badge badge-gray">${d.jenisHak}</span></td>
+            <td><span class="badge ${d.statusPembebasan === 'Selesai' ? 'badge-success' : 'badge-primary'}">${d.statusPembebasan}</span></td>
+            <td>${formatRupiah(Number(d.hargaKesepakatan))}</td>
+            <td style="color: #059669; font-weight: 600;">${formatRupiah(Number(d.terbayar))}</td>
+            <td style="color: #dc2626; font-weight: 600;">${formatRupiah(Number(d.sisaBayar))}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-lokasi') {
+        html = data.map(d => `
+          <tr>
+            <td><strong>${d.kodeLokasi}</strong></td>
+            <td><strong>${d.namaLokasi}</strong></td>
+            <td>${d.kecamatan}, ${d.kabupaten}</td>
+            <td>${d.peruntukan}</td>
+            <td>${Number(d.luasTarget).toLocaleString('id-ID')}</td>
+            <td>${Number(d.luasDeal).toLocaleString('id-ID')}</td>
+            <td><span class="badge badge-primary">${d.status}</span></td>
+            <td><span class="badge badge-gray">${d.jumlahBidang} Bidang</span></td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-bidang') {
+        html = data.map(d => `
+          <tr>
+            <td><strong>${d.kodeTanah}</strong></td>
+            <td>${d.namaLokasi}</td>
+            <td>${d.nomorBidang}</td>
+            <td>${Number(d.luas).toLocaleString('id-ID')}</td>
+            <td><span class="badge badge-gray">${d.jenisHak}</span></td>
+            <td>${d.nomorHak}</td>
+            <td><span class="badge badge-primary">${d.statusPembebasan}</span></td>
+            <td>${formatRupiah(Number(d.hargaKesepakatan))}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-pihak') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${d.nama}</strong></td>
+            <td>${d.nik}</td>
+            <td>${d.nomorTelp}</td>
+            <td><span class="badge badge-primary">${d.tipePihak}</span></td>
+            <td>${d.kodeTanah}</td>
+            <td>${d.namaLokasi}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-survey') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><span class="badge badge-gray">${d.targetSurvey}</span></td>
+            <td><strong>${d.referensiId}</strong></td>
+            <td>${d.tanggalSurvey ? new Date(d.tanggalSurvey).toLocaleDateString('id-ID') : '-'}</td>
+            <td>${d.picSurvey}</td>
+            <td><code>${d.koordinat}</code></td>
+            <td>${d.hasilSurvey}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-legalitas') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${d.kodeTanah}</strong></td>
+            <td><span class="badge badge-primary">${d.jenisDokumen}</span></td>
+            <td><span class="badge ${d.status === 'Ada' ? 'badge-success' : 'badge-warning'}">${d.status}</span></td>
+            <td>${d.nomorDokumen}</td>
+            <td>${d.penerbit}</td>
+            <td>${d.catatan}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-pembahasan') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><span class="badge badge-gray">${d.target}</span></td>
+            <td><strong>${d.referensiId}</strong></td>
+            <td>${d.tanggal ? new Date(d.tanggal).toLocaleDateString('id-ID') : '-'}</td>
+            <td><span class="badge ${d.keputusan === 'Layak' ? 'badge-success' : 'badge-warning'}">${d.keputusan}</span></td>
+            <td>${d.peserta}</td>
+            <td>${d.hasilPembahasan}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-pemetaan') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${d.kodeKkpr}</strong></td>
+            <td><strong>${d.namaKegiatan}</strong></td>
+            <td>${d.pemohon}</td>
+            <td>${d.nomorIzin}</td>
+            <td><span class="badge badge-primary">${d.kategori}</span></td>
+            <td>${Number(d.luasRencana).toLocaleString('id-ID')}</td>
+            <td><span class="badge badge-success">${d.status}</span></td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-project') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${d.kodeProject}</strong></td>
+            <td><strong>${d.namaProject}</strong></td>
+            <td>${d.kecamatan}, ${d.kabupaten}</td>
+            <td><span class="badge ${d.status === 'Berjalan' ? 'badge-primary' : 'badge-success'}">${d.status}</span></td>
+            <td>${d.keterangan}</td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-arsip') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${d.kodeArsip}</strong></td>
+            <td><strong>${d.namaDokumen}</strong></td>
+            <td><span class="badge badge-gray">${d.kategori}</span></td>
+            <td>${d.jenisDokumen}</td>
+            <td>${d.nomorDokumen}</td>
+            <td>${d.lemari} / ${d.rak} / ${d.bantek} / ${d.folderMap}</td>
+            <td><span class="badge ${d.statusFisik === 'Tersedia' ? 'badge-success' : 'badge-warning'}">${d.statusFisik}</span></td>
+          </tr>
+        `).join('');
+      } else if (type === 'rekap-bast') {
+        html = data.map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${d.nomorBast}</strong></td>
+            <td>${d.tanggal ? new Date(d.tanggal).toLocaleDateString('id-ID') : '-'}</td>
+            <td><span class="badge ${d.jenis === 'Peminjaman' ? 'badge-primary' : 'badge-success'}">${d.jenis}</span></td>
+            <td>${d.pihakPenyerah}</td>
+            <td>${d.pihakPenerima}</td>
+            <td><span class="badge badge-gray">${d.jumlahDokumen} Dokumen</span></td>
+            <td>${d.keterangan}</td>
+          </tr>
+        `).join('');
+      }
+
+      tbody.innerHTML = html;
+    }
+
+    // Attach Event Handlers
+    document.querySelectorAll('.report-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const type = tab.getAttribute('data-type');
+        document.getElementById('searchInput').value = '';
+        currentSearch = '';
+        loadReport(type);
+      });
+    });
+
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        currentSearch = e.target.value.trim();
+        loadReport(currentReport, currentSearch);
+      }, 300);
+    });
+
+    document.getElementById('btnRefresh').addEventListener('click', () => {
+      loadDashboardStats();
+      loadReport(currentReport, currentSearch);
+      showToast('Data laporan berhasil diperbarui');
+    });
+
+    document.getElementById('btnDownloadPdf').addEventListener('click', () => {
+      const url = `/api/laporan/${currentReport}?format=pdf${currentSearch ? `&search=${encodeURIComponent(currentSearch)}` : ''}`;
+      window.open(url, '_blank');
+      showToast('Mengunduh dokumen PDF...');
+    });
+
+    document.getElementById('btnDownloadExcel').addEventListener('click', () => {
+      const url = `/api/laporan/${currentReport}?format=excel${currentSearch ? `&search=${encodeURIComponent(currentSearch)}` : ''}`;
+      window.location.href = url;
+      showToast('Mengunduh spreadsheet Excel...');
+    });
+
+    // Initialize
+    loadDashboardStats();
+    loadReport('progress-pembebasan');
+  </script>
+</body>
+</html>

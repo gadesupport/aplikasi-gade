@@ -176,4 +176,40 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `PUT /api/arsip-legal/:id` - Perbarui informasi dokumen arsip atau lokasi fisik penyimpanan
 - `DELETE /api/arsip-legal/:id` - Hapus data dokumen arsip
 
+### Endpoint API BAST Berita Acara Serah Terima (`/api/bast`)
+- `GET /api/bast` - Daftar transaksi BAST peminjaman & pengembalian berkas disertai ringkasan statistik
+- `GET /api/bast/arsip-options` - Pilihan dokumen arsip legal yang tersedia untuk diserahterimakan
+- `GET /api/bast/:id` - Detail BAST lengkap dengan daftar dokumen fisik yang dipinjam/dikembalikan
+- `POST /api/bast` - Buat BAST baru (mendukung multi-dokumen dalam 1 cetakan BAST dan otomatis memperbarui status fisik dokumen di arsip legal)
+- `GET /api/bast/:id/cetak` - Cetak file Berita Acara Serah Terima resmi format PDF dilengkapi Digital Signature & QR Code verifikasi keaslian
+
+### Endpoint API Modul Laporan & Rekapitulasi (`/api/laporan`)
+- `GET /api/laporan/dashboard-stats` - Ringkasan metrik statistik agregat dari seluruh modul (Lokasi, Bidang, Pihak, Survey, Legalitas, Pembahasan, Pemetaan, Project, Arsip, BAST, Realisasi Finansial)
+- `GET /api/laporan/progress-pembebasan` - **Laporan Progress Pembebasan Tanah**: Rekapitulasi target vs realisasi luas bidang, pagu kesepakatan, realisasi pembayaran, dan sisa kewajiban (Mendukung export format: `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-lokasi` - Laporan rekapitulasi data lokasi pengadaan (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-bidang` - Laporan rekapitulasi bidang tanah & status kepemilikan (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-pihak` - Laporan rekapitulasi pihak / pemilik tanah (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-survey` - Laporan rekapitulasi hasil survey lapangan (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-legalitas` - Laporan rekapitulasi status kelengkapan dokumen legalitas (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-pembahasan` - Laporan rekapitulasi notulensi & keputusan musyawarah (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-pemetaan` - Laporan rekapitulasi perencanaan kesesuaian ruang KKPR / OSS (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-project` - Laporan rekapitulasi monitoring project lahan (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-arsip` - Laporan rekapitulasi arsip legal dan lokasi penyimpanan fisik lemari/rak/bantek/map (Mendukung `?format=pdf` dan `?format=excel`)
+- `GET /api/laporan/rekap-bast` - Laporan rekapitulasi serah terima berkas (BAST) peminjaman & pengembalian (Mendukung `?format=pdf` dan `?format=excel`)
+
+### Endpoint API Generate Dokumen & Mail Merge (`/api/generate-dokumen`)
+- `GET /api/generate-dokumen/available-placeholders` - Daftar seluruh variabel placeholder dinamis dari sistem (Lokasi, Bidang, Pemilik, Project, Tanggal, Custom Fields)
+- `GET /api/generate-dokumen/reference-data` - Pengambilan data entitas database untuk fungsi auto-fill otomatis saat pengisian surat
+- `GET /api/generate-dokumen/fields` - Daftar seluruh custom field tambahan
+- `POST /api/generate-dokumen/fields` - Tambah data field kustom baru (menyimpan variabel kustom seperti Nama Lurah, No SK, Penilai, dll)
+- `DELETE /api/generate-dokumen/fields/:id` - Hapus data custom field
+- `GET /api/generate-dokumen/templates` - Daftar template dokumen custom
+- `GET /api/generate-dokumen/templates/:id` - Detail satu template dokumen
+- `POST /api/generate-dokumen/templates` - Buat template surat baru (Mendukung ukuran kertas A4, Legal, F4, Letter; orientasi Portrait / Landscape; dan **Layout Mode 2 Halaman Buku (Two-Page Book Spread)**)
+- `PUT /api/generate-dokumen/templates/:id` - Perbarui template dokumen
+- `DELETE /api/generate-dokumen/templates/:id` - Hapus template dokumen
+- `POST /api/generate-dokumen/preview` - Live compilation pratinjau teks sebelum dicetak
+- `POST /api/generate-dokumen/cetak` - **Cetak PDF Dokumen**: Menghasilkan dokumen cetak resmi PDF sesuai orientasi, ukuran kertas, dan tata letak 2 halaman buku berdampingan dengan pembagi lipatan buku, nomor halaman buku, dan catatan kaki.
+
+
 
