@@ -8,6 +8,7 @@ import { lokasiRoutes } from './routes/lokasi';
 import { bidangTanahRoutes } from './routes/bidangTanah';
 import { pihakRoutes } from './routes/pihak';
 import { surveyRoutes } from './routes/survey';
+import { pembahasanRoutes } from './routes/pembahasan';
 
 const app = new Elysia()
   .use(cors())
@@ -17,13 +18,14 @@ const app = new Elysia()
         info: {
           title: 'Aplikasi Gade API Documentation',
           version: '1.0.0',
-          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak & Survey',
+          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey & Pembahasan',
         },
         tags: [
           { name: 'Lokasi', description: 'Endpoints untuk Pengelolaan Lokasi & Pemetaan Area' },
           { name: 'Bidang Tanah', description: 'Endpoints untuk Manajemen Bidang Tanah, Polygon & Legalitas' },
           { name: 'Pihak/Pemilik', description: 'Endpoints untuk Pengelolaan Pihak/Pemilik Terintegrasi Bidang Tanah' },
           { name: 'Survey', description: 'Endpoints untuk Pencatatan & Riwayat Survey Lapangan' },
+          { name: 'Pembahasan', description: 'Endpoints untuk Pengelolaan Notulensi & Keputusan Pembahasan Lahan' },
           { name: 'Users', description: 'Endpoints untuk Manajemen User' },
         ],
       },
@@ -40,6 +42,7 @@ const app = new Elysia()
       bidangTanah: '/bidang-tanah.html',
       pihak: '/pihak.html',
       survey: '/survey.html',
+      pembahasan: '/pembahasan.html',
     },
     timestamp: new Date().toISOString(),
   }))
@@ -51,6 +54,7 @@ const app = new Elysia()
   .use(bidangTanahRoutes)
   .use(pihakRoutes)
   .use(surveyRoutes)
+  .use(pembahasanRoutes)
 
   .group('/api', (app) =>
     app.get('/users', async ({ db }) => {
