@@ -5,6 +5,7 @@ import { staticPlugin } from '@elysiajs/static';
 import { db } from './db';
 import { users } from './db/schema';
 import { lokasiRoutes } from './routes/lokasi';
+import { bidangTanahRoutes } from './routes/bidangTanah';
 
 const app = new Elysia()
   .use(cors())
@@ -18,6 +19,7 @@ const app = new Elysia()
         },
         tags: [
           { name: 'Lokasi', description: 'Endpoints untuk Pengelolaan Lokasi & Pemetaan Area' },
+          { name: 'Bidang Tanah', description: 'Endpoints untuk Manajemen Bidang Tanah, Polygon & Legalitas' },
           { name: 'Users', description: 'Endpoints untuk Manajemen User' },
         ],
       },
@@ -29,7 +31,10 @@ const app = new Elysia()
     status: 'ok',
     message: 'Welcome to Aplikasi Gade API',
     docs: '/swagger',
-    ui: '/lokasi.html',
+    ui: {
+      lokasi: '/lokasi.html',
+      bidangTanah: '/bidang-tanah.html',
+    },
     timestamp: new Date().toISOString(),
   }))
   .get('/health', () => ({
@@ -37,6 +42,8 @@ const app = new Elysia()
     uptime: process.uptime(),
   }))
   .use(lokasiRoutes)
+  .use(bidangTanahRoutes)
+
   .group('/api', (app) =>
     app.get('/users', async ({ db }) => {
       try {

@@ -65,3 +65,55 @@ export type NewUser = typeof users.$inferInsert;
 export type Lokasi = typeof lokasi.$inferSelect;
 export type NewLokasi = typeof lokasi.$inferInsert;
 
+export const statusPembebasanValues = [
+  'Teridentifikasi',
+  'Deal',
+  'Legal Check',
+  'Negosiasi',
+  'Transaksi',
+  'Siap Transaksi',
+  'Selesai',
+  'Ditunda',
+  'Ditolak',
+] as const;
+
+export type StatusPembebasan = (typeof statusPembebasanValues)[number];
+
+export interface LegalitasCheckItem {
+  id: string;
+  namaDokumen: string;
+  status: 'Ada' | 'Belum Ada' | 'Dalam Proses' | 'Tidak Diperlukan';
+  catatan?: string;
+}
+
+export const bidangTanah = pgTable('bidang_tanah', {
+  // Step 1 - Data Identitas & Finansial Bidang Tanah
+  kodeTanah: varchar('kode_tanah', { length: 100 }).primaryKey(),
+  kodeLokasi: varchar('kode_lokasi', { length: 100 })
+    .notNull()
+    .references(() => lokasi.kodeLokasi, { onDelete: 'cascade' }),
+  nomorBidang: varchar('nomor_bidang', { length: 100 }),
+  luas: numeric('luas', { precision: 14, scale: 2 }).notNull(),
+  jenisHak: varchar('jenis_hak', { length: 100 }),
+  nomorHak: varchar('nomor_hak', { length: 150 }),
+  statusPembebasan: varchar('status_pembebasan', { length: 50 })
+    .notNull()
+    .default('Teridentifikasi'),
+  hargaPenawaran: numeric('harga_penawaran', { precision: 18, scale: 2 }),
+  hargaKesepakatan: numeric('harga_kesepakatan', { precision: 18, scale: 2 }),
+  tanggalKesepakatan: timestamp('tanggal_kesepakatan'),
+  catatan: text('catatan'),
+
+  // Step 2 - Polygon Bidang (Peta) & Checklist Legalitas
+  geojson: jsonb('geojson'),
+  checklistLegalitas: jsonb('checklist_legalitas').$type<LegalitasCheckItem[]>(),
+
+  // Audit Timestamps
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type BidangTanah = typeof bidangTanah.$inferSelect;
+export type NewBidangTanah = typeof bidangTanah.$inferInsert;
+
+

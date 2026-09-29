@@ -15,6 +15,13 @@
       "when": 1790669258343,
       "tag": "0001_stiff_the_hood",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790671416972,
+      "tag": "0002_real_talos",
+      "breakpoints": true
     }
   ]
 }

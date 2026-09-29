@@ -26,6 +26,7 @@ Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Lo
       - Sisa Luas
       - Bidang Terpetakan
 -----------------------------------------------------------------
+Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Lokasi yang nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
 #Bidang Tanah
  - Lokasi Induk
  - Kode Tanah
@@ -38,7 +39,8 @@ Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Lo
  - Harga Kesepakatan
  - Tanggal Kesepakatan
  - Catatan
-    #Step 2 - Polygon Bidang (Peta)
+setelah inputan ini terisi user nantinya bisa menyimpan atau melanjutkan ke step 2 untuk membuat batas lokasi di peta
+    #Step 2 - pembuatan Polygon Bidang (Peta)
       - Checklist Legalitas
       - Luas Induk 
       - Total Luas Bidang

@@ -59,16 +59,32 @@ const inMemoryStore: Map<string, Lokasi> = new Map([
   ],
 ]);
 
+let dbAvailable: boolean | null = null;
+let lastDbCheck = 0;
+
 async function checkDbConnection(): Promise<boolean> {
+  const now = Date.now();
+  if (dbAvailable !== null && now - lastDbCheck < 10000) {
+    return dbAvailable;
+  }
+
   try {
-    // Quick test query to see if Postgres is up
     const { client } = await import('../db');
-    await client.unsafe('SELECT 1');
+    const ping = client.unsafe('SELECT 1');
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('DB Timeout')), 150)
+    );
+    await Promise.race([ping, timeout]);
+    dbAvailable = true;
+    lastDbCheck = now;
     return true;
   } catch {
+    dbAvailable = false;
+    lastDbCheck = now;
     return false;
   }
 }
+
 
 export const lokasiRoutes = new Elysia({ prefix: '/api/lokasi' })
   // 1. GET /api/lokasi - List all lokasi with optional filter and search
