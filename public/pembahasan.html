@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Riwayat Survey Lahan | Aplikasi Gade</title>
+  <title>Notulensi & Keputusan Pembahasan Lahan | Aplikasi Gade</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,12 +11,14 @@
   
   <style>
     :root {
-      --primary: #059669;
-      --primary-dark: #047857;
-      --primary-light: #d1fae5;
-      --accent: #0ea5e9;
-      --accent-dark: #0284c7;
-      --accent-light: #e0f2fe;
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #e0e7ff;
+      --accent: #6366f1;
+      --accent-dark: #4f46e5;
+      --accent-light: #e0e7ff;
+      --success: #059669;
+      --success-light: #d1fae5;
       --warning: #d97706;
       --warning-light: #fef3c7;
       --danger: #dc2626;
@@ -77,7 +79,7 @@
     .brand-logo {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
       color: #fff;
       border-radius: 10px;
       display: flex;
@@ -85,7 +87,7 @@
       justify-content: center;
       font-weight: 800;
       font-size: 1.25rem;
-      box-shadow: 0 4px 10px rgba(14, 165, 233, 0.35);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.35);
     }
 
     .brand-title h1 {
@@ -132,20 +134,20 @@
     }
 
     .nav-btn-active {
-      background: var(--accent-light);
-      color: var(--accent-dark);
-      border: 1px solid #bae6fd;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #c7d2fe;
     }
 
     .nav-btn-primary {
-      background: var(--accent);
+      background: var(--primary);
       color: #fff;
       border: none;
-      box-shadow: 0 2px 6px rgba(14, 165, 233, 0.3);
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
     }
 
     .nav-btn-primary:hover {
-      background: var(--accent-dark);
+      background: var(--primary-dark);
     }
 
     .container {
@@ -157,7 +159,7 @@
     /* Stats Grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -205,7 +207,7 @@
       letter-spacing: 0.03em;
     }
 
-    /* Filter & Controls Card */
+    /* Controls Card */
     .controls-card {
       background: #ffffff;
       border: 1px solid var(--border);
@@ -245,14 +247,14 @@
     }
 
     .input-control:focus, .select-control:focus {
-      border-color: var(--accent);
+      border-color: var(--primary);
       background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
     .input-search {
+      min-width: 240px;
       flex: 1;
-      min-width: 220px;
     }
 
     .btn-action-group {
@@ -266,37 +268,37 @@
       border-radius: 8px;
       font-size: 0.875rem;
       font-weight: 600;
-      font-family: inherit;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
       transition: all 0.2s;
       border: 1px solid transparent;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background: var(--accent-dark);
+      font-family: inherit;
     }
 
     .btn-outline {
-      background: #fff;
-      color: #475569;
+      background: #ffffff;
       border-color: var(--border);
+      color: #334155;
     }
     .btn-outline:hover {
-      background: #f8fafc;
+      background: #f1f5f9;
       color: #0f172a;
     }
 
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
     .btn-sm {
-      padding: 0.35rem 0.65rem;
-      font-size: 0.75rem;
-      border-radius: 6px;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
     }
 
     .btn-danger {
@@ -309,7 +311,7 @@
       color: #fff;
     }
 
-    /* Main Table */
+    /* Table Card */
     .table-card {
       background: #ffffff;
       border: 1px solid var(--border);
@@ -382,9 +384,9 @@
       white-space: nowrap;
     }
 
-    .badge-sesuai { background: var(--primary-light); color: var(--primary-dark); border: 1px solid #6ee7b7; }
-    .badge-penyesuaian { background: var(--warning-light); color: var(--warning); border: 1px solid #fcd34d; }
-    .badge-tidak { background: var(--danger-light); color: var(--danger); border: 1px solid #fca5a5; }
+    .badge-layak { background: var(--success-light); color: var(--success); border: 1px solid #6ee7b7; }
+    .badge-perlukajian { background: var(--warning-light); color: var(--warning); border: 1px solid #fcd34d; }
+    .badge-tidaklayak { background: var(--danger-light); color: var(--danger); border: 1px solid #fca5a5; }
     .badge-default { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
 
     .target-badge {
@@ -428,7 +430,7 @@
     .modal-card {
       background: #ffffff;
       border-radius: 16px;
-      max-width: 600px;
+      max-width: 620px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
@@ -522,21 +524,13 @@
 
     .form-control:focus {
       background: #fff;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
     textarea.form-control {
       resize: vertical;
-      min-height: 80px;
-    }
-
-    .input-group {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .input-group .form-control {
-      flex: 1;
+      min-height: 85px;
     }
 
     .modal-footer {
@@ -579,20 +573,20 @@
   <header>
     <div class="nav-container">
       <div class="brand">
-        <div class="brand-logo">S</div>
+        <div class="brand-logo">P</div>
         <div class="brand-title">
           <h1>Aplikasi Gade</h1>
-          <p>Catatan Riwayat & Hasil Survey Lapangan</p>
+          <p>Notulensi & Keputusan Pembahasan Lahan</p>
         </div>
       </div>
       <div class="nav-links">
         <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Menu Lokasi</a>
         <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Menu Bidang</a>
         <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak / Pemilik</a>
-        <a href="/survey.html" class="nav-btn nav-btn-active">📋 Data Survey</a>
-        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Data Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-active">🤝 Pembahasan</a>
         <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
-        <button id="btnOpenAddModal" class="nav-btn nav-btn-primary">+ Entri Survey</button>
+        <button id="btnOpenAddModal" class="nav-btn nav-btn-primary">+ Entri Pembahasan</button>
       </div>
     </div>
   </header>
@@ -603,24 +597,31 @@
     <!-- Stats Cards -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon" style="background: var(--accent-light); color: var(--accent-dark);">📋</div>
+        <div class="stat-icon" style="background: var(--primary-light); color: var(--primary);">🤝</div>
         <div>
           <div class="stat-val" id="statTotal">0</div>
-          <div class="stat-lbl">Total Riwayat Survey</div>
+          <div class="stat-lbl">Total Pembahasan</div>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon" style="background: #eff6ff; color: #1d4ed8;">📍</div>
+        <div class="stat-icon" style="background: var(--success-light); color: var(--success);">✅</div>
         <div>
-          <div class="stat-val" id="statLokasi">0</div>
-          <div class="stat-lbl">Target Lokasi</div>
+          <div class="stat-val" id="statLayak">0</div>
+          <div class="stat-lbl">Keputusan Layak</div>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon" style="background: var(--purple-light); color: var(--purple);">🏞️</div>
+        <div class="stat-icon" style="background: var(--warning-light); color: var(--warning);">⏳</div>
         <div>
-          <div class="stat-val" id="statBidang">0</div>
-          <div class="stat-lbl">Target Bidang Tanah</div>
+          <div class="stat-val" id="statPerluKajian">0</div>
+          <div class="stat-lbl">Perlu Kajian</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--danger-light); color: var(--danger);">❌</div>
+        <div>
+          <div class="stat-val" id="statTidakLayak">0</div>
+          <div class="stat-lbl">Tidak Layak</div>
         </div>
       </div>
     </div>
@@ -641,8 +642,16 @@
             <option value="Semua">Semua Kode Referensi</option>
           </select>
 
+          <!-- Filter Keputusan -->
+          <select id="filterKeputusan" class="select-control">
+            <option value="Semua">Semua Keputusan</option>
+            <option value="Layak">Layak</option>
+            <option value="Perlu Kajian">Perlu Kajian</option>
+            <option value="Tidak Layak">Tidak Layak</option>
+          </select>
+
           <!-- Search Input -->
-          <input type="text" id="searchKeyword" class="input-control input-search" placeholder="Cari PIC, hasil, catatan...">
+          <input type="text" id="searchKeyword" class="input-control input-search" placeholder="Cari peserta, notulensi, catatan...">
         </div>
 
         <div class="btn-action-group">
@@ -656,21 +665,21 @@
     <div class="table-card">
       <div class="table-header-title">
         <div>
-          <h2>Daftar Riwayat Survey Lapangan</h2>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Catatan hasil peninjauan lahan oleh surveyor</p>
+          <h2>Daftar Riwayat Notulensi & Pembahasan</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Rekam jejak rapat, musyawarah, dan mediasi lahan</p>
         </div>
-        <span id="dataCountBadge" style="font-size: 0.8rem; font-weight: 700; background: #f1f5f9; padding: 0.3rem 0.75rem; border-radius: 999px; color: #475569;">0 Survey</span>
+        <span id="dataCountBadge" style="font-size: 0.8rem; font-weight: 700; background: #f1f5f9; padding: 0.3rem 0.75rem; border-radius: 999px; color: #475569;">0 Pembahasan</span>
       </div>
 
       <div class="table-responsive">
-        <table id="surveyTable">
+        <table id="pembahasanTable">
           <thead>
             <tr>
-              <th>Tgl Survey & PIC</th>
+              <th>Tanggal & Peserta</th>
               <th>Target & Referensi</th>
-              <th>Hasil Survey</th>
+              <th>Hasil Pembahasan (Notulensi)</th>
+              <th>Keputusan</th>
               <th>Catatan</th>
-              <th>Koordinat</th>
               <th style="text-align: right;">Aksi</th>
             </tr>
           </thead>
@@ -678,7 +687,7 @@
             <tr>
               <td colspan="6" class="empty-state">
                 <span>⏳</span>
-                Memuat data survey...
+                Memuat data pembahasan...
               </td>
             </tr>
           </tbody>
@@ -692,25 +701,25 @@
   <div class="modal-overlay" id="formModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 id="modalTitle">Entri Data Survey</h3>
+        <h3 id="modalTitle">Entri Data Pembahasan</h3>
         <button class="modal-close" onclick="closeFormModal()">&times;</button>
       </div>
-      <form id="surveyForm">
+      <form id="pembahasanForm">
         <div class="modal-body">
-          <input type="hidden" id="surveyId" value="">
+          <input type="hidden" id="pembahasanId" value="">
 
           <div class="form-row">
-            <!-- Target Survey -->
+            <!-- Target Pembahasan -->
             <div class="form-group">
-              <label for="formTarget">Target Survey <span class="req">*</span></label>
+              <label for="formTarget">Target Pembahasan <span class="req">*</span></label>
               <select id="formTarget" class="form-control" required onchange="handleFormTargetChange()">
                 <option value="">-- Pilih Target --</option>
-                <option value="Lokasi">Lokasi (Peninjauan Awal)</option>
-                <option value="Bidang">Bidang Tanah (Detail Persil)</option>
+                <option value="Lokasi">Lokasi (Kawasan Induk)</option>
+                <option value="Bidang">Bidang Tanah (Persil)</option>
               </select>
             </div>
             
-            <!-- Tanggal Survey -->
+            <!-- Tanggal Pembahasan -->
             <div class="form-group">
               <label for="formTanggal">Tanggal Pelaksanaan</label>
               <input type="date" id="formTanggal" class="form-control">
@@ -723,47 +732,43 @@
             <select id="formRef" class="form-control" required disabled>
               <option value="">-- Pilih Target Terlebih Dahulu --</option>
             </select>
+            <div class="form-hint" id="formRefHint">Pilih target di atas untuk mengaktifkan pilihan referensi.</div>
           </div>
 
           <div class="form-row">
-            <!-- PIC Survey -->
-            <div class="form-group">
-              <label for="formPic">PIC / Petugas Survey</label>
-              <input type="text" id="formPic" class="form-control" placeholder="Nama petugas/tim">
+            <!-- Peserta -->
+            <div class="form-group" style="flex: 2;">
+              <label for="formPeserta">Peserta Rapat / Musyawarah</label>
+              <input type="text" id="formPeserta" class="form-control" placeholder="Contoh: Tim Pengadaan, Pemilik Lahan, Notaris, Lurah">
             </div>
 
-            <!-- Hasil Survey -->
-            <div class="form-group">
-              <label for="formHasil">Hasil Evaluasi</label>
-              <select id="formHasil" class="form-control">
-                <option value="">-- Pilih Hasil --</option>
-                <option value="Sesuai Kriteria">Sesuai Kriteria</option>
-                <option value="Butuh Penyesuaian">Butuh Penyesuaian</option>
+            <!-- Keputusan -->
+            <div class="form-group" style="flex: 1.2;">
+              <label for="formKeputusan">Keputusan <span class="req">*</span></label>
+              <select id="formKeputusan" class="form-control" required>
+                <option value="Layak">Layak</option>
+                <option value="Perlu Kajian" selected>Perlu Kajian</option>
                 <option value="Tidak Layak">Tidak Layak</option>
-                <option value="Lainnya">Lainnya</option>
               </select>
             </div>
           </div>
 
-          <!-- Koordinat -->
+          <!-- Hasil Pembahasan -->
           <div class="form-group">
-            <label for="formKoordinat">Koordinat GPS (Lat, Lng)</label>
-            <div class="input-group">
-              <input type="text" id="formKoordinat" class="form-control" placeholder="-6.200000, 106.816666">
-              <button type="button" class="btn btn-outline" onclick="getCurrentLocation()" title="Ambil Lokasi Saat Ini">📍 Dapatkan</button>
-            </div>
+            <label for="formHasil">Hasil Pembahasan / Notulensi <span class="req">*</span></label>
+            <textarea id="formHasil" class="form-control" rows="3" required placeholder="Tuliskan poin-poin kesepakatan, tanggapan pemilik lahan, atau isu yang dibahas..."></textarea>
           </div>
 
           <!-- Catatan -->
           <div class="form-group" style="margin-bottom: 0;">
-            <label for="formCatatan">Catatan Survey</label>
-            <textarea id="formCatatan" class="form-control" placeholder="Tulis rincian kondisi lapangan, kendala, kelayakan akses, dsb..."></textarea>
+            <label for="formCatatan">Catatan / Tindak Lanjut</label>
+            <textarea id="formCatatan" class="form-control" rows="2" placeholder="Langkah selanjutnya, batas waktu konfirmasi, atau tindak lanjut tim..."></textarea>
           </div>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closeFormModal()">Batal</button>
-          <button type="submit" class="btn btn-primary" id="btnSubmitForm">Simpan Data</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitForm">Simpan Pembahasan</button>
         </div>
       </form>
     </div>
@@ -773,12 +778,12 @@
   <div class="modal-overlay" id="deleteModal">
     <div class="modal-card" style="max-width: 440px;">
       <div class="modal-header">
-        <h3>Hapus Riwayat Survey</h3>
+        <h3>Hapus Riwayat Pembahasan</h3>
         <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <p>Apakah Anda yakin ingin menghapus data survey referensi <strong id="deleteTargetRef">-</strong>?</p>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Data riwayat yang dihapus tidak dapat dikembalikan.</p>
+        <p>Apakah Anda yakin ingin menghapus pembahasan untuk referensi <strong id="deleteTargetRef">-</strong>?</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Data riwayat notulensi yang dihapus tidak dapat dipulihkan kembali.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeDeleteModal()">Batal</button>
@@ -793,7 +798,7 @@
   <!-- Script -->
   <script>
     // State
-    let surveys = [];
+    let pembahasanList = [];
     let listLokasi = [];
     let listBidang = [];
     let activeDeleteId = null;
@@ -802,15 +807,17 @@
     const tableBody = document.getElementById('tableBody');
     const filterTarget = document.getElementById('filterTarget');
     const filterRef = document.getElementById('filterRef');
+    const filterKeputusan = document.getElementById('filterKeputusan');
     const searchKeyword = document.getElementById('searchKeyword');
     
     const formModal = document.getElementById('formModal');
     const deleteModal = document.getElementById('deleteModal');
-    const surveyForm = document.getElementById('surveyForm');
+    const pembahasanForm = document.getElementById('pembahasanForm');
     const modalTitle = document.getElementById('modalTitle');
     
     const formTarget = document.getElementById('formTarget');
     const formRef = document.getElementById('formRef');
+    const formRefHint = document.getElementById('formRefHint');
     const toast = document.getElementById('toast');
 
     // Show Toast
@@ -843,25 +850,27 @@
       populateFilterRef();
       if (preRef) filterRef.value = preRef;
 
-      await loadSurveys();
+      await loadPembahasan();
 
       // Listeners
       filterTarget.addEventListener('change', () => {
         populateFilterRef();
-        loadSurveys();
+        loadPembahasan();
       });
-      filterRef.addEventListener('change', loadSurveys);
-      searchKeyword.addEventListener('input', debounce(loadSurveys, 300));
-      document.getElementById('btnRefresh').addEventListener('click', loadSurveys);
+      filterRef.addEventListener('change', loadPembahasan);
+      filterKeputusan.addEventListener('change', loadPembahasan);
+      searchKeyword.addEventListener('input', debounce(loadPembahasan, 300));
+      document.getElementById('btnRefresh').addEventListener('click', loadPembahasan);
       document.getElementById('btnFilterReset').addEventListener('click', () => {
         filterTarget.value = 'Semua';
+        filterKeputusan.value = 'Semua';
         populateFilterRef();
         searchKeyword.value = '';
-        loadSurveys();
+        loadPembahasan();
       });
 
       document.getElementById('btnOpenAddModal').addEventListener('click', () => openFormModal());
-      surveyForm.addEventListener('submit', handleFormSubmit);
+      pembahasanForm.addEventListener('submit', handleFormSubmit);
       document.getElementById('btnConfirmDelete').addEventListener('click', executeDelete);
     }
 
@@ -899,237 +908,213 @@
       
       if (target === 'Lokasi' || target === 'Semua') {
         if (target === 'Semua') html += '<optgroup label="Lokasi">';
-        listLokasi.forEach(l => {
-          html += `<option value="${l.kodeLokasi}">${l.kodeLokasi} - ${l.namaLokasi}</option>`;
+        listLokasi.forEach(lok => {
+          html += `<option value="${lok.kodeLokasi}">[Lokasi] ${lok.kodeLokasi} - ${lok.namaLokasi}</option>`;
         });
         if (target === 'Semua') html += '</optgroup>';
       }
-      
+
       if (target === 'Bidang' || target === 'Semua') {
         if (target === 'Semua') html += '<optgroup label="Bidang Tanah">';
-        listBidang.forEach(b => {
-          html += `<option value="${b.kodeTanah}">${b.kodeTanah}</option>`;
+        listBidang.forEach(bid => {
+          html += `<option value="${bid.kodeTanah}">[Bidang] ${bid.kodeTanah} - Bidang #${bid.nomorBidang || '-'}</option>`;
         });
         if (target === 'Semua') html += '</optgroup>';
       }
-      
+
       filterRef.innerHTML = html;
     }
 
-    function handleFormTargetChange() {
+    function handleFormTargetChange(selectedRef = '') {
       const target = formTarget.value;
       if (!target) {
-        formRef.innerHTML = '<option value="">-- Pilih Target Terlebih Dahulu --</option>';
         formRef.disabled = true;
+        formRef.innerHTML = '<option value="">-- Pilih Target Terlebih Dahulu --</option>';
+        formRefHint.textContent = 'Pilih target di atas untuk mengaktifkan pilihan referensi.';
         return;
       }
 
       formRef.disabled = false;
-      let html = '<option value="">-- Pilih Referensi --</option>';
+      let html = '<option value="">-- Pilih Referensi ' + target + ' --</option>';
 
       if (target === 'Lokasi') {
-        listLokasi.forEach(l => {
-          html += `<option value="${l.kodeLokasi}">${l.kodeLokasi} - ${l.namaLokasi}</option>`;
+        formRefHint.textContent = 'Pilih Lokasi Induk yang menjadi subjek pembahasan.';
+        listLokasi.forEach(lok => {
+          const isSel = lok.kodeLokasi === selectedRef ? 'selected' : '';
+          html += `<option value="${lok.kodeLokasi}" ${isSel}>${lok.kodeLokasi} - ${lok.namaLokasi}</option>`;
         });
-      } else {
-        listBidang.forEach(b => {
-          html += `<option value="${b.kodeTanah}">${b.kodeTanah} (${b.nomorBidang || '-'})</option>`;
+      } else if (target === 'Bidang') {
+        formRefHint.textContent = 'Pilih Bidang Tanah / Persil yang menjadi subjek pembahasan.';
+        listBidang.forEach(bid => {
+          const isSel = bid.kodeTanah === selectedRef ? 'selected' : '';
+          html += `<option value="${bid.kodeTanah}" ${isSel}>${bid.kodeTanah} (Bidang #${bid.nomorBidang || '-'}, Lokasi: ${bid.kodeLokasi})</option>`;
         });
       }
+
       formRef.innerHTML = html;
     }
 
-    // Load Surveys
-    async function loadSurveys() {
-      const target = filterTarget.value;
-      const ref = filterRef.value;
-      const search = searchKeyword.value.trim();
-
-      let url = '/api/survey?';
-      const params = new URLSearchParams();
-      if (target && target !== 'Semua') params.append('targetSurvey', target);
-      if (ref && ref !== 'Semua') params.append('referensiId', ref);
-      if (search) params.append('search', search);
-
-      url += params.toString();
-
-      tableBody.innerHTML = `<tr><td colspan="6" class="empty-state"><span>⏳</span>Memuat data survey...</td></tr>`;
-
+    async function loadPembahasan() {
       try {
-        const res = await fetch(url);
+        const params = new URLSearchParams();
+        if (filterTarget.value !== 'Semua') params.append('target', filterTarget.value);
+        if (filterRef.value !== 'Semua') params.append('referensiId', filterRef.value);
+        if (filterKeputusan.value !== 'Semua') params.append('keputusan', filterKeputusan.value);
+        if (searchKeyword.value.trim()) params.append('search', searchKeyword.value.trim());
+
+        const res = await fetch(`/api/pembahasan?${params.toString()}`);
         const json = await res.json();
 
         if (json.success) {
-          surveys = json.data;
-          renderTable(surveys);
-          updateStats(surveys);
+          pembahasanList = json.data;
+          renderStats();
+          renderTable();
         } else {
-          tableBody.innerHTML = `<tr><td colspan="6" class="empty-state"><span>⚠️</span>Gagal memuat: ${json.message}</td></tr>`;
+          showToast(json.message || 'Gagal memuat pembahasan', true);
         }
       } catch (err) {
-        tableBody.innerHTML = `<tr><td colspan="6" class="empty-state"><span>❌</span>Koneksi error: ${err.message}</td></tr>`;
+        console.error(err);
+        showToast('Koneksi gagal saat memuat pembahasan', true);
       }
     }
 
-    function updateStats(items) {
-      document.getElementById('statTotal').textContent = items.length;
-      document.getElementById('statLokasi').textContent = items.filter(i => i.targetSurvey === 'Lokasi').length;
-      document.getElementById('statBidang').textContent = items.filter(i => i.targetSurvey === 'Bidang').length;
-      document.getElementById('dataCountBadge').textContent = `${items.length} Survey`;
+    function renderStats() {
+      const total = pembahasanList.length;
+      const layak = pembahasanList.filter(s => s.keputusan === 'Layak').length;
+      const perluKajian = pembahasanList.filter(s => s.keputusan === 'Perlu Kajian').length;
+      const tidakLayak = pembahasanList.filter(s => s.keputusan === 'Tidak Layak').length;
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statLayak').textContent = layak;
+      document.getElementById('statPerluKajian').textContent = perluKajian;
+      document.getElementById('statTidakLayak').textContent = tidakLayak;
+      document.getElementById('dataCountBadge').textContent = `${total} Pembahasan`;
     }
 
-    function renderTable(items) {
-      if (!items || items.length === 0) {
+    function getKeputusanBadge(keputusan) {
+      if (!keputusan) return '<span class="badge-pill badge-default">-</span>';
+      if (keputusan === 'Layak') {
+        return '<span class="badge-pill badge-layak">✅ Layak</span>';
+      } else if (keputusan === 'Perlu Kajian') {
+        return '<span class="badge-pill badge-perlukajian">⏳ Perlu Kajian</span>';
+      } else if (keputusan === 'Tidak Layak') {
+        return '<span class="badge-pill badge-tidaklayak">❌ Tidak Layak</span>';
+      }
+      return `<span class="badge-pill badge-default">${escapeHtml(keputusan)}</span>`;
+    }
+
+    function formatDate(val) {
+      if (!val) return '-';
+      const dt = new Date(val);
+      if (isNaN(dt.getTime())) return '-';
+      return dt.toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
+    function renderTable() {
+      if (pembahasanList.length === 0) {
         tableBody.innerHTML = `
           <tr>
             <td colspan="6" class="empty-state">
-              <span>📋</span>
-              Belum ada data survey yang sesuai.
+              <span>🤝</span>
+              <p>Belum ada riwayat pembahasan yang sesuai filter.</p>
+              <button class="btn btn-outline btn-sm" style="margin-top: 0.75rem;" onclick="openFormModal()">+ Tambah Pembahasan Baru</button>
             </td>
           </tr>
         `;
         return;
       }
 
-      tableBody.innerHTML = items.map(item => {
-        let badgeClass = 'badge-default';
-        let hasil = item.hasilSurvey || 'Belum Dievaluasi';
-        
-        if (hasil.toLowerCase().includes('sesuai')) badgeClass = 'badge-sesuai';
-        else if (hasil.toLowerCase().includes('tidak')) badgeClass = 'badge-tidak';
-        else if (hasil.toLowerCase().includes('butuh') || hasil.toLowerCase().includes('penyesuaian')) badgeClass = 'badge-penyesuaian';
+      tableBody.innerHTML = pembahasanList.map(item => {
+        const isLokasi = item.target === 'Lokasi';
+        const targetBadgeClass = isLokasi ? 'target-lokasi' : 'target-bidang';
+        const targetIcon = isLokasi ? '📍' : '🏞️';
 
-        const tgl = item.tanggalSurvey ? new Date(item.tanggalSurvey).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
-        const targetClass = item.targetSurvey === 'Lokasi' ? 'target-lokasi' : 'target-bidang';
-        
-        // Link to respective details page
-        let linkHref = item.targetSurvey === 'Lokasi' ? `/lokasi.html?kodeLokasi=${item.referensiId}` : `/bidang-tanah.html?kodeTanah=${item.referensiId}`;
+        let refDetail = '';
+        if (isLokasi) {
+          const lok = listLokasi.find(l => l.kodeLokasi === item.referensiId);
+          refDetail = lok ? `<br><small style="color: var(--text-muted);">${escapeHtml(lok.namaLokasi)}</small>` : '';
+        } else {
+          const bid = listBidang.find(b => b.kodeTanah === item.referensiId);
+          refDetail = bid ? `<br><small style="color: var(--text-muted);">Bidang #${escapeHtml(bid.nomorBidang || '-')} (${escapeHtml(bid.kodeLokasi)})</small>` : '';
+        }
+
+        const dateStr = formatDate(item.tanggal);
+        const pesertaStr = item.peserta ? escapeHtml(item.peserta) : '<span style="color: var(--text-muted);">-</span>';
+        const hasilStr = item.hasilPembahasan ? escapeHtml(item.hasilPembahasan) : '<span style="color: var(--text-muted);">-</span>';
+        const catatanStr = item.catatan ? escapeHtml(item.catatan) : '<span style="color: var(--text-muted);">-</span>';
 
         return `
           <tr>
             <td>
-              <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.2rem;">📅 ${tgl}</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted);">PIC: <span style="color:#334155; font-weight: 600;">${escapeHtml(item.picSurvey || '-')}</span></div>
+              <div style="font-weight: 700; color: #0f172a;">${dateStr}</div>
+              <div style="font-size: 0.8rem; color: #475569; margin-top: 0.2rem;">
+                <span title="Peserta">👥 ${pesertaStr}</span>
+              </div>
             </td>
             <td>
-              <div style="margin-bottom: 0.25rem;"><span class="target-badge ${targetClass}">${item.targetSurvey}</span></div>
-              <a href="${linkHref}" style="font-weight: 600; color: var(--accent-dark); text-decoration: none; font-size: 0.85rem;" title="Lihat detail target">
-                ${escapeHtml(item.referensiId)}
-              </a>
+              <span class="target-badge ${targetBadgeClass}">${targetIcon} ${escapeHtml(item.target)}: ${escapeHtml(item.referensiId)}</span>
+              ${refDetail}
             </td>
             <td>
-              <span class="badge-pill ${badgeClass}">
-                ${escapeHtml(hasil)}
-              </span>
-            </td>
-            <td style="max-width: 250px; font-size: 0.8rem; color: #475569;">
-              ${item.catatan ? escapeHtml(item.catatan) : '<span style="color: var(--text-muted);">-</span>'}
+              <div style="max-width: 320px; white-space: normal; line-height: 1.4;">
+                ${hasilStr}
+              </div>
             </td>
             <td>
-              ${item.koordinat ? `
-                <a href="https://maps.google.com/?q=${encodeURIComponent(item.koordinat)}" target="_blank" class="btn btn-sm btn-outline" style="text-decoration:none;" title="Lihat di Google Maps">
-                  📍 Map
-                </a>
-              ` : '<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>'}
+              ${getKeputusanBadge(item.keputusan)}
+            </td>
+            <td>
+              <div style="max-width: 220px; font-size: 0.82rem; color: var(--text-muted); white-space: normal;">
+                ${catatanStr}
+              </div>
             </td>
             <td style="text-align: right; white-space: nowrap;">
-              <button class="btn btn-sm btn-outline" onclick="openEditModal(${item.id})">✏️ Edit</button>
-              <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${item.id}, '${escapeJs(item.referensiId)}')">🗑️</button>
+              <button class="btn btn-outline btn-sm" onclick="editPembahasan(${item.id})" title="Edit Pembahasan">✏️ Edit</button>
+              <button class="btn btn-outline btn-sm btn-danger" onclick="confirmDelete(${item.id}, '${escapeHtml(item.referensiId)}', '${escapeHtml(item.target)}')" title="Hapus Pembahasan">🗑️</button>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-    function escapeJs(str) {
-      if (!str) return '';
-      return String(str).replace(/'/g, "\\'");
-    }
+    function openFormModal(editData = null) {
+      pembahasanForm.reset();
+      document.getElementById('pembahasanId').value = '';
 
-    function getCurrentLocation() {
-      if ("geolocation" in navigator) {
-        const btn = document.querySelector('button[onclick="getCurrentLocation()"]');
-        btn.textContent = '⏳ ...';
-        btn.disabled = true;
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const lat = position.coords.latitude.toFixed(6);
-            const lng = position.coords.longitude.toFixed(6);
-            document.getElementById('formKoordinat').value = `${lat}, ${lng}`;
-            btn.textContent = '📍 Dapatkan';
-            btn.disabled = false;
-            showToast('Koordinat berhasil didapatkan');
-          },
-          (error) => {
-            btn.textContent = '📍 Dapatkan';
-            btn.disabled = false;
-            showToast(`Gagal: ${error.message}`, true);
-          },
-          { enableHighAccuracy: true, timeout: 10000 }
-        );
-      } else {
-        showToast('Browser tidak mendukung Geolocation', true);
-      }
-    }
-
-    // Modals
-    function openFormModal(item = null) {
-      surveyForm.reset();
-      formRef.innerHTML = '<option value="">-- Pilih Target Terlebih Dahulu --</option>';
-      formRef.disabled = true;
-
-      if (item) {
-        modalTitle.textContent = 'Edit Riwayat Survey';
-        document.getElementById('surveyId').value = item.id;
-        formTarget.value = item.targetSurvey;
-        handleFormTargetChange();
-        formRef.value = item.referensiId;
+      if (editData) {
+        modalTitle.textContent = 'Edit Data Pembahasan';
+        document.getElementById('pembahasanId').value = editData.id;
+        formTarget.value = editData.target;
+        handleFormTargetChange(editData.referensiId);
         
-        if (item.tanggalSurvey) {
-          const dt = new Date(item.tanggalSurvey);
-          document.getElementById('formTanggal').valueAsDate = dt;
-        }
-        
-        document.getElementById('formPic').value = item.picSurvey || '';
-        
-        // Handle Hasil dropdown if custom
-        const formHasil = document.getElementById('formHasil');
-        if (item.hasilSurvey && !Array.from(formHasil.options).map(o => o.value).includes(item.hasilSurvey)) {
-           formHasil.value = 'Lainnya'; // Can't perfectly restore custom text without a separate input, sticking to options for simplicity in this demo. Or append option.
-           const newOpt = document.createElement('option');
-           newOpt.value = item.hasilSurvey;
-           newOpt.text = item.hasilSurvey;
-           formHasil.add(newOpt);
-           formHasil.value = item.hasilSurvey;
-        } else {
-           formHasil.value = item.hasilSurvey || '';
-        }
-
-        document.getElementById('formKoordinat').value = item.koordinat || '';
-        document.getElementById('formCatatan').value = item.catatan || '';
-      } else {
-        modalTitle.textContent = 'Entri Data Survey Baru';
-        document.getElementById('surveyId').value = '';
-        document.getElementById('formTanggal').valueAsDate = new Date();
-        
-        if (filterTarget.value && filterTarget.value !== 'Semua') {
-          formTarget.value = filterTarget.value;
-          handleFormTargetChange();
-          if (filterRef.value && filterRef.value !== 'Semua') {
-            formRef.value = filterRef.value;
+        if (editData.tanggal) {
+          const d = new Date(editData.tanggal);
+          if (!isNaN(d.getTime())) {
+            document.getElementById('formTanggal').value = d.toISOString().split('T')[0];
           }
         }
+        document.getElementById('formPeserta').value = editData.peserta || '';
+        document.getElementById('formKeputusan').value = editData.keputusan || 'Perlu Kajian';
+        document.getElementById('formHasil').value = editData.hasilPembahasan || '';
+        document.getElementById('formCatatan').value = editData.catatan || '';
+      } else {
+        modalTitle.textContent = 'Entri Data Pembahasan';
+        document.getElementById('formTanggal').valueAsDate = new Date();
+        
+        // If filter is active, prefill target and ref
+        if (filterTarget.value !== 'Semua') {
+          formTarget.value = filterTarget.value;
+          handleFormTargetChange(filterRef.value !== 'Semua' ? filterRef.value : '');
+        } else {
+          handleFormTargetChange();
+        }
+        document.getElementById('formKeputusan').value = 'Perlu Kajian';
       }
+
       formModal.style.display = 'flex';
     }
 
@@ -1137,110 +1122,129 @@
       formModal.style.display = 'none';
     }
 
-    function openEditModal(id) {
-      const item = surveys.find(s => s.id === id);
-      if (item) openFormModal(item);
+    function editPembahasan(id) {
+      const item = pembahasanList.find(s => s.id === id);
+      if (item) {
+        openFormModal(item);
+      }
     }
 
     async function handleFormSubmit(e) {
       e.preventDefault();
-      const id = document.getElementById('surveyId').value;
-      const isEdit = Boolean(id);
 
+      const id = document.getElementById('pembahasanId').value;
       const target = formTarget.value;
-      const ref = formRef.value;
-      
-      if (!target || !ref) {
-        showToast('Target dan Kode Referensi wajib diisi', true);
+      const referensiId = formRef.value;
+      const tanggal = document.getElementById('formTanggal').value;
+      const peserta = document.getElementById('formPeserta').value.trim();
+      const keputusan = document.getElementById('formKeputusan').value;
+      const hasilPembahasan = document.getElementById('formHasil').value.trim();
+      const catatan = document.getElementById('formCatatan').value.trim();
+
+      if (!target || !referensiId) {
+        showToast('Target dan Kode Referensi wajib diisi!', true);
         return;
       }
 
       const payload = {
-        targetSurvey: target,
-        referensiId: ref,
-        tanggalSurvey: document.getElementById('formTanggal').value || null,
-        picSurvey: document.getElementById('formPic').value.trim() || null,
-        hasilSurvey: document.getElementById('formHasil').value || null,
-        koordinat: document.getElementById('formKoordinat').value.trim() || null,
-        catatan: document.getElementById('formCatatan').value.trim() || null,
+        target,
+        referensiId,
+        tanggal: tanggal || undefined,
+        peserta: peserta || undefined,
+        keputusan,
+        hasilPembahasan: hasilPembahasan || undefined,
+        catatan: catatan || undefined
       };
 
-      const submitBtn = document.getElementById('btnSubmitForm');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Menyimpan...';
+      const btnSubmit = document.getElementById('btnSubmitForm');
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Menyimpan...';
 
       try {
-        const url = isEdit ? `/api/survey/${id}` : '/api/survey';
-        const method = isEdit ? 'PUT' : 'POST';
-
-        const res = await fetch(url, {
-          method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+        let res;
+        if (id) {
+          res = await fetch(`/api/pembahasan/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          res = await fetch('/api/pembahasan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        }
 
         const json = await res.json();
         if (json.success) {
-          showToast(json.message || 'Data berhasil disimpan!');
+          showToast(id ? 'Pembahasan berhasil diperbarui!' : 'Pembahasan berhasil ditambahkan!');
           closeFormModal();
-          loadSurveys();
+          await loadPembahasan();
         } else {
-          showToast(`Gagal: ${json.message}`, true);
+          showToast(json.message || 'Gagal menyimpan pembahasan', true);
         }
       } catch (err) {
-        showToast(`Error: ${err.message}`, true);
+        console.error(err);
+        showToast('Terjadi kesalahan saat menyimpan', true);
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Simpan Data';
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Simpan Pembahasan';
       }
     }
 
-    function openDeleteModal(id, ref) {
+    function confirmDelete(id, ref, target) {
       activeDeleteId = id;
-      document.getElementById('deleteTargetRef').textContent = ref;
+      document.getElementById('deleteTargetRef').textContent = `${target}: ${ref}`;
       deleteModal.style.display = 'flex';
     }
 
     function closeDeleteModal() {
-      activeDeleteId = null;
       deleteModal.style.display = 'none';
+      activeDeleteId = null;
     }
 
     async function executeDelete() {
       if (!activeDeleteId) return;
+
       const btn = document.getElementById('btnConfirmDelete');
       btn.disabled = true;
       btn.textContent = 'Menghapus...';
 
       try {
-        const res = await fetch(`/api/survey/${activeDeleteId}`, { method: 'DELETE' });
+        const res = await fetch(`/api/pembahasan/${activeDeleteId}`, {
+          method: 'DELETE'
+        });
         const json = await res.json();
+
         if (json.success) {
-          showToast(json.message || 'Survey berhasil dihapus');
+          showToast('Data pembahasan berhasil dihapus');
           closeDeleteModal();
-          loadSurveys();
+          await loadPembahasan();
         } else {
-          showToast(`Gagal: ${json.message}`, true);
+          showToast(json.message || 'Gagal menghapus data', true);
         }
       } catch (err) {
-        showToast(`Error: ${err.message}`, true);
+        console.error(err);
+        showToast('Kesalahan jaringan saat menghapus', true);
       } finally {
         btn.disabled = false;
         btn.textContent = 'Ya, Hapus';
       }
     }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeFormModal();
-        closeDeleteModal();
-      }
-    });
-    formModal.addEventListener('click', (e) => { if (e.target === formModal) closeFormModal(); });
-    deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
 
-    // Start
-    init();
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>

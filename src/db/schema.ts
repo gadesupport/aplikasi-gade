@@ -160,3 +160,30 @@ export const survey = pgTable('survey', {
 
 export type Survey = typeof survey.$inferSelect;
 export type NewSurvey = typeof survey.$inferInsert;
+
+export const keputusanPembahasanValues = [
+  'Layak',
+  'Perlu Kajian',
+  'Tidak Layak',
+] as const;
+
+export type KeputusanPembahasan = (typeof keputusanPembahasanValues)[number];
+
+export const pembahasan = pgTable('pembahasan', {
+  id: serial('id').primaryKey(),
+  target: varchar('target', { length: 50 }).notNull(), // 'Lokasi' | 'Bidang'
+  referensiId: varchar('referensi_id', { length: 100 }).notNull(), // kodeLokasi or kodeTanah
+  tanggal: timestamp('tanggal'),
+  peserta: text('peserta'),
+  hasilPembahasan: text('hasil_pembahasan'),
+  keputusan: varchar('keputusan', { length: 50 })
+    .notNull()
+    .default('Perlu Kajian'), // 'Layak' | 'Perlu Kajian' | 'Tidak Layak'
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Pembahasan = typeof pembahasan.$inferSelect;
+export type NewPembahasan = typeof pembahasan.$inferInsert;
+
