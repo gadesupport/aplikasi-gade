@@ -295,4 +295,45 @@ export const pembebasan = pgTable('pembebasan', {
 export type Pembebasan = typeof pembebasan.$inferSelect;
 export type NewPembebasan = typeof pembebasan.$inferInsert;
 
+export const statusKkprValues = [
+  'Draft',
+  'Diajukan',
+  'Ditinjau',
+  'Disetujui',
+  'Ditolak',
+] as const;
+
+export type StatusKkpr = (typeof statusKkprValues)[number];
+
+export const kategoriKkprValues = [
+  'Perumahan & Permukiman',
+  'Komersial & Jasa',
+  'Industri & Pergudangan',
+  'Infrastruktur & Utilitas',
+  'Pariwisata',
+  'Pertanian & Perkebunan',
+  'Lainnya',
+] as const;
+
+export type KategoriKkpr = (typeof kategoriKkprValues)[number];
+
+export const kkpr = pgTable('kkpr', {
+  id: serial('id').primaryKey(),
+  kodeKkpr: varchar('kode_kkpr', { length: 100 }).notNull().unique(),
+  namaKegiatan: varchar('nama_kegiatan', { length: 255 }).notNull(),
+  pemohon: varchar('pemohon', { length: 255 }),
+  nomorIzin: varchar('nomor_izin', { length: 150 }),
+  kategori: varchar('kategori', { length: 100 }).notNull().default('Industri & Pergudangan'),
+  luasRencana: numeric('luas_rencana', { precision: 14, scale: 2 }).notNull().default('0'),
+  status: varchar('status', { length: 50 }).notNull().default('Draft'),
+  geojson: jsonb('geojson'),
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Kkpr = typeof kkpr.$inferSelect;
+export type NewKkpr = typeof kkpr.$inferInsert;
+
+
 

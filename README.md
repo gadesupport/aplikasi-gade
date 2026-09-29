@@ -78,6 +78,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /pembahasan.html` - Antarmuka Web interaktif Notulensi & Keputusan Pembahasan Lahan
 - `GET /legalitas.html` - Antarmuka Web interaktif Legalitas Tanah & Dokumen Alas Hak Terintegrasi
 - `GET /pembebasan.html` - Antarmuka Web interaktif Kontrol Utama Rekap & Tracking Pembayaran Pembebasan Tanah
+- `GET /pemetaan.html` - **Antarmuka Web Kontrol Utama Pemetaan GIS**: Visualisasi spasial multi-layer (Induk, Batas Bidang, KKPR), Base Map Switcher, Snapping Presisi (Endpoint & Nearest), Digitasi Polygon, Interaksi Popup Detail Bidang saat Diklik, Import (GeoJSON, SHP ZIP, KML), serta Export Shapefile ZIP untuk upload OSS RBA
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -136,6 +137,18 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/pembebasan` - Tambah catatan transaksi pembayaran baru (Mendukung alias `bidang_id`, nominal uang, tahap pembayaran, status, metode, bukti transfer)
 - `PUT /api/pembebasan/:id` - Perbarui catatan transaksi pembayaran
 - `DELETE /api/pembebasan/:id` - Hapus catatan transaksi pembayaran
+
+### Endpoint API Pemetaan GIS & KKPR (`/api/pemetaan`)
+- `GET /api/pemetaan/layers` - **Agregasi Multi-Layer Spasial**: Mengambil GeoJSON FeatureCollection untuk seluruh layer (Induk, Batas Bidang diperkaya status pembayaran finansial & pemilik, serta KKPR) (mendukung filter `?kodeLokasi=`)
+- `GET /api/pemetaan/kkpr` - Daftar seluruh rencana permohonan KKPR (mendukung query `?search=`, `?status=`, dan `?kategori=`)
+- `GET /api/pemetaan/kkpr/:id` - Detail data perencanaan KKPR berdasarkan ID
+- `POST /api/pemetaan/kkpr` - Tambah perencanaan KKPR baru lengkap dengan atribut OSS dan polygon spasial
+- `PUT /api/pemetaan/kkpr/:id` - Perbarui informasi dan status izin KKPR
+- `DELETE /api/pemetaan/kkpr/:id` - Hapus data perencanaan KKPR
+- `PATCH /api/pemetaan/polygon` - Simpan atau perbarui langsung polygon batas hasil digitasi peta untuk target `bidang`, `lokasi`, atau `kkpr`
+- `POST /api/pemetaan/import` - Import data spasial berformat GeoJSON, KML, atau Shapefile (ZIP) dan langsung diklasifikasikan ke layer target
+- `GET /api/pemetaan/export` - Export data spasial (mendukung format `?format=shp` (ESRI Shapefile dikemas .ZIP untuk upload OSS), `?format=geojson`, dan `?format=kml` untuk Google Earth)
+
 
 
 
