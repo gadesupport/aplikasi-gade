@@ -567,6 +567,7 @@
       </div>
       <div class="nav-links">
         <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Menu Lokasi</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak / Pemilik</a>
         <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary">API Docs</a>
         <button id="btnNewBidang" class="nav-btn nav-btn-primary">+ Bidang Baru</button>
       </div>
@@ -1071,7 +1072,8 @@
             <td><small>${item.jenisHak || '-'} (${item.nomorHak || '-'})</small></td>
             <td><span class="status-badge ${statusClass}">${item.statusPembebasan}</span></td>
             <td>${hasGeo}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center; white-space: nowrap;">
+              <a href="/pihak.html?kodeTanah=${encodeURIComponent(item.kodeTanah)}" class="btn btn-light btn-sm" style="text-decoration:none;" title="Lihat & Kelola Pihak/Pemilik">👥 Pihak</a>
               <button class="btn btn-light btn-sm" onclick="editBidang('${item.kodeTanah}')">Edit</button>
               <button class="btn btn-accent btn-sm" onclick="openMapBidang('${item.kodeTanah}')">Peta</button>
               <button class="btn btn-danger btn-sm" onclick="deleteBidang('${item.kodeTanah}')">Hapus</button>

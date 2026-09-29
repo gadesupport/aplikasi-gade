@@ -116,4 +116,31 @@ export const bidangTanah = pgTable('bidang_tanah', {
 export type BidangTanah = typeof bidangTanah.$inferSelect;
 export type NewBidangTanah = typeof bidangTanah.$inferInsert;
 
+export const tipePihakValues = [
+  'Pemegang Hak',
+  'Ahli Waris',
+  'Kuasa',
+  'Penguasa',
+  'Pihak Lain',
+] as const;
 
+export type TipePihak = (typeof tipePihakValues)[number];
+
+export const pihak = pgTable('pihak', {
+  id: serial('id').primaryKey(),
+  kodeTanah: varchar('kode_tanah', { length: 100 })
+    .notNull()
+    .references(() => bidangTanah.kodeTanah, { onDelete: 'cascade' }),
+  nama: varchar('nama', { length: 255 }).notNull(),
+  nik: varchar('nik', { length: 50 }),
+  nomorTelp: varchar('nomor_telp', { length: 50 }),
+  tipePihak: varchar('tipe_pihak', { length: 100 })
+    .notNull()
+    .default('Pemegang Hak'),
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Pihak = typeof pihak.$inferSelect;
+export type NewPihak = typeof pihak.$inferInsert;
