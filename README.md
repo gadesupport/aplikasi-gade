@@ -76,6 +76,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /pihak.html` - Antarmuka Web interaktif Manajemen Pihak / Pemilik Lahan Terintegrasi
 - `GET /survey.html` - Antarmuka Web interaktif Pencatatan & Riwayat Survey Lapangan
 - `GET /pembahasan.html` - Antarmuka Web interaktif Notulensi & Keputusan Pembahasan Lahan
+- `GET /legalitas.html` - Antarmuka Web interaktif Legalitas Tanah & Dokumen Alas Hak Terintegrasi
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -117,6 +118,14 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/pembahasan` - Tambah data pembahasan baru (Terintegrasi dengan Lokasi atau Bidang Tanah, status Keputusan: Layak, Perlu Kajian, Tidak Layak)
 - `PUT /api/pembahasan/:id` - Perbarui data pembahasan
 - `DELETE /api/pembahasan/:id` - Hapus data riwayat pembahasan
+
+### Endpoint API Legalitas Tanah (`/api/legalitas-tanah`)
+- `GET /api/legalitas-tanah` - Daftar dokumen legalitas tanah (mendukung query `?kodeTanah=`, `?jenisDokumen=`, `?status=`, `?pihakId=`, dan `?search=`)
+- `GET /api/legalitas-tanah/:id` - Detail dokumen legalitas berdasarkan ID
+- `GET /api/legalitas-tanah/by-bidang/:kodeTanah` - Daftar semua dokumen legalitas pada bidang tanah tertentu
+- `POST /api/legalitas-tanah` - Tambah dokumen legalitas baru (Terintegrasi ke Bidang Tanah dan Pihak Terkait)
+- `PUT /api/legalitas-tanah/:id` - Perbarui informasi dokumen legalitas tanah
+- `DELETE /api/legalitas-tanah/:id` - Hapus data dokumen legalitas
 
 
 

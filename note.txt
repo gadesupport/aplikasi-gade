@@ -26,7 +26,7 @@ Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Lo
       - Sisa Luas
       - Bidang Terpetakan
 -----------------------------------------------------------------
-Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Lokasi yang nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
+Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Bidang Tanah yang nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
 #Bidang Tanah
  - Lokasi Induk
  - Kode Tanah
@@ -46,12 +46,15 @@ setelah inputan ini terisi user nantinya bisa menyimpan atau melanjutkan ke step
       - Total Luas Bidang
       - Sisa Luas
       - Bidang Terpetakan
-
+-----------------------------------------------------------------
+Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Pihak/Pemilik yang terintegrasi pada bidang tanah perintah ini nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
 #Pihak/Pemilik
  - Nama
  - NIK
  - Nomor Telp
  - Tipe Pihak (Pemegang Hak, Ahli Waris, Kuasa, Penguasa, Pihak Lain)
+------------------------------------------------------------------
+
 
 #Project
  - Kode Project
@@ -63,6 +66,8 @@ setelah inputan ini terisi user nantinya bisa menyimpan atau melanjutkan ke step
  - Status (Perencanaan, Berjalan, Selesai, Dibatalkan)
  - Keterangan
 
+
+Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Survey yang nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
 #Survey
  - Target Survey (Lokasi, Bidang)
  - Lokasi (Konek ke lokasi bidang)
@@ -71,7 +76,8 @@ setelah inputan ini terisi user nantinya bisa menyimpan atau melanjutkan ke step
  - Hasil Survey
  - Koordinat Lokasi
  - Catatan
-
+-------------------------------------------------------------------
+Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Pembahasan yang nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
 #Pembahasan
  - Target (Lokasi, Bidang)
  - Lokasi (Konek ke lokasi bidang)
@@ -79,7 +85,8 @@ setelah inputan ini terisi user nantinya bisa menyimpan atau melanjutkan ke step
  - Peserta
  - Hasil Pembahasan
  - Keputusan (Layak, Perlu Kajian, Tidak Layak)
-
+ -------------------------------------------------------------------
+Selanjutnya buatkan Issue.md yang isinya perintah atau perencanaan untuk menu Legalitas Tanah yang nantinya akan di implementasikan oleh programer atau model yang lebih murah dengan rincian inputan seperti berikut :
 #Legalitas Tanah
  - Bidang Tanah (Konek ke bidang tanah)
  - Jenis Dokumen (Sertifikat, SHM, SHGB, AJB, KTP, KK, PBB, SPPT, Girik, Letter C, Surat Waris, Akta Waris, Surat Kuasa, Dokumen Lainnya)
@@ -89,6 +96,7 @@ setelah inputan ini terisi user nantinya bisa menyimpan atau melanjutkan ke step
  - Penerbit
  - Pihak Terkait (Konek ke pihak/pemilik)
  - Catatan
+ ---------------------------------------------------------------------
 
 #Pembebasan
  - Rekap Pembebasan

@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legalitas Tanah & Dokumen Alas Hak | Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #ccfbf1;
+      --accent: #14b8a6;
+      --accent-dark: #0d9488;
+      --accent-light: #e6fffa;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --orange: #ea580c;
+      --orange-light: #ffedd5;
+      --neutral: #64748b;
+      --neutral-light: #f1f5f9;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #99f6e4;
+    }
+
+    .nav-btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      box-shadow: 0 2px 6px rgba(13, 148, 136, 0.3);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .stat-lbl {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Controls / Filters */
+    .controls-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .controls-bar {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+      flex: 1;
+    }
+
+    .input-control, .select-control {
+      padding: 0.6rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-control:focus, .select-control:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+
+    .input-search {
+      min-width: 240px;
+      flex: 1;
+    }
+
+    .btn-action-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.6rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      font-family: inherit;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      border-color: var(--border);
+      color: #334155;
+    }
+    .btn-outline:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-danger {
+      background: var(--danger-light);
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Table Card */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .table-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #f8fafc;
+      padding: 0.85rem 1.25rem;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-status-ada {
+      background: var(--success-light);
+      color: var(--success);
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-status-belum-ada {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .badge-status-proses {
+      background: var(--warning-light);
+      color: var(--warning);
+      border: 1px solid #fde68a;
+    }
+
+    .badge-status-perlu-verifikasi {
+      background: var(--orange-light);
+      color: var(--orange);
+      border: 1px solid #fed7aa;
+    }
+
+    .badge-status-tidak-relevan {
+      background: var(--neutral-light);
+      color: var(--neutral);
+      border: 1px solid #cbd5e1;
+    }
+
+    .badge-dokumen {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+
+    .badge-bidang {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 600;
+      border: 1px solid #99f6e4;
+      font-family: monospace;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      z-index: 10;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.35rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+    .form-row > .form-group {
+      flex: 1;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group label span.req {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .form-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+
+    /* Detail View Styling */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .detail-item {
+      background: #f8fafc;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .detail-item-full {
+      grid-column: span 2;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .detail-text {
+      font-size: 0.9rem;
+      color: #334155;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 0.9rem 1.25rem;
+      border-radius: 10px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast-success {
+      background: #065f46;
+      border-left: 4px solid #34d399;
+    }
+
+    .toast-error {
+      background: #991b1b;
+      border-left: 4px solid #f87171;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 4rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+      opacity: 0.6;
+    }
+
+    .empty-state h4 {
+      font-size: 1.1rem;
+      color: #334155;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">⚖️</div>
+        <div class="brand-title">
+          <h1>Legalitas Tanah</h1>
+          <p>Dokumen Alas Hak & Sertifikasi Bidang Tanah</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Menu Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Menu Bidang</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak / Pemilik</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Data Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-active">⚖️ Legalitas</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
+        <button id="btnOpenAddModal" class="nav-btn nav-btn-primary">+ Entri Legalitas</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <div class="container">
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--primary-light); color: var(--primary);">⚖️</div>
+        <div>
+          <div class="stat-val" id="statTotal">0</div>
+          <div class="stat-lbl">Total Dokumen</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--success-light); color: var(--success);">✅</div>
+        <div>
+          <div class="stat-val" id="statAda">0</div>
+          <div class="stat-lbl">Dokumen Ada</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--warning-light); color: var(--warning);">⏳</div>
+        <div>
+          <div class="stat-val" id="statProses">0</div>
+          <div class="stat-lbl">Dalam Proses</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--danger-light); color: var(--danger);">⚠️</div>
+        <div>
+          <div class="stat-val" id="statBelumAda">0</div>
+          <div class="stat-lbl">Belum Ada</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--orange-light); color: var(--orange);">🔍</div>
+        <div>
+          <div class="stat-val" id="statVerifikasi">0</div>
+          <div class="stat-lbl">Perlu Verifikasi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls / Filters -->
+    <div class="controls-card">
+      <div class="controls-bar">
+        <div class="filter-group">
+          <!-- Filter Bidang Tanah -->
+          <select id="filterBidang" class="select-control" style="min-width: 200px;">
+            <option value="Semua">Semua Bidang Tanah</option>
+          </select>
+
+          <!-- Filter Jenis Dokumen -->
+          <select id="filterJenis" class="select-control">
+            <option value="Semua">Semua Jenis Dokumen</option>
+            <option value="Sertifikat">Sertifikat</option>
+            <option value="SHM">SHM</option>
+            <option value="SHGB">SHGB</option>
+            <option value="AJB">AJB</option>
+            <option value="KTP">KTP</option>
+            <option value="KK">KK</option>
+            <option value="PBB">PBB</option>
+            <option value="SPPT">SPPT</option>
+            <option value="Girik">Girik</option>
+            <option value="Letter C">Letter C</option>
+            <option value="Surat Waris">Surat Waris</option>
+            <option value="Akta Waris">Akta Waris</option>
+            <option value="Surat Kuasa">Surat Kuasa</option>
+            <option value="Dokumen Lainnya">Dokumen Lainnya</option>
+          </select>
+
+          <!-- Filter Status -->
+          <select id="filterStatus" class="select-control">
+            <option value="Semua">Semua Status</option>
+            <option value="Ada">Ada</option>
+            <option value="Belum Ada">Belum Ada</option>
+            <option value="Proses">Proses</option>
+            <option value="Perlu Verifikasi">Perlu Verifikasi</option>
+            <option value="Tidak Relevan">Tidak Relevan</option>
+          </select>
+
+          <!-- Search Input -->
+          <input type="text" id="searchInput" class="input-control input-search" placeholder="Cari nomor dokumen, penerbit, catatan, atau kode...">
+        </div>
+
+        <div class="btn-action-group">
+          <button id="btnResetFilter" class="btn btn-outline" title="Reset Filter">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="table-card">
+      <div class="table-header">
+        <h2>
+          <span>📁</span>
+          <span>Daftar Dokumen Legalitas Lahan</span>
+        </h2>
+        <span id="dataCount" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+          Menampilkan 0 dokumen
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">No</th>
+              <th>Bidang Tanah</th>
+              <th>Jenis Dokumen</th>
+              <th>Nomor Dokumen</th>
+              <th>Tanggal</th>
+              <th>Penerbit</th>
+              <th>Pihak Terkait</th>
+              <th>Status</th>
+              <th>Catatan</th>
+              <th style="text-align: right; width: 140px;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="legalitasTableBody">
+            <tr>
+              <td colspan="10" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                Memuat data dokumen legalitas...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Form Add/Edit -->
+  <div class="modal-overlay" id="formModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Entri Dokumen Legalitas</h3>
+        <button class="modal-close" onclick="closeFormModal()">&times;</button>
+      </div>
+      <form id="legalitasForm">
+        <div class="modal-body">
+          <input type="hidden" id="legalitasId" value="">
+
+          <!-- Bidang Tanah -->
+          <div class="form-group">
+            <label for="formKodeTanah">Bidang Tanah <span class="req">*</span></label>
+            <select id="formKodeTanah" class="form-control" required onchange="handleFormBidangChange()">
+              <option value="">-- Pilih Bidang Tanah --</option>
+            </select>
+            <div class="form-hint">Dokumen legalitas akan terhubung langsung dengan bidang tanah yang dipilih.</div>
+          </div>
+
+          <div class="form-row">
+            <!-- Jenis Dokumen -->
+            <div class="form-group">
+              <label for="formJenisDokumen">Jenis Dokumen <span class="req">*</span></label>
+              <select id="formJenisDokumen" class="form-control" required>
+                <option value="">-- Pilih Jenis Dokumen --</option>
+                <option value="Sertifikat">Sertifikat</option>
+                <option value="SHM">SHM (Sertifikat Hak Milik)</option>
+                <option value="SHGB">SHGB (Hak Guna Bangunan)</option>
+                <option value="AJB">AJB (Akta Jual Beli)</option>
+                <option value="KTP">KTP (Identitas)</option>
+                <option value="KK">KK (Kartu Keluarga)</option>
+                <option value="PBB">PBB (Pajak Bumi Bangunan)</option>
+                <option value="SPPT">SPPT (Surat Pemberitahuan Pajak)</option>
+                <option value="Girik">Girik / Letter C</option>
+                <option value="Letter C">Letter C</option>
+                <option value="Surat Waris">Surat Waris</option>
+                <option value="Akta Waris">Akta Waris Notaris</option>
+                <option value="Surat Kuasa">Surat Kuasa</option>
+                <option value="Dokumen Lainnya">Dokumen Lainnya</option>
+              </select>
+            </div>
+
+            <!-- Status Dokumen -->
+            <div class="form-group">
+              <label for="formStatus">Status Dokumen <span class="req">*</span></label>
+              <select id="formStatus" class="form-control" required>
+                <option value="Belum Ada">Belum Ada</option>
+                <option value="Ada">Ada</option>
+                <option value="Proses">Proses</option>
+                <option value="Perlu Verifikasi">Perlu Verifikasi</option>
+                <option value="Tidak Relevan">Tidak Relevan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Nomor Dokumen -->
+            <div class="form-group">
+              <label for="formNomorDokumen">Nomor Dokumen</label>
+              <input type="text" id="formNomorDokumen" class="form-control" placeholder="Contoh: SHM No. 10452/Sukamaju">
+            </div>
+
+            <!-- Tanggal Dokumen -->
+            <div class="form-group">
+              <label for="formTanggalDokumen">Tanggal Dokumen</label>
+              <input type="date" id="formTanggalDokumen" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Penerbit -->
+            <div class="form-group">
+              <label for="formPenerbit">Penerbit Dokumen</label>
+              <input type="text" id="formPenerbit" class="form-control" placeholder="Contoh: Kantor Pertanahan / Kepala Desa / Notaris">
+            </div>
+
+            <!-- Pihak Terkait (Dynamic based on selected parcel) -->
+            <div class="form-group">
+              <label for="formPihakId">Pihak Terkait (Pemilik / Ahli Waris)</label>
+              <select id="formPihakId" class="form-control">
+                <option value="">-- Pilih Bidang Terlebih Dahulu --</option>
+              </select>
+              <div class="form-hint" id="formPihakHint">Memuat otomatis pihak yang terelasi dengan bidang tanah di atas.</div>
+            </div>
+          </div>
+
+          <!-- Catatan -->
+          <div class="form-group">
+            <label for="formCatatan">Catatan / Keterangan Dokumen</label>
+            <textarea id="formCatatan" class="form-control" rows="3" placeholder="Keterangan kondisi fisik dokumen, arsip penyimpanan, legalisir, atau tindak lanjut..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeFormModal()">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitForm">Simpan Dokumen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Detail -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Detail Dokumen Legalitas</h3>
+        <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="detailModalContent">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeDetailModal()">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // State management
+    let legalitasData = [];
+    let bidangList = [];
+    let pihakMap = {}; // id -> Pihak object
+
+    // DOM Elements
+    const tableBody = document.getElementById('legalitasTableBody');
+    const filterBidang = document.getElementById('filterBidang');
+    const filterJenis = document.getElementById('filterJenis');
+    const filterStatus = document.getElementById('filterStatus');
+    const searchInput = document.getElementById('searchInput');
+    const btnResetFilter = document.getElementById('btnResetFilter');
+    const btnOpenAddModal = document.getElementById('btnOpenAddModal');
+    const dataCount = document.getElementById('dataCount');
+
+    // Stats
+    const statTotal = document.getElementById('statTotal');
+    const statAda = document.getElementById('statAda');
+    const statProses = document.getElementById('statProses');
+    const statBelumAda = document.getElementById('statBelumAda');
+    const statVerifikasi = document.getElementById('statVerifikasi');
+
+    // Form elements
+    const formModal = document.getElementById('formModal');
+    const legalitasForm = document.getElementById('legalitasForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const legalitasId = document.getElementById('legalitasId');
+    const formKodeTanah = document.getElementById('formKodeTanah');
+    const formJenisDokumen = document.getElementById('formJenisDokumen');
+    const formStatus = document.getElementById('formStatus');
+    const formNomorDokumen = document.getElementById('formNomorDokumen');
+    const formTanggalDokumen = document.getElementById('formTanggalDokumen');
+    const formPenerbit = document.getElementById('formPenerbit');
+    const formPihakId = document.getElementById('formPihakId');
+    const formPihakHint = document.getElementById('formPihakHint');
+    const formCatatan = document.getElementById('formCatatan');
+
+    // Detail modal
+    const detailModal = document.getElementById('detailModal');
+    const detailModalContent = document.getElementById('detailModalContent');
+    const toast = document.getElementById('toast');
+
+    // Init
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadMasterData();
+      await fetchLegalitas();
+      setupEventListeners();
+    });
+
+    // Load master Bidang Tanah and all Pihak for reference
+    async function loadMasterData() {
+      try {
+        const [resBidang, resPihak] = await Promise.all([
+          fetch('/api/bidang-tanah').then(r => r.json()).catch(() => ({ data: [] })),
+          fetch('/api/pihak').then(r => r.json()).catch(() => ({ data: [] }))
+        ]);
+
+        bidangList = resBidang.data || [];
+        const pihaks = resPihak.data || [];
+        pihaks.forEach(p => {
+          pihakMap[p.id] = p;
+        });
+
+        // Populate filterBidang
+        filterBidang.innerHTML = '<option value="Semua">Semua Bidang Tanah</option>';
+        formKodeTanah.innerHTML = '<option value="">-- Pilih Bidang Tanah --</option>';
+
+        bidangList.forEach(b => {
+          const label = `${b.kodeTanah} - ${b.nomorBidang ? 'No. ' + b.nomorBidang : b.kodeLokasi || ''}`;
+          
+          const optFilter = document.createElement('option');
+          optFilter.value = b.kodeTanah;
+          optFilter.textContent = label;
+          filterBidang.appendChild(optFilter);
+
+          const optForm = document.createElement('option');
+          optForm.value = b.kodeTanah;
+          optForm.textContent = label;
+          formKodeTanah.appendChild(optForm);
+        });
+
+      } catch (err) {
+        console.error('Gagal memuat master data:', err);
+      }
+    }
+
+    // Dynamic populate Pihak dropdown in Form based on selected Bidang
+    async function handleFormBidangChange(selectedPihakIdToSelect = null) {
+      const kodeTanah = formKodeTanah.value;
+      formPihakId.innerHTML = '<option value="">-- Tanpa Pihak / Belum Ditentukan --</option>';
+
+      if (!kodeTanah) {
+        formPihakId.disabled = true;
+        formPihakHint.textContent = 'Pilih bidang tanah di atas terlebih dahulu.';
+        return;
+      }
+
+      formPihakId.disabled = false;
+      formPihakHint.textContent = 'Mengambil daftar pihak terkait bidang tanah ini...';
+
+      try {
+        const res = await fetch(`/api/pihak/by-bidang/${encodeURIComponent(kodeTanah)}`);
+        const json = await res.json();
+        const relatedPihak = json.data || [];
+
+        if (relatedPihak.length === 0) {
+          formPihakHint.textContent = 'Belum ada pihak/pemilik terdaftar pada bidang tanah ini. Anda tetap dapat menyimpan dokumen.';
+        } else {
+          formPihakHint.textContent = `Tersedia ${relatedPihak.length} pihak terhubung pada bidang tanah ini.`;
+          relatedPihak.forEach(p => {
+            pihakMap[p.id] = p; // update cache
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = `${p.nama} (${p.tipePihak}${p.nik ? ' - ' + p.nik : ''})`;
+            if (selectedPihakIdToSelect && String(selectedPihakIdToSelect) === String(p.id)) {
+              opt.selected = true;
+            }
+            formPihakId.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        formPihakHint.textContent = 'Gagal memuat daftar pihak dari server.';
+      }
+    }
+
+    // Event listeners
+    function setupEventListeners() {
+      filterBidang.addEventListener('change', fetchLegalitas);
+      filterJenis.addEventListener('change', fetchLegalitas);
+      filterStatus.addEventListener('change', fetchLegalitas);
+
+      let debounceTimer;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(fetchLegalitas, 250);
+      });
+
+      btnResetFilter.addEventListener('click', () => {
+        filterBidang.value = 'Semua';
+        filterJenis.value = 'Semua';
+        filterStatus.value = 'Semua';
+        searchInput.value = '';
+        fetchLegalitas();
+      });
+
+      btnOpenAddModal.addEventListener('click', () => openFormModal());
+      legalitasForm.addEventListener('submit', handleFormSubmit);
+    }
+
+    // Fetch Legalitas Tanah
+    async function fetchLegalitas() {
+      const params = new URLSearchParams();
+      if (filterBidang.value && filterBidang.value !== 'Semua') params.append('kodeTanah', filterBidang.value);
+      if (filterJenis.value && filterJenis.value !== 'Semua') params.append('jenisDokumen', filterJenis.value);
+      if (filterStatus.value && filterStatus.value !== 'Semua') params.append('status', filterStatus.value);
+      if (searchInput.value.trim()) params.append('search', searchInput.value.trim());
+
+      try {
+        const res = await fetch(`/api/legalitas-tanah?${params.toString()}`);
+        const result = await res.json();
+
+        if (result.success) {
+          legalitasData = result.data || [];
+          updateStats(result.ringkasanStatus, result.count);
+          renderTable(legalitasData);
+        } else {
+          showToast(result.message || 'Gagal mengambil data', 'error');
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        showToast('Terjadi kesalahan jaringan', 'error');
+      }
+    }
+
+    // Update Stats Card Counters
+    function updateStats(ringkasan = {}, total = 0) {
+      statTotal.textContent = total || 0;
+      statAda.textContent = ringkasan['Ada'] || 0;
+      statProses.textContent = ringkasan['Proses'] || 0;
+      statBelumAda.textContent = ringkasan['Belum Ada'] || 0;
+      statVerifikasi.textContent = ringkasan['Perlu Verifikasi'] || 0;
+    }
+
+    // Render Table
+    function renderTable(data) {
+      dataCount.textContent = `Menampilkan ${data.length} dokumen`;
+
+      if (data.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="10">
+              <div class="empty-state">
+                <div class="empty-state-icon">⚖️</div>
+                <h4>Tidak Ada Dokumen Legalitas Ditemukan</h4>
+                <p>Coba sesuaikan kata kunci pencarian atau tambah entri dokumen baru.</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = data.map((item, index) => {
+        const pihakObj = item.pihakId ? pihakMap[item.pihakId] : null;
+        const pihakName = pihakObj ? pihakObj.nama : (item.pihakId ? `Pihak #${item.pihakId}` : '-');
+        const pihakTipe = pihakObj ? pihakObj.tipePihak : '';
+
+        // Status badge class
+        let statusBadgeClass = 'badge-status-tidak-relevan';
+        if (item.status === 'Ada') statusBadgeClass = 'badge-status-ada';
+        else if (item.status === 'Belum Ada') statusBadgeClass = 'badge-status-belum-ada';
+        else if (item.status === 'Proses') statusBadgeClass = 'badge-status-proses';
+        else if (item.status === 'Perlu Verifikasi') statusBadgeClass = 'badge-status-perlu-verifikasi';
+
+        // Format Date
+        let formattedDate = '-';
+        if (item.tanggalDokumen) {
+          try {
+            const dt = new Date(item.tanggalDokumen);
+            if (!isNaN(dt.getTime())) {
+              formattedDate = dt.toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+          } catch(e) {}
+        }
+
+        return `
+          <tr>
+            <td style="color: var(--text-muted); font-weight: 500;">${index + 1}</td>
+            <td>
+              <span class="badge badge-bidang">${escapeHtml(item.kodeTanah)}</span>
+            </td>
+            <td>
+              <span class="badge badge-dokumen">${escapeHtml(item.jenisDokumen)}</span>
+            </td>
+            <td>
+              <strong style="color: #0f172a;">${escapeHtml(item.nomorDokumen || '-')}</strong>
+            </td>
+            <td>${formattedDate}</td>
+            <td>${escapeHtml(item.penerbit || '-')}</td>
+            <td>
+              <div>
+                <span style="font-weight: 600; color: #334155;">${escapeHtml(pihakName)}</span>
+                ${pihakTipe ? `<div style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(pihakTipe)}</div>` : ''}
+              </div>
+            </td>
+            <td>
+              <span class="badge ${statusBadgeClass}">● ${escapeHtml(item.status)}</span>
+            </td>
+            <td style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-muted);" title="${escapeHtml(item.catatan || '')}">
+              ${escapeHtml(item.catatan || '-')}
+            </td>
+            <td style="text-align: right;">
+              <div style="display: inline-flex; gap: 0.35rem;">
+                <button class="btn btn-outline btn-sm" onclick="showDetail(${item.id})" title="Lihat Detail">🔍</button>
+                <button class="btn btn-outline btn-sm" onclick="openEditModal(${item.id})" title="Edit Dokumen">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete(${item.id})" title="Hapus Dokumen">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Open Form Modal (Add)
+    function openFormModal() {
+      modalTitle.textContent = 'Entri Dokumen Legalitas Baru';
+      legalitasId.value = '';
+      legalitasForm.reset();
+      formKodeTanah.value = '';
+      formPihakId.innerHTML = '<option value="">-- Pilih Bidang Terlebih Dahulu --</option>';
+      formPihakId.disabled = true;
+      formPihakHint.textContent = 'Pilih bidang tanah di atas terlebih dahulu.';
+      formModal.classList.add('active');
+    }
+
+    // Open Form Modal (Edit)
+    async function openEditModal(id) {
+      const item = legalitasData.find(d => d.id === id);
+      if (!item) return;
+
+      modalTitle.textContent = `Edit Dokumen Legalitas #${item.id}`;
+      legalitasId.value = item.id;
+      formKodeTanah.value = item.kodeTanah;
+      formJenisDokumen.value = item.jenisDokumen;
+      formStatus.value = item.status || 'Belum Ada';
+      formNomorDokumen.value = item.nomorDokumen || '';
+      
+      if (item.tanggalDokumen) {
+        try {
+          const dt = new Date(item.tanggalDokumen);
+          formTanggalDokumen.value = dt.toISOString().split('T')[0];
+        } catch(e) {
+          formTanggalDokumen.value = '';
+        }
+      } else {
+        formTanggalDokumen.value = '';
+      }
+
+      formPenerbit.value = item.penerbit || '';
+      formCatatan.value = item.catatan || '';
+
+      // Populate Pihak options for selected parcel and select current
+      await handleFormBidangChange(item.pihakId);
+
+      formModal.classList.add('active');
+    }
+
+    // Close Form Modal
+    function closeFormModal() {
+      formModal.classList.remove('active');
+    }
+
+    // Form Submit (Add or Edit)
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const id = legalitasId.value;
+      const isEdit = Boolean(id);
+
+      const payload = {
+        kodeTanah: formKodeTanah.value,
+        jenisDokumen: formJenisDokumen.value,
+        status: formStatus.value,
+        nomorDokumen: formNomorDokumen.value.trim() || undefined,
+        tanggalDokumen: formTanggalDokumen.value || undefined,
+        penerbit: formPenerbit.value.trim() || undefined,
+        pihakId: formPihakId.value ? parseInt(formPihakId.value, 10) : null,
+        catatan: formCatatan.value.trim() || undefined,
+      };
+
+      const submitBtn = document.getElementById('btnSubmitForm');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Menyimpan...';
+
+      try {
+        const url = isEdit ? `/api/legalitas-tanah/${id}` : '/api/legalitas-tanah';
+        const method = isEdit ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          showToast(isEdit ? 'Dokumen legalitas berhasil diperbarui' : 'Dokumen legalitas berhasil ditambahkan', 'success');
+          closeFormModal();
+          await fetchLegalitas();
+        } else {
+          showToast(result.message || 'Gagal menyimpan data', 'error');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Terjadi kesalahan koneksi server', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Simpan Dokumen';
+      }
+    }
+
+    // Show Detail Modal
+    function showDetail(id) {
+      const item = legalitasData.find(d => d.id === id);
+      if (!item) return;
+
+      const pihakObj = item.pihakId ? pihakMap[item.pihakId] : null;
+
+      let formattedDate = '-';
+      if (item.tanggalDokumen) {
+        try {
+          const dt = new Date(item.tanggalDokumen);
+          if (!isNaN(dt.getTime())) {
+            formattedDate = dt.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+          }
+        } catch(e) {}
+      }
+
+      let createdDate = '-';
+      if (item.createdAt) {
+        try {
+          createdDate = new Date(item.createdAt).toLocaleString('id-ID');
+        } catch(e) {}
+      }
+
+      let statusBadgeClass = 'badge-status-tidak-relevan';
+      if (item.status === 'Ada') statusBadgeClass = 'badge-status-ada';
+      else if (item.status === 'Belum Ada') statusBadgeClass = 'badge-status-belum-ada';
+      else if (item.status === 'Proses') statusBadgeClass = 'badge-status-proses';
+      else if (item.status === 'Perlu Verifikasi') statusBadgeClass = 'badge-status-perlu-verifikasi';
+
+      detailModalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div>
+            <span class="badge badge-dokumen" style="font-size: 0.95rem; padding: 0.35rem 0.8rem;">${escapeHtml(item.jenisDokumen)}</span>
+            <span class="badge badge-bidang" style="margin-left: 0.5rem; font-size: 0.95rem;">${escapeHtml(item.kodeTanah)}</span>
+          </div>
+          <span class="badge ${statusBadgeClass}" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">● Status: ${escapeHtml(item.status)}</span>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label">Nomor Dokumen</div>
+            <div class="detail-value">${escapeHtml(item.nomorDokumen || '-')}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Tanggal Terbit / Pengesahan</div>
+            <div class="detail-value">${formattedDate}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Instansi / Pejabat Penerbit</div>
+            <div class="detail-value">${escapeHtml(item.penerbit || '-')}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Pihak / Pemilik Terkait</div>
+            <div class="detail-value">
+              ${pihakObj ? `${escapeHtml(pihakObj.nama)} (${escapeHtml(pihakObj.tipePihak)})` : (item.pihakId ? `Pihak #${item.pihakId}` : 'Belum Ditentukan')}
+            </div>
+            ${pihakObj && pihakObj.nik ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">NIK: ${escapeHtml(pihakObj.nik)}</div>` : ''}
+          </div>
+          <div class="detail-item detail-item-full">
+            <div class="detail-label">Catatan & Keterangan Fisik</div>
+            <div class="detail-text">${escapeHtml(item.catatan || 'Tidak ada catatan tambahan.')}</div>
+          </div>
+          <div class="detail-item detail-item-full">
+            <div class="detail-label">Waktu Pencatatan Sistem</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">${createdDate}</div>
+          </div>
+        </div>
+      `;
+
+      detailModal.classList.add('active');
+    }
+
+    function closeDetailModal() {
+      detailModal.classList.remove('active');
+    }
+
+    // Confirm Delete
+    async function confirmDelete(id) {
+      const item = legalitasData.find(d => d.id === id);
+      const name = item ? `${item.jenisDokumen} (${item.nomorDokumen || item.kodeTanah})` : `ID #${id}`;
+      
+      if (!confirm(`Apakah Anda yakin ingin menghapus data dokumen "${name}"? Tindakan ini tidak dapat dibatalkan.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/legalitas-tanah/${id}`, {
+          method: 'DELETE',
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          showToast('Dokumen legalitas berhasil dihapus', 'success');
+          await fetchLegalitas();
+        } else {
+          showToast(result.message || 'Gagal menghapus data', 'error');
+        }
+      } catch (err) {
+        showToast('Terjadi kesalahan server saat menghapus', 'error');
+      }
+    }
+
+    // Toast message helper
+    function showToast(message, type = 'info') {
+      toast.textContent = message;
+      toast.className = `toast show ${type === 'success' ? 'toast-success' : type === 'error' ? 'toast-error' : ''}`;
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 3500);
+    }
+
+    // Escape HTML helper
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

@@ -1,60 +1,70 @@
-# Fitur Pembahasan (Manajemen Lahan)
+# Fitur Legalitas Tanah (Manajemen Lahan)
 
-Tugas ini berisi perintah dan perencanaan (blueprint) untuk implementasi menu **Pembahasan** pada sistem. Modul ini digunakan untuk mencatat dan mengelola aktivitas rapat, negosiasi, atau mediasi terkait pembebasan lahan, baik di tingkat lokasi awal (Lokasi Induk) maupun detail pada suatu bidang tanah (Bidang Tanah/Persil).
+Tugas ini berisi perintah dan perencanaan (blueprint) untuk implementasi menu **Legalitas Tanah** pada sistem. Modul ini digunakan untuk mencatat, memonitor, dan mengelola dokumen legalitas yang terkait dengan suatu bidang tanah, serta menghubungkan dokumen tersebut dengan pihak/pemilik terkait.
 
 ---
 
-## Kebutuhan Input & Data (Formulir Pembahasan)
+## Kebutuhan Input & Data (Formulir Legalitas Tanah)
 
 Antarmuka formulir dan database harus mampu menangani rincian inputan berikut:
 
-1. **Target**: 
-   - Jenis dropdown/pilihan: `Lokasi` atau `Bidang`.
-   - Menentukan konteks pembahasan, apakah untuk lokasi secara luas atau spesifik pada satu bidang tanah.
-2. **Lokasi/Referensi**: 
-   - Terintegrasi (Foreign Key dinamis) dengan tabel `lokasi` (jika Target = Lokasi) atau tabel `bidang_tanah` (jika Target = Bidang).
-   - Pada UI, dropdown ini harus memuat opsi sesuai pilihan "Target" sebelumnya.
-3. **Tanggal**:
-   - Tanggal pelaksanaan pembahasan/rapat.
-4. **Peserta**:
-   - Daftar peserta yang hadir (contoh: tim internal, pemilik lahan, notaris, dll). Dapat berupa teks (varchar/text).
-5. **Hasil Pembahasan**:
-   - Kolom teks (textarea) untuk mencatat notulensi, poin-poin kesepakatan, atau hal-hal yang dibicarakan.
-6. **Keputusan**:
-   - Dropdown opsi: *Layak*, *Perlu Kajian*, *Tidak Layak*.
+1. **Bidang Tanah**: 
+   - Dropdown untuk memilih Bidang Tanah (Foreign Key ke tabel `bidang_tanah`).
+   - Digunakan untuk mengidentifikasi dokumen ini milik bidang tanah yang mana.
+2. **Jenis Dokumen**: 
+   - Dropdown opsi jenis dokumen. Pilihan yang tersedia:
+     *Sertifikat, SHM, SHGB, AJB, KTP, KK, PBB, SPPT, Girik, Letter C, Surat Waris, Akta Waris, Surat Kuasa, Dokumen Lainnya*.
+3. **Status**:
+   - Dropdown status dokumen saat ini. Pilihan yang tersedia:
+     *Ada, Belum Ada, Proses, Tidak Relevan, Perlu Verifikasi*.
+4. **Nomor Dokumen**:
+   - Kolom teks (varchar) untuk mencatat nomor seri atau identitas dokumen (jika ada).
+5. **Tanggal Dokumen**:
+   - Tanggal penerbitan atau pengesahan dokumen.
+6. **Penerbit**:
+   - Kolom teks (varchar) untuk mencatat instansi atau pejabat yang menerbitkan (misal: BPN, Kelurahan, Notaris, dll).
+7. **Pihak Terkait**:
+   - Dropdown untuk mengkoneksikan dokumen dengan individu terkait (Foreign Key ke tabel `pihak`).
+   - Pada UI, disarankan agar opsi Pihak yang muncul adalah pihak-pihak yang sudah terelasi dengan Bidang Tanah yang dipilih pada poin 1.
+8. **Catatan**:
+   - Kolom teks (textarea) untuk keterangan tambahan, kondisi fisik dokumen, atau hal lainnya.
 
 ---
 
 ## Rencana Implementasi Teknis
 
 ### 1. Database Schema (Drizzle ORM)
-- Tambahkan tabel `pembahasan` pada `src/db/schema.ts`.
+- Tambahkan tabel `legalitas_tanah` pada `src/db/schema.ts`.
 - Kolom yang diperlukan:
   - `id` (Serial/UUID, Primary Key)
-  - `target` (Varchar: 'Lokasi' atau 'Bidang')
-  - `referensi_id` (Varchar/Foreign Key dinamis yang menyimpan `kode_lokasi` atau `kode_tanah`)
-  - `tanggal` (Date/Timestamp)
-  - `peserta` (Text)
-  - `hasil_pembahasan` (Text)
-  - `keputusan` (Varchar: 'Layak', 'Perlu Kajian', 'Tidak Layak')
+  - `kode_tanah` (Varchar, Foreign Key ke `bidang_tanah.kode_tanah`, on delete cascade)
+  - `jenis_dokumen` (Varchar)
+  - `status` (Varchar: 'Ada', 'Belum Ada', 'Proses', 'Tidak Relevan', 'Perlu Verifikasi')
+  - `nomor_dokumen` (Varchar, nullable)
+  - `tanggal_dokumen` (Date/Timestamp, nullable)
+  - `penerbit` (Varchar, nullable)
+  - `pihak_id` (Integer, Foreign Key ke `pihak.id`, nullable/on delete set null)
+  - `catatan` (Text, nullable)
   - `created_at` & `updated_at` (Timestamp)
 - Generate dan jalankan migrasi database (menggunakan Drizzle Kit).
 
 ### 2. REST API (ElysiaJS)
-- Buat file routing `src/routes/pembahasan.ts` untuk melayani operasi CRUD:
-  - `GET /api/pembahasan` - Mengambil data pembahasan (dengan kapabilitas filter berdasarkan target dan referensi ID, serta pencarian kata kunci).
-  - `GET /api/pembahasan/:id` - Mengambil detail pembahasan.
-  - `POST /api/pembahasan` - Menambah data pembahasan baru.
-  - `PUT /api/pembahasan/:id` - Memperbarui data pembahasan.
-  - `DELETE /api/pembahasan/:id` - Menghapus data pembahasan.
-- Implementasikan *in-memory store fallback* (dengan koneksi timeout check) apabila database sedang bermasalah.
+- Buat file routing `src/routes/legalitasTanah.ts` untuk melayani operasi CRUD:
+  - `GET /api/legalitas-tanah` - Mengambil data legalitas (dengan filter berdasarkan `kodeTanah`, `status`, `jenisDokumen`, dan pencarian).
+  - `GET /api/legalitas-tanah/:id` - Mengambil detail legalitas.
+  - `POST /api/legalitas-tanah` - Menambah data legalitas baru.
+  - `PUT /api/legalitas-tanah/:id` - Memperbarui data legalitas.
+  - `DELETE /api/legalitas-tanah/:id` - Menghapus data legalitas.
+- Implementasikan *in-memory store fallback* (dengan pengecekan koneksi timeout) seperti pada modul-modul sebelumnya.
+- Daftarkan route baru ini pada `src/index.ts`.
 
 ### 3. Antarmuka Web (UI)
-- Buat halaman HTML baru `public/pembahasan.html` dengan desain (layout, font, CSS variable) yang konsisten dengan halaman sebelumnya.
-- Sediakan navigasi lintas modul pada bagian header.
-- Implementasikan UI form dinamis: Jika pengguna memilih "Target = Lokasi", dropdown referensi hanya akan meload opsi dari endpoint `/api/lokasi`. Jika "Target = Bidang", dropdown meload dari `/api/bidang-tanah`.
-- Sediakan tabel riwayat pembahasan dengan tombol aksi Edit/Hapus, serta badge status untuk kolom *Keputusan*.
+- Buat halaman HTML baru `public/legalitas.html` dengan desain (layout, font, komponen) yang konsisten dengan halaman sebelumnya (tema disarankan menggunakan warna khusus agar mudah dibedakan, misal kombinasi warna *Slate/Teal* atau sesuai harmoni aplikasi).
+- Sediakan navigasi lintas modul pada bagian header, dan tambahkan tautan Legalitas Tanah ini di file-file `.html` lainnya (Lokasi, Bidang, Pihak, Survey, Pembahasan).
+- Implementasikan UI form dinamis:
+  - Ketika dropdown "Bidang Tanah" dipilih, dropdown "Pihak Terkait" harus secara dinamis (via AJAX) mengambil data dari endpoint `/api/pihak/by-bidang/:kodeTanah` agar relevan.
+- Sediakan tabel riwayat dan daftar dokumen legalitas dengan tombol aksi Edit/Hapus, serta badge warna-warni untuk kolom *Status* (misal: Hijau untuk "Ada", Kuning untuk "Proses", Merah untuk "Belum Ada", dll).
 
 ### 4. Testing Otomatis
-- Buat file pengujian `test/pembahasan.test.ts`.
-- Lakukan pengetesan terhadap endpoint CRUD untuk memastikan validasi payload (termasuk validasi opsi Keputusan), fallback in-memory, dan relasi dinamis berjalan baik.
+- Buat file pengujian `test/legalitasTanah.test.ts`.
+- Lakukan pengetesan terhadap endpoint CRUD untuk memastikan relasi dengan `bidang_tanah` dan `pihak` berjalan lancar, form validasi bekerja, dan fallback in-memory teruji dengan baik.
