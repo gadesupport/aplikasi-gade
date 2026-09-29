@@ -77,6 +77,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /survey.html` - Antarmuka Web interaktif Pencatatan & Riwayat Survey Lapangan
 - `GET /pembahasan.html` - Antarmuka Web interaktif Notulensi & Keputusan Pembahasan Lahan
 - `GET /legalitas.html` - Antarmuka Web interaktif Legalitas Tanah & Dokumen Alas Hak Terintegrasi
+- `GET /pembebasan.html` - Antarmuka Web interaktif Kontrol Utama Rekap & Tracking Pembayaran Pembebasan Tanah
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -126,6 +127,16 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/legalitas-tanah` - Tambah dokumen legalitas baru (Terintegrasi ke Bidang Tanah dan Pihak Terkait)
 - `PUT /api/legalitas-tanah/:id` - Perbarui informasi dokumen legalitas tanah
 - `DELETE /api/legalitas-tanah/:id` - Hapus data dokumen legalitas
+
+### Endpoint API Pembebasan & Transaksi Pembayaran (`/api/pembebasan`)
+- `GET /api/pembebasan` - Daftar mutasi seluruh transaksi pembayaran (mendukung query `?kodeTanah=`, `?status=`, `?tahapPembayaran=`, `?metodePembayaran=`, dan `?search=`) disertai ringkasan finansial (`totalNominal`, `totalLunas`, `totalPending`)
+- `GET /api/pembebasan/rekap` - **Kontrol Utama Rekap Pembebasan**: Ringkasan agregat per bidang tanah (harga kesepakatan, realisasi terbayar, sisa kewajiban, persentase pelunasan, status)
+- `GET /api/pembebasan/bidang/:bidangId` - Rekapitulasi pembayaran khusus satu bidang tanah beserta riwayat mutasinya
+- `GET /api/pembebasan/:id` - Detail satu transaksi pembayaran
+- `POST /api/pembebasan` - Tambah catatan transaksi pembayaran baru (Mendukung alias `bidang_id`, nominal uang, tahap pembayaran, status, metode, bukti transfer)
+- `PUT /api/pembebasan/:id` - Perbarui catatan transaksi pembayaran
+- `DELETE /api/pembebasan/:id` - Hapus catatan transaksi pembayaran
+
 
 
 
