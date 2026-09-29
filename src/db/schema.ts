@@ -237,3 +237,62 @@ export const legalitasTanah = pgTable('legalitas_tanah', {
 export type LegalitasTanah = typeof legalitasTanah.$inferSelect;
 export type NewLegalitasTanah = typeof legalitasTanah.$inferInsert;
 
+export const tahapPembebasanValues = [
+  'Uang Muka',
+  'Termin 1',
+  'Termin 2',
+  'Termin 3',
+  'Pelunasan',
+  'Ganti Rugi Penuh',
+  'Lainnya',
+] as const;
+
+export type TahapPembebasan = (typeof tahapPembebasanValues)[number];
+
+export const statusTransaksiValues = [
+  'Pending',
+  'Lunas',
+  'Dalam Proses',
+  'Dibatalkan',
+  'Gagal',
+] as const;
+
+export type StatusTransaksi = (typeof statusTransaksiValues)[number];
+
+export const metodePembayaranValues = [
+  'Transfer Bank',
+  'Cek / Bilyet Giro',
+  'Tunai',
+  'Konsinyasi (Pengadilan)',
+  'Lainnya',
+] as const;
+
+export type MetodePembayaran = (typeof metodePembayaranValues)[number];
+
+export const pembebasan = pgTable('pembebasan', {
+  id: serial('id').primaryKey(),
+  kodeTanah: varchar('kode_tanah', { length: 100 })
+    .notNull()
+    .references(() => bidangTanah.kodeTanah, { onDelete: 'cascade' }),
+  tanggalPembayaran: timestamp('tanggal_pembayaran').notNull(),
+  jumlahPembayaran: numeric('jumlah_pembayaran', { precision: 18, scale: 2 }).notNull(),
+  tahapPembayaran: varchar('tahap_pembayaran', { length: 100 })
+    .notNull()
+    .default('Uang Muka'), // 'Uang Muka' | 'Termin 1' | 'Termin 2' | 'Termin 3' | 'Pelunasan' | 'Ganti Rugi Penuh' | 'Lainnya'
+  metodePembayaran: varchar('metode_pembayaran', { length: 100 })
+    .notNull()
+    .default('Transfer Bank'), // 'Transfer Bank' | 'Cek / Bilyet Giro' | 'Tunai' | 'Konsinyasi (Pengadilan)' | 'Lainnya'
+  nomorReferensi: varchar('nomor_referensi', { length: 150 }),
+  buktiPembayaran: text('bukti_pembayaran'),
+  status: varchar('status', { length: 50 })
+    .notNull()
+    .default('Pending'), // 'Pending' | 'Lunas' | 'Dalam Proses' | 'Dibatalkan' | 'Gagal'
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Pembebasan = typeof pembebasan.$inferSelect;
+export type NewPembebasan = typeof pembebasan.$inferInsert;
+
+

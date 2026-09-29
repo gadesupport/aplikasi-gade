@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aplikasi Gade - Kontrol Pembebasan & Transaksi Pembayaran Tanah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --bg-main: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --info: #0284c7;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #fff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #a7f3d0;
+    }
+
+    .nav-btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      padding: 1.25rem 1.5rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .stat-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stat-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Navigation Tabs */
+    .tab-nav {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: rgba(5, 150, 105, 0.04);
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .tab-badge {
+      background: #e2e8f0;
+      color: #334155;
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    .tab-btn.active .tab-badge {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    /* Filter Card */
+    .filter-card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 1.15rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 1fr auto;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .form-group-filter label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .filter-input, .filter-select {
+      width: 100%;
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .filter-input:focus, .filter-select:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    /* Table Container */
+    .table-container {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .table-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .table-title h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .table-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.86rem;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      color: #1e293b;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .badge-lunas {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-pending {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-proses {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .badge-batal {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .badge-tahap {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .badge-tahap-dp {
+      background: #ede9fe;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+    }
+
+    .badge-tahap-lunas {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    /* Progress bar */
+    .progress-box {
+      min-width: 140px;
+    }
+
+    .progress-bar-bg {
+      background: #e2e8f0;
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 0.25rem;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.4s ease;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Action buttons in table */
+    .action-btns {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-icon {
+      padding: 0.4rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.15s;
+    }
+
+    .btn-icon:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-icon-pay {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-color: #a7f3d0;
+    }
+
+    .btn-icon-pay:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-icon-danger:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    /* Modal Styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: modalFadeIn 0.25s ease-out;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+    }
+
+    .modal-title h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .modal-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .form-row > .form-group {
+      flex: 1;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group label span.req {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    .parcel-info-badge {
+      background: #ecfdf5;
+      border: 1px dashed #6ee7b7;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      font-size: 0.825rem;
+      color: #065f46;
+      display: none;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 0.9rem 1.4rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast-success {
+      background: #065f46;
+      border-left: 4px solid #34d399;
+    }
+
+    .toast-error {
+      background: #991b1b;
+      border-left: 4px solid #f87171;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 4rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+      opacity: 0.6;
+    }
+
+    .empty-state h4 {
+      font-size: 1.1rem;
+      color: #334155;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">💰</div>
+        <div class="brand-title">
+          <h1>Pembebasan & Transaksi Tanah</h1>
+          <p>Kontrol Utama & Tracking Pembayaran Pembebasan Lahan</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Bidang</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-secondary">⚖️ Legalitas</a>
+        <a href="/pembebasan.html" class="nav-btn nav-btn-active">💰 Pembebasan</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
+        <button id="btnOpenAddModal" class="nav-btn nav-btn-primary">+ Entri Pembayaran</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <div class="container">
+
+    <!-- Financial Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">💵</div>
+        <div class="stat-info">
+          <div class="stat-label">Total Realisasi Bayar</div>
+          <div class="stat-value" id="kpiTotalLunas">Rp 0</div>
+          <div class="stat-sub" id="kpiCountLunas">0 transaksi lunas</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #e0e7ff; color: #4338ca;">🏷️</div>
+        <div class="stat-info">
+          <div class="stat-label">Nilai Kesepakatan Lahan</div>
+          <div class="stat-value" id="kpiTotalKesepakatan">Rp 0</div>
+          <div class="stat-sub" id="kpiTotalBidang">0 bidang tanah</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fef3c7; color: #d97706;">⏳</div>
+        <div class="stat-info">
+          <div class="stat-label">Sisa Kewajiban Bayar</div>
+          <div class="stat-value" id="kpiSisaKewajiban">Rp 0</div>
+          <div class="stat-sub" id="kpiPersentaseBayar">0% teralisasi</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">📝</div>
+        <div class="stat-info">
+          <div class="stat-label">Pending / Dalam Proses</div>
+          <div class="stat-value" id="kpiTotalPending">Rp 0</div>
+          <div class="stat-sub" id="kpiCountPending">0 transaksi pending</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tabBtnRekap" onclick="switchTab('rekap')">
+        📊 Kontrol Utama Rekap Bidang Tanah
+        <span class="tab-badge" id="badgeTotalBidang">0</span>
+      </button>
+      <button class="tab-btn" id="tabBtnJurnal" onclick="switchTab('jurnal')">
+        💳 Jurnal Riwayat Transaksi Pembayaran
+        <span class="tab-badge" id="badgeTotalTransaksi">0</span>
+      </button>
+    </div>
+
+    <!-- VIEW 1: REKAP KONTROL UTAMA PER BIDANG -->
+    <div id="viewRekap">
+      <div class="table-container">
+        <div class="table-header">
+          <div class="table-title">
+            <h3>Tabel Kontrol Utama Pembebasan per Bidang Tanah</h3>
+            <p>Pemantauan status pembayaran, sisa kewajiban, dan progress pelunasan setiap bidang tanah</p>
+          </div>
+          <button class="btn-icon" onclick="loadData()">🔄 Refresh Rekap</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Kode / No. Bidang</th>
+                <th>Lokasi</th>
+                <th>Pemilik / Pihak</th>
+                <th>Luas</th>
+                <th>Harga Kesepakatan</th>
+                <th>Total Terbayar</th>
+                <th>Sisa Kewajiban</th>
+                <th>Progress Pelunasan</th>
+                <th>Status</th>
+                <th style="text-align: right;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBodyRekap">
+              <tr>
+                <td colspan="10" style="text-align: center; padding: 2.5rem;">
+                  Sedang memuat data rekap pembebasan...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: JURNAL TRANSAKSI LENGKAP -->
+    <div id="viewJurnal" style="display: none;">
+      <!-- Filter Card -->
+      <div class="filter-card">
+        <div class="filter-row">
+          <div class="form-group-filter">
+            <label for="filterBidang">Bidang Tanah</label>
+            <select id="filterBidang" class="filter-select" onchange="applyFilters()">
+              <option value="Semua">Semua Bidang Tanah</option>
+            </select>
+          </div>
+
+          <div class="form-group-filter">
+            <label for="filterStatus">Status Pembayaran</label>
+            <select id="filterStatus" class="filter-select" onchange="applyFilters()">
+              <option value="Semua">Semua Status</option>
+              <option value="Lunas">Lunas</option>
+              <option value="Pending">Pending</option>
+              <option value="Dalam Proses">Dalam Proses</option>
+              <option value="Dibatalkan">Dibatalkan</option>
+            </select>
+          </div>
+
+          <div class="form-group-filter">
+            <label for="filterTahap">Tahap Pembayaran</label>
+            <select id="filterTahap" class="filter-select" onchange="applyFilters()">
+              <option value="Semua">Semua Tahap</option>
+              <option value="Uang Muka">Uang Muka</option>
+              <option value="Termin 1">Termin 1</option>
+              <option value="Termin 2">Termin 2</option>
+              <option value="Termin 3">Termin 3</option>
+              <option value="Pelunasan">Pelunasan</option>
+              <option value="Ganti Rugi Penuh">Ganti Rugi Penuh</option>
+            </select>
+          </div>
+
+          <div class="form-group-filter">
+            <label for="filterSearch">Cari Transaksi</label>
+            <input type="text" id="filterSearch" class="filter-input" placeholder="No Ref, Catatan, Nama..." oninput="debounceSearch()" />
+          </div>
+
+          <div>
+            <button class="btn-icon" onclick="resetFilters()">↺ Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="table-container">
+        <div class="table-header">
+          <div class="table-title">
+            <h3>Jurnal Riwayat Seluruh Transaksi Pembayaran</h3>
+            <p>Daftar kronologis mutasi pencairan dan pelunasan pembebasan tanah</p>
+          </div>
+          <button class="nav-btn nav-btn-primary" onclick="openAddModal()">+ Entri Transaksi</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>No. Ref / ID</th>
+                <th>Tanggal Bayar</th>
+                <th>Bidang Tanah</th>
+                <th>Tahap</th>
+                <th>Jumlah Bayar (Rp)</th>
+                <th>Metode</th>
+                <th>Status</th>
+                <th>Bukti / Berkas</th>
+                <th>Catatan</th>
+                <th style="text-align: right;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBodyJurnal">
+              <tr>
+                <td colspan="10" style="text-align: center; padding: 2.5rem;">
+                  Sedang memuat data transaksi...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL: ENTRI / EDIT PEMBAYARAN -->
+  <div class="modal-backdrop" id="modalPayment">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <h3 id="modalPaymentTitle">Entri Transaksi Pembayaran</h3>
+          <p>Catat mutasi pembayaran pembebasan tanah ke sistem</p>
+        </div>
+        <button class="modal-close" onclick="closeModalPayment()">✕</button>
+      </div>
+
+      <form id="formPayment" onsubmit="handleSavePayment(event)">
+        <div class="modal-body">
+          <input type="hidden" id="paymentId" />
+
+          <!-- Pilih Bidang Tanah -->
+          <div class="form-group">
+            <label for="modalKodeTanah">Bidang Tanah Terkait <span class="req">*</span></label>
+            <select id="modalKodeTanah" class="form-control" required onchange="handleParcelSelect()">
+              <option value="">-- Pilih Bidang Tanah --</option>
+            </select>
+            <div id="parcelInfoBox" class="parcel-info-badge">
+              <strong>Info Bidang:</strong> Pemilik: <span id="infoPemilik">-</span> | Luas: <span id="infoLuas">-</span> m² | Kesepakatan: <span id="infoKesepakatan">-</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="modalTanggal">Tanggal Pembayaran <span class="req">*</span></label>
+              <input type="date" id="modalTanggal" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+              <label for="modalJumlah">Jumlah Pembayaran (Rp) <span class="req">*</span></label>
+              <input type="number" id="modalJumlah" class="form-control" required min="1" step="any" placeholder="Contoh: 500000000" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="modalTahap">Tahap Pembayaran <span class="req">*</span></label>
+              <select id="modalTahap" class="form-control" required>
+                <option value="Uang Muka">Uang Muka</option>
+                <option value="Termin 1">Termin 1</option>
+                <option value="Termin 2">Termin 2</option>
+                <option value="Termin 3">Termin 3</option>
+                <option value="Pelunasan">Pelunasan</option>
+                <option value="Ganti Rugi Penuh">Ganti Rugi Penuh</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="modalMetode">Metode Pembayaran <span class="req">*</span></label>
+              <select id="modalMetode" class="form-control" required>
+                <option value="Transfer Bank">Transfer Bank</option>
+                <option value="Cek / Bilyet Giro">Cek / Bilyet Giro</option>
+                <option value="Tunai">Tunai</option>
+                <option value="Konsinyasi (Pengadilan)">Konsinyasi (Pengadilan)</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="modalNomorReferensi">Nomor Referensi / No. Kuitansi</label>
+              <input type="text" id="modalNomorReferensi" class="form-control" placeholder="Contoh: TRF-2026-00123 / BG-0044" />
+            </div>
+
+            <div class="form-group">
+              <label for="modalStatus">Status Transaksi <span class="req">*</span></label>
+              <select id="modalStatus" class="form-control" required>
+                <option value="Lunas">Lunas</option>
+                <option value="Pending">Pending</option>
+                <option value="Dalam Proses">Dalam Proses</option>
+                <option value="Dibatalkan">Dibatalkan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="modalBukti">URL / Path Bukti Transfer (Opsional)</label>
+            <input type="text" id="modalBukti" class="form-control" placeholder="https://storage.gade.id/bukti/... atau link file" />
+          </div>
+
+          <div class="form-group">
+            <label for="modalCatatan">Catatan Transaksi</label>
+            <textarea id="modalCatatan" rows="3" class="form-control" placeholder="Keterangan tambahan transaksi pembebasan ini..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-icon" onclick="closeModalPayment()">Batal</button>
+          <button type="submit" class="nav-btn nav-btn-primary" id="btnSubmitPayment">Simpan Pembayaran</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DETAIL RIWAYAT BIDANG -->
+  <div class="modal-backdrop" id="modalParcelHistory">
+    <div class="modal" style="max-width: 780px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <h3 id="historyModalTitle">Riwayat Pembayaran Bidang</h3>
+          <p id="historyModalSubtitle">Rincian mutasi pencairan pembebasan lahan</p>
+        </div>
+        <button class="modal-close" onclick="closeModalParcelHistory()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Summary Box -->
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; text-align: center;">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">NILAI KESEPAKATAN</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: #0f172a;" id="histKesepakatan">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; color: #16a34a; font-weight: 600;">TOTAL TERBAYAR</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: #16a34a;" id="histTerbayar">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; color: #d97706; font-weight: 600;">SISA KEWAJIBAN</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: #d97706;" id="histSisa">Rp 0</div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">PROGRESS</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: var(--primary);" id="histPersen">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Tahap</th>
+                <th>Jumlah (Rp)</th>
+                <th>Metode</th>
+                <th>Status</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-icon" onclick="closeModalParcelHistory()">Tutup</button>
+        <button class="nav-btn nav-btn-primary" id="btnHistAddPay">+ Tambah Bayar untuk Bidang Ini</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <span id="toastIcon">✓</span>
+    <span id="toastMessage">Pesan pemberitahuan</span>
+  </div>
+
+  <script>
+    // State management
+    let activeTab = 'rekap';
+    let rekapData = [];
+    let transactionsData = [];
+    let parcelsList = [];
+    let searchDebounceTimeout = null;
+
+    // Formatters
+    const formatRp = (num) => {
+      const val = parseFloat(num) || 0;
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }).format(val);
+    };
+
+    const formatDate = (dateStr) => {
+      if (!dateStr) return '-';
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toast.className = `toast ${isError ? 'toast-error' : 'toast-success'} show`;
+      toastIcon.textContent = isError ? '✕' : '✓';
+      toastMessage.textContent = message;
+
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 3500);
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      const btnRekap = document.getElementById('tabBtnRekap');
+      const btnJurnal = document.getElementById('tabBtnJurnal');
+      const viewRekap = document.getElementById('viewRekap');
+      const viewJurnal = document.getElementById('viewJurnal');
+
+      if (tab === 'rekap') {
+        btnRekap.classList.add('active');
+        btnJurnal.classList.remove('active');
+        viewRekap.style.display = 'block';
+        viewJurnal.style.display = 'none';
+      } else {
+        btnJurnal.classList.add('active');
+        btnRekap.classList.remove('active');
+        viewJurnal.style.display = 'block';
+        viewRekap.style.display = 'none';
+      }
+    }
+
+    // Load initial data
+    async function loadData() {
+      await Promise.all([loadRekap(), loadTransactions(), loadParcels()]);
+    }
+
+    async function loadParcels() {
+      try {
+        const res = await fetch('/api/bidang-tanah');
+        if (res.ok) {
+          const json = await res.json();
+          parcelsList = json.data || [];
+          populateParcelDropdowns();
+        }
+      } catch (err) {
+        console.warn('Gagal memuat list bidang tanah:', err);
+      }
+    }
+
+    function populateParcelDropdowns() {
+      const modalSelect = document.getElementById('modalKodeTanah');
+      const filterSelect = document.getElementById('filterBidang');
+
+      // Preserve currently selected if any
+      const currentModalVal = modalSelect.value;
+      const currentFilterVal = filterSelect.value;
+
+      modalSelect.innerHTML = '<option value="">-- Pilih Bidang Tanah --</option>';
+      filterSelect.innerHTML = '<option value="Semua">Semua Bidang Tanah</option>';
+
+      // If parcelsList is empty, fallback to rekap data parcels
+      const listToUse = parcelsList.length > 0 ? parcelsList : rekapData.map(r => ({
+        kodeTanah: r.kodeTanah,
+        nomorBidang: r.nomorBidang,
+        pemilik: r.pemilik,
+        hargaKesepakatan: r.hargaKesepakatan
+      }));
+
+      listToUse.forEach(p => {
+        const optText = `${p.kodeTanah} - ${p.nomorBidang || 'Tanpa No'} (${p.pemilik || 'Pemilik Belum Terdata'})`;
+        
+        const optModal = document.createElement('option');
+        optModal.value = p.kodeTanah;
+        optModal.textContent = optText;
+        modalSelect.appendChild(optModal);
+
+        const optFilter = document.createElement('option');
+        optFilter.value = p.kodeTanah;
+        optFilter.textContent = optText;
+        filterSelect.appendChild(optFilter);
+      });
+
+      if (currentModalVal) modalSelect.value = currentModalVal;
+      if (currentFilterVal) filterSelect.value = currentFilterVal;
+    }
+
+    function handleParcelSelect() {
+      const select = document.getElementById('modalKodeTanah');
+      const box = document.getElementById('parcelInfoBox');
+      const kode = select.value;
+
+      if (!kode) {
+        box.style.display = 'none';
+        return;
+      }
+
+      const foundRekap = rekapData.find(r => r.kodeTanah === kode);
+      const foundBidang = parcelsList.find(p => p.kodeTanah === kode);
+
+      const pemilik = foundRekap?.pemilik || foundBidang?.pemilik || '-';
+      const luas = foundRekap?.luas || foundBidang?.luas || '-';
+      const kesepakatan = foundRekap?.hargaKesepakatan || foundBidang?.hargaKesepakatan || 0;
+
+      document.getElementById('infoPemilik').textContent = pemilik;
+      document.getElementById('infoLuas').textContent = luas;
+      document.getElementById('infoKesepakatan').textContent = formatRp(kesepakatan);
+      box.style.display = 'block';
+    }
+
+    async function loadRekap() {
+      try {
+        const res = await fetch('/api/pembebasan/rekap');
+        const json = await res.json();
+
+        if (json.success) {
+          rekapData = json.data || [];
+          const summary = json.summary || {};
+
+          // Update KPI cards
+          document.getElementById('kpiTotalLunas').textContent = formatRp(summary.grandTotalDibayar);
+          document.getElementById('kpiTotalKesepakatan').textContent = formatRp(summary.grandTotalKesepakatan);
+          document.getElementById('kpiSisaKewajiban').textContent = formatRp(summary.grandTotalSisa);
+          document.getElementById('kpiPersentaseBayar').textContent = `${summary.persentaseRealisasi || 0}% teralisasi`;
+          document.getElementById('kpiTotalPending').textContent = formatRp(summary.grandTotalPending);
+          document.getElementById('kpiTotalBidang').textContent = `${summary.totalBidangTerdata || 0} bidang tanah`;
+
+          document.getElementById('badgeTotalBidang').textContent = rekapData.length;
+
+          renderRekapTable();
+        }
+      } catch (err) {
+        console.error('Error loadRekap:', err);
+        showToast('Gagal memuat rekap pembebasan', true);
+      }
+    }
+
+    function renderRekapTable() {
+      const tbody = document.getElementById('tableBodyRekap');
+      if (rekapData.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10">
+              <div class="empty-state">
+                <div class="empty-state-icon">🏞️</div>
+                <h4>Belum Ada Data Bidang Tanah</h4>
+                <p>Data bidang tanah akan otomatis tersinkronisasi di tabel kontrol ini.</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = rekapData.map(item => {
+        let badgeClass = 'badge-pending';
+        if (item.statusPelunasan === 'Lunas') badgeClass = 'badge-lunas';
+        else if (item.statusPelunasan === 'Sebagian (DP/Termin)') badgeClass = 'badge-tahap-dp';
+        else if (item.statusPelunasan === 'Menunggu Proses') badgeClass = 'badge-proses';
+
+        return `
+          <tr>
+            <td>
+              <strong>${item.kodeTanah}</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">${item.nomorBidang || '-'}</div>
+            </td>
+            <td>${item.kodeLokasi || '-'}</td>
+            <td><strong>${item.pemilik || '-'}</strong></td>
+            <td>${item.luas ? `${item.luas} m²` : '-'}</td>
+            <td><strong>${formatRp(item.hargaKesepakatan)}</strong></td>
+            <td style="color: #16a34a; font-weight: 700;">${formatRp(item.totalDibayar)}</td>
+            <td style="color: #d97706; font-weight: 700;">${formatRp(item.sisaPembayaran)}</td>
+            <td>
+              <div class="progress-box">
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" style="width: ${Math.min(100, item.persentase)}%;"></div>
+                </div>
+                <div class="progress-text">
+                  <span>${item.persentase}%</span>
+                  <span>${item.jumlahTransaksi} Trx</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge ${badgeClass}">${item.statusPelunasan}</span>
+            </td>
+            <td style="text-align: right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="btn-icon" onclick="openParcelHistory('${item.kodeTanah}')" title="Lihat Riwayat">
+                  👁️ Riwayat
+                </button>
+                <button class="btn-icon btn-icon-pay" onclick="openAddPaymentForParcel('${item.kodeTanah}')" title="Entri Pembayaran">
+                  + Bayar
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function loadTransactions() {
+      try {
+        const filterBidang = document.getElementById('filterBidang')?.value || 'Semua';
+        const filterStatus = document.getElementById('filterStatus')?.value || 'Semua';
+        const filterTahap = document.getElementById('filterTahap')?.value || 'Semua';
+        const search = document.getElementById('filterSearch')?.value || '';
+
+        const params = new URLSearchParams();
+        if (filterBidang !== 'Semua') params.append('kodeTanah', filterBidang);
+        if (filterStatus !== 'Semua') params.append('status', filterStatus);
+        if (filterTahap !== 'Semua') params.append('tahapPembayaran', filterTahap);
+        if (search) params.append('search', search);
+
+        const res = await fetch(`/api/pembebasan?${params.toString()}`);
+        const json = await res.json();
+
+        if (json.success) {
+          transactionsData = json.data || [];
+          document.getElementById('badgeTotalTransaksi').textContent = json.count || 0;
+
+          // Update count info
+          document.getElementById('kpiCountLunas').textContent = `${json.ringkasanStatus?.['Lunas'] || 0} transaksi lunas`;
+          document.getElementById('kpiCountPending').textContent = `${(json.ringkasanStatus?.['Pending'] || 0) + (json.ringkasanStatus?.['Dalam Proses'] || 0)} transaksi pending`;
+
+          renderTransactionsTable();
+        }
+      } catch (err) {
+        console.error('Error loadTransactions:', err);
+        showToast('Gagal memuat transaksi pembayaran', true);
+      }
+    }
+
+    function renderTransactionsTable() {
+      const tbody = document.getElementById('tableBodyJurnal');
+      if (transactionsData.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10">
+              <div class="empty-state">
+                <div class="empty-state-icon">💳</div>
+                <h4>Belum Ada Riwayat Transaksi</h4>
+                <p>Klik tombol "+ Entri Transaksi" untuk mulai mencatat pembayaran tanah.</p>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = transactionsData.map(tx => {
+        let statusBadge = 'badge-pending';
+        if (tx.status === 'Lunas') statusBadge = 'badge-lunas';
+        else if (tx.status === 'Dalam Proses') statusBadge = 'badge-proses';
+        else if (tx.status === 'Dibatalkan' || tx.status === 'Gagal') statusBadge = 'badge-batal';
+
+        let tahapBadge = 'badge-tahap';
+        if (tx.tahapPembayaran === 'Uang Muka') tahapBadge = 'badge-tahap-dp';
+        else if (tx.tahapPembayaran === 'Pelunasan') tahapBadge = 'badge-tahap-lunas';
+
+        return `
+          <tr>
+            <td>
+              <strong>${tx.nomorReferensi || `#TRX-${tx.id}`}</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">ID: #${tx.id}</div>
+            </td>
+            <td>${formatDate(tx.tanggalPembayaran)}</td>
+            <td>
+              <strong>${tx.kodeTanah}</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">${tx.pemilik || '-'}</div>
+            </td>
+            <td><span class="badge ${tahapBadge}">${tx.tahapPembayaran}</span></td>
+            <td style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">${formatRp(tx.jumlahPembayaran)}</td>
+            <td>${tx.metodePembayaran}</td>
+            <td><span class="badge ${statusBadge}">${tx.status}</span></td>
+            <td>
+              ${tx.buktiPembayaran ? `
+                <a href="${tx.buktiPembayaran}" target="_blank" class="btn-icon" style="font-size: 0.75rem; text-decoration: none;">
+                  📎 Bukti
+                </a>
+              ` : '<span style="color: var(--text-muted); font-size: 0.75rem;">-</span>'}
+            </td>
+            <td style="max-width: 220px; font-size: 0.8rem; color: #475569;">
+              ${tx.catatan || '-'}
+            </td>
+            <td style="text-align: right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="btn-icon" onclick="openEditModal(${tx.id})" title="Edit Transaksi">✏️</button>
+                <button class="btn-icon btn-icon-danger" onclick="deleteTransaction(${tx.id})" title="Hapus Transaksi">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function applyFilters() {
+      loadTransactions();
+    }
+
+    function debounceSearch() {
+      clearTimeout(searchDebounceTimeout);
+      searchDebounceTimeout = setTimeout(() => {
+        loadTransactions();
+      }, 300);
+    }
+
+    function resetFilters() {
+      document.getElementById('filterBidang').value = 'Semua';
+      document.getElementById('filterStatus').value = 'Semua';
+      document.getElementById('filterTahap').value = 'Semua';
+      document.getElementById('filterSearch').value = '';
+      loadTransactions();
+    }
+
+    // Modal Payment Add / Edit
+    function openAddModal() {
+      document.getElementById('modalPaymentTitle').textContent = 'Entri Transaksi Pembayaran';
+      document.getElementById('formPayment').reset();
+      document.getElementById('paymentId').value = '';
+      document.getElementById('modalTanggal').value = new Date().toISOString().split('T')[0];
+      document.getElementById('parcelInfoBox').style.display = 'none';
+      document.getElementById('modalPayment').classList.add('show');
+    }
+
+    function openAddPaymentForParcel(kodeTanah) {
+      openAddModal();
+      const select = document.getElementById('modalKodeTanah');
+      select.value = kodeTanah;
+      handleParcelSelect();
+    }
+
+    async function openEditModal(id) {
+      try {
+        const res = await fetch(`/api/pembebasan/${id}`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          const d = json.data;
+          document.getElementById('modalPaymentTitle').textContent = `Edit Transaksi #${d.id}`;
+          document.getElementById('paymentId').value = d.id;
+          document.getElementById('modalKodeTanah').value = d.kodeTanah;
+          document.getElementById('modalTanggal').value = d.tanggalPembayaran ? new Date(d.tanggalPembayaran).toISOString().split('T')[0] : '';
+          document.getElementById('modalJumlah').value = d.jumlahPembayaran;
+          document.getElementById('modalTahap').value = d.tahapPembayaran;
+          document.getElementById('modalMetode').value = d.metodePembayaran;
+          document.getElementById('modalNomorReferensi').value = d.nomorReferensi || '';
+          document.getElementById('modalStatus').value = d.status;
+          document.getElementById('modalBukti').value = d.buktiPembayaran || '';
+          document.getElementById('modalCatatan').value = d.catatan || '';
+
+          handleParcelSelect();
+          document.getElementById('modalPayment').classList.add('show');
+        }
+      } catch (err) {
+        showToast('Gagal memuat data transaksi', true);
+      }
+    }
+
+    function closeModalPayment() {
+      document.getElementById('modalPayment').classList.remove('show');
+    }
+
+    async function handleSavePayment(e) {
+      e.preventDefault();
+      const id = document.getElementById('paymentId').value;
+      const payload = {
+        kodeTanah: document.getElementById('modalKodeTanah').value,
+        tanggalPembayaran: document.getElementById('modalTanggal').value,
+        jumlahPembayaran: parseFloat(document.getElementById('modalJumlah').value),
+        tahapPembayaran: document.getElementById('modalTahap').value,
+        metodePembayaran: document.getElementById('modalMetode').value,
+        nomorReferensi: document.getElementById('modalNomorReferensi').value,
+        status: document.getElementById('modalStatus').value,
+        buktiPembayaran: document.getElementById('modalBukti').value,
+        catatan: document.getElementById('modalCatatan').value,
+      };
+
+      try {
+        const url = id ? `/api/pembebasan/${id}` : '/api/pembebasan';
+        const method = id ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          showToast(id ? 'Transaksi pembayaran berhasil diperbarui' : 'Transaksi pembayaran berhasil dicatat');
+          closeModalPayment();
+          await loadData();
+        } else {
+          showToast(json.message || 'Gagal menyimpan transaksi', true);
+        }
+      } catch (err) {
+        showToast('Terjadi kesalahan koneksi server', true);
+      }
+    }
+
+    async function deleteTransaction(id) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus catatan transaksi pembayaran #${id}?`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/pembebasan/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Transaksi berhasil dihapus');
+          await loadData();
+        } else {
+          showToast(json.message || 'Gagal menghapus transaksi', true);
+        }
+      } catch (err) {
+        showToast('Gagal menghubungi server', true);
+      }
+    }
+
+    // Modal Riwayat Bidang
+    async function openParcelHistory(kodeTanah) {
+      try {
+        const res = await fetch(`/api/pembebasan/bidang/${kodeTanah}`);
+        const json = await res.json();
+
+        if (json.success) {
+          const r = json.rekap;
+          const meta = json.metadata;
+
+          document.getElementById('historyModalTitle').textContent = `Riwayat Transaksi - ${kodeTanah}`;
+          document.getElementById('historyModalSubtitle').textContent = `Nomor Bidang: ${meta.nomorBidang || '-'} | Pemilik: ${meta.pemilik || '-'}`;
+
+          document.getElementById('histKesepakatan').textContent = formatRp(r.hargaKesepakatan);
+          document.getElementById('histTerbayar').textContent = formatRp(r.totalDibayar);
+          document.getElementById('histSisa').textContent = formatRp(r.sisaPembayaran);
+          document.getElementById('histPersen').textContent = `${r.persentase}%`;
+
+          const btnAdd = document.getElementById('btnHistAddPay');
+          btnAdd.onclick = () => {
+            closeModalParcelHistory();
+            openAddPaymentForParcel(kodeTanah);
+          };
+
+          const tbody = document.getElementById('historyTableBody');
+          const txList = json.transaksi || [];
+
+          if (txList.length === 0) {
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                  Belum ada transaksi pembayaran untuk bidang tanah ini.
+                </td>
+              </tr>
+            `;
+          } else {
+            tbody.innerHTML = txList.map(tx => `
+              <tr>
+                <td>${formatDate(tx.tanggalPembayaran)}</td>
+                <td><strong>${tx.tahapPembayaran}</strong></td>
+                <td style="font-weight: 700; color: #16a34a;">${formatRp(tx.jumlahPembayaran)}</td>
+                <td>${tx.metodePembayaran}</td>
+                <td><span class="badge ${tx.status === 'Lunas' ? 'badge-lunas' : 'badge-pending'}">${tx.status}</span></td>
+                <td style="font-size: 0.8rem;">${tx.catatan || '-'}</td>
+              </tr>
+            `).join('');
+          }
+
+          document.getElementById('modalParcelHistory').classList.add('show');
+        }
+      } catch (err) {
+        showToast('Gagal memuat riwayat bidang', true);
+      }
+    }
+
+    function closeModalParcelHistory() {
+      document.getElementById('modalParcelHistory').classList.remove('show');
+    }
+
+    // Attach event listeners
+    document.getElementById('btnOpenAddModal').addEventListener('click', openAddModal);
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadData();
+    });
+  </script>
+</body>
+</html>
