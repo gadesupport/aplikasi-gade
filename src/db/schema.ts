@@ -144,3 +144,19 @@ export const pihak = pgTable('pihak', {
 
 export type Pihak = typeof pihak.$inferSelect;
 export type NewPihak = typeof pihak.$inferInsert;
+
+export const survey = pgTable('survey', {
+  id: serial('id').primaryKey(),
+  targetSurvey: varchar('target_survey', { length: 50 }).notNull(), // 'Lokasi' | 'Bidang'
+  referensiId: varchar('referensi_id', { length: 100 }).notNull(), // kodeLokasi or kodeTanah
+  tanggalSurvey: timestamp('tanggal_survey'),
+  picSurvey: varchar('pic_survey', { length: 255 }),
+  hasilSurvey: text('hasil_survey'),
+  koordinat: text('koordinat'),
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Survey = typeof survey.$inferSelect;
+export type NewSurvey = typeof survey.$inferInsert;

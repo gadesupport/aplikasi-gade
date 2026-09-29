@@ -74,6 +74,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /` & `GET /lokasi.html` - Antarmuka Web interaktif Menu Lokasi (Step 1 Formulir + Step 2 Peta Leaflet Polygon)
 - `GET /bidang-tanah.html` - Antarmuka Web interaktif Menu Bidang Tanah (Step 1 Finansial + Step 2 Peta Polygon & Checklist Legalitas)
 - `GET /pihak.html` - Antarmuka Web interaktif Manajemen Pihak / Pemilik Lahan Terintegrasi
+- `GET /survey.html` - Antarmuka Web interaktif Pencatatan & Riwayat Survey Lapangan
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -101,5 +102,12 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/pihak` - Tambah data pihak/pemilik baru
 - `PUT /api/pihak/:id` - Perbarui informasi pihak/pemilik
 - `DELETE /api/pihak/:id` - Hapus data pihak/pemilik
+
+### Endpoint API Survey Lapangan (`/api/survey`)
+- `GET /api/survey` - Daftar riwayat survey (mendukung query `?targetSurvey=`, `?referensiId=`, dan `?search=`)
+- `GET /api/survey/:id` - Detail data survey
+- `POST /api/survey` - Tambah data survey baru (Terintegrasi dengan Lokasi atau Bidang Tanah)
+- `PUT /api/survey/:id` - Perbarui data riwayat survey
+- `DELETE /api/survey/:id` - Hapus data riwayat survey
 
 
