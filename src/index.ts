@@ -14,6 +14,7 @@ import { pembebasanRoutes } from './routes/pembebasan';
 import { pemetaanRoutes } from './routes/pemetaan';
 import { projectRoutes } from './routes/project';
 import { arsipLegalRoutes } from './routes/arsip-legal';
+import { bastRoutes } from './routes/bast';
 
 const app = new Elysia()
   .use(cors())
@@ -23,7 +24,7 @@ const app = new Elysia()
         info: {
           title: 'Aplikasi Gade API Documentation',
           version: '1.0.0',
-          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey, Pembahasan, Legalitas, Pembebasan, Pemetaan GIS, Project & Arsip Legal',
+          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey, Pembahasan, Legalitas, Pembebasan, Pemetaan GIS, Project, Arsip Legal & BAST',
         },
         tags: [
           { name: 'Lokasi', description: 'Endpoints untuk Pengelolaan Lokasi & Pemetaan Area' },
@@ -36,6 +37,7 @@ const app = new Elysia()
           { name: 'Pemetaan', description: 'Endpoints untuk Modul Pemetaan GIS, Layer Batas, Digitasi & KKPR' },
           { name: 'Project', description: 'Endpoints untuk Pengelolaan Data & Monitoring Project Lahan' },
           { name: 'Arsip Legal', description: 'Endpoints untuk Pengelolaan Dokumen Legalitas & Lokasi Fisik Arsip' },
+          { name: 'BAST', description: 'Endpoints untuk Berita Acara Serah Terima (Peminjaman, Pengembalian, Cetak PDF & QR Code)' },
           { name: 'Users', description: 'Endpoints untuk Manajemen User' },
         ],
       },
@@ -58,6 +60,7 @@ const app = new Elysia()
       pemetaan: '/pemetaan.html',
       project: '/project.html',
       arsipLegal: '/arsip-legal.html',
+      bast: '/bast.html',
     },
     timestamp: new Date().toISOString(),
   }))
@@ -75,6 +78,7 @@ const app = new Elysia()
   .use(pemetaanRoutes)
   .use(projectRoutes)
   .use(arsipLegalRoutes)
+  .use(bastRoutes)
 
   .group('/api', (app) =>
     app.get('/users', async ({ db }) => {
