@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Log Aktivitas - Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --rose: #e11d48;
+      --rose-light: #ffe4e6;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 1px solid transparent;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-color: #a7f3d0;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .page-header-text h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+
+    .page-header-text p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .page-header-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-white {
+      background: #ffffff;
+      color: #065f46;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .btn-white:hover {
+      background: #f0fdf4;
+      transform: translateY(-1px);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      padding: 1.25rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-info h4 {
+      font-size: 0.775rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-info p {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    /* Card Filters & Table */
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .filter-bar {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.2fr 1.2fr auto;
+      gap: 0.75rem;
+      align-items: end;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .filter-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .filter-bar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-label {
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .form-control {
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      font-family: inherit;
+      background: #ffffff;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    .btn {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.725rem;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    td {
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: #334155;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #fdfdfd;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-create { background: var(--primary-light); color: var(--primary-dark); }
+    .badge-update { background: var(--accent-light); color: var(--accent); }
+    .badge-delete { background: var(--rose-light); color: var(--rose); }
+    .badge-cetak { background: var(--purple-light); color: var(--purple); }
+    .badge-export { background: #e0e7ff; color: #4338ca; }
+    .badge-login { background: var(--amber-light); color: var(--amber); }
+    .badge-view { background: #f1f5f9; color: #475569; }
+
+    .role-badge {
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 0.725rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.5rem;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      max-width: 650px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #f8fafc;
+    }
+
+    .code-block {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      margin-top: 0.5rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">G</div>
+        <div class="brand-title">
+          <h1>Aplikasi Gade</h1>
+          <p>Sistem Pengadaan & Manajemen Lahan</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Bidang Tanah</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-secondary">⚖️ Legalitas</a>
+        <a href="/pembebasan.html" class="nav-btn nav-btn-secondary">💰 Pembebasan</a>
+        <a href="/pemetaan.html" class="nav-btn nav-btn-secondary">🗺️ Pemetaan</a>
+        <a href="/project.html" class="nav-btn nav-btn-secondary">🏗️ Project</a>
+        <a href="/arsip-legal.html" class="nav-btn nav-btn-secondary">📂 Arsip</a>
+        <a href="/bast.html" class="nav-btn nav-btn-secondary">📑 BAST</a>
+        <a href="/laporan.html" class="nav-btn nav-btn-secondary">📊 Laporan</a>
+        <a href="/generate-dokumen.html" class="nav-btn nav-btn-secondary">📄 Dokumen</a>
+        <a href="/audit-log.html" class="nav-btn nav-btn-active">📜 Audit Log</a>
+        <a href="/pengaturan.html" class="nav-btn nav-btn-secondary">⚙️ Pengaturan</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary">📖 API Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Page Header Banner -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <h2>📜 Audit Log & Jejak Aktivitas</h2>
+        <p>Transparansi penuh atas setiap perubahan, operasi CRUD, ekspor berkas, cetak BAST, dan aktivitas sistem Aplikasi Gade.</p>
+      </div>
+      <div class="page-header-actions">
+        <button id="btnExportCsv" class="btn-white">📥 Unduh CSV</button>
+        <button id="btnRefresh" class="btn-white">🔄 Muat Ulang</button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #e0f2fe; color: #0284c7;">📊</div>
+        <div class="stat-info">
+          <h4>Total Aktivitas</h4>
+          <p id="statTotalLogs">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">⚡</div>
+        <div class="stat-info">
+          <h4>Aktivitas Hari Ini</h4>
+          <p id="statTodayLogs">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #ede9fe; color: #7c3aed;">📝</div>
+        <div class="stat-info">
+          <h4>Create / Update</h4>
+          <p id="statMutationLogs">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #fef3c7; color: #d97706;">🖨️</div>
+        <div class="stat-info">
+          <h4>Cetak & Ekspor</h4>
+          <p id="statExportLogs">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Table Card -->
+    <div class="card">
+      <div class="card-body">
+        <div class="filter-bar">
+          <div class="form-group">
+            <label class="form-label">Pencarian Cepat</label>
+            <input type="text" id="searchInput" class="form-control" placeholder="Cari nama pengguna, deskripsi, atau modul...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jenis Aksi</label>
+            <select id="actionFilter" class="form-control">
+              <option value="">Semua Aksi</option>
+              <option value="CREATE">CREATE (Tambah Data)</option>
+              <option value="UPDATE">UPDATE (Ubah Data)</option>
+              <option value="DELETE">DELETE (Hapus Data)</option>
+              <option value="CETAK">CETAK (Cetak Berkas/PDF)</option>
+              <option value="EXPORT">EXPORT (Unduh Excel/SHP)</option>
+              <option value="LOGIN">LOGIN (Masuk Sistem)</option>
+              <option value="LOGOUT">LOGOUT (Keluar Sistem)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Modul / Menu</label>
+            <select id="menuFilter" class="form-control">
+              <option value="">Semua Modul</option>
+              <option value="Lokasi">Lokasi</option>
+              <option value="Bidang Tanah">Bidang Tanah</option>
+              <option value="Pihak">Pihak / Pemilik</option>
+              <option value="Survey">Survey</option>
+              <option value="Pembahasan">Pembahasan</option>
+              <option value="Legalitas Tanah">Legalitas Tanah</option>
+              <option value="Pembebasan">Pembebasan</option>
+              <option value="Pemetaan">Pemetaan</option>
+              <option value="Project">Project</option>
+              <option value="Arsip Legal">Arsip Legal</option>
+              <option value="BAST">BAST</option>
+              <option value="Laporan">Laporan</option>
+              <option value="Generate Dokumen">Generate Dokumen</option>
+              <option value="Pengaturan">Pengaturan</option>
+              <option value="Autentikasi">Autentikasi</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dari Tanggal</label>
+            <input type="date" id="startDateFilter" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sampai Tanggal</label>
+            <input type="date" id="endDateFilter" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">&nbsp;</label>
+            <button id="btnResetFilter" class="btn btn-secondary">Reset</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 160px;">Waktu & Tanggal</th>
+                <th style="width: 170px;">Pengguna</th>
+                <th style="width: 100px;">Aksi</th>
+                <th style="width: 140px;">Modul</th>
+                <th>Deskripsi Aktivitas</th>
+                <th style="width: 120px;">IP Address</th>
+                <th style="width: 90px; text-align: center;">Detail</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <tr>
+                <td colspan="7" class="empty-state">Memuat data log aktivitas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Detail Audit Log</h3>
+        <button id="btnModalClose" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modalDetailContent">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="modal-footer">
+        <button id="btnModalClose2" class="btn btn-secondary">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLogs = [];
+
+    // Format badge
+    function getActionBadge(action) {
+      const act = (action || '').toUpperCase();
+      let badgeClass = 'badge-view';
+      if (act === 'CREATE') badgeClass = 'badge-create';
+      else if (act === 'UPDATE') badgeClass = 'badge-update';
+      else if (act === 'DELETE') badgeClass = 'badge-delete';
+      else if (act === 'CETAK') badgeClass = 'badge-cetak';
+      else if (act === 'EXPORT') badgeClass = 'badge-export';
+      else if (act === 'LOGIN' || act === 'LOGOUT') badgeClass = 'badge-login';
+
+      return `<span class="badge ${badgeClass}">${act}</span>`;
+    }
+
+    function formatDate(isoStr) {
+      if (!isoStr) return '-';
+      const d = new Date(isoStr);
+      return d.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/audit-log/stats');
+        const json = await res.json();
+        if (json.success && json.data) {
+          document.getElementById('statTotalLogs').textContent = json.data.totalLogs || 0;
+          document.getElementById('statTodayLogs').textContent = json.data.todayLogs || 0;
+
+          const creates = (json.data.byAction?.CREATE || 0) + (json.data.byAction?.UPDATE || 0);
+          document.getElementById('statMutationLogs').textContent = creates;
+
+          const exports = (json.data.byAction?.CETAK || 0) + (json.data.byAction?.EXPORT || 0);
+          document.getElementById('statExportLogs').textContent = exports;
+        }
+      } catch (err) {
+        console.error('Error loading stats:', err);
+      }
+    }
+
+    async function loadLogs() {
+      const search = document.getElementById('searchInput').value.trim();
+      const action = document.getElementById('actionFilter').value;
+      const menu = document.getElementById('menuFilter').value;
+      const startDate = document.getElementById('startDateFilter').value;
+      const endDate = document.getElementById('endDateFilter').value;
+
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (action) params.append('action', action);
+      if (menu) params.append('menu', menu);
+      if (startDate) params.append('startDate', startDate);
+      if (endDate) params.append('endDate', endDate);
+      params.append('limit', '100');
+
+      const tbody = document.getElementById('auditTableBody');
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Mengambil log data...</td></tr>';
+
+      try {
+        const res = await fetch(`/api/audit-log?${params.toString()}`);
+        const json = await res.json();
+
+        if (json.success && json.data) {
+          currentLogs = json.data;
+          renderTable(currentLogs);
+        } else {
+          tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Gagal memuat log aktivitas.</td></tr>';
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state" style="color: red;">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderTable(logs) {
+      const tbody = document.getElementById('auditTableBody');
+      if (!logs || logs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+              <strong>Tidak ada aktivitas log yang cocok</strong>
+              <p>Coba sesuaikan kata kunci pencarian atau bersihkan filter.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = logs.map(log => `
+        <tr>
+          <td style="font-size: 0.8rem; font-weight: 500;">${formatDate(log.createdAt)}</td>
+          <td>
+            <div style="font-weight: 700; color: #0f172a;">${log.userName || 'System'}</div>
+            <div style="margin-top: 0.15rem;"><span class="role-badge">${log.userRole || 'Admin'}</span></div>
+          </td>
+          <td>${getActionBadge(log.action)}</td>
+          <td><span style="font-weight: 600; color: #1e293b;">${log.menu}</span></td>
+          <td>
+            <div style="color: #1e293b; line-height: 1.4;">${log.description}</div>
+            ${log.entityId ? `<small style="color: #64748b; font-family: monospace;">Ref: ${log.entityId}</small>` : ''}
+          </td>
+          <td><span style="font-family: monospace; font-size: 0.8rem; color: #475569;">${log.ipAddress || '127.0.0.1'}</span></td>
+          <td style="text-align: center;">
+            <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.775rem;" onclick="viewDetail(${log.id})">🔍</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.viewDetail = function(id) {
+      const log = currentLogs.find(l => l.id === id);
+      if (!log) return;
+
+      const container = document.getElementById('modalDetailContent');
+      container.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>${getActionBadge(log.action)} <span style="font-weight: 700; margin-left: 0.5rem;">${log.menu}</span></div>
+            <span style="font-size: 0.825rem; color: var(--text-muted);">${formatDate(log.createdAt)}</span>
+          </div>
+
+          <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Deskripsi</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: #0f172a; margin-top: 0.25rem;">${log.description}</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);">
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Pengguna</div>
+              <div style="font-weight: 700;">${log.userName} (${log.userRole || 'Admin'})</div>
+            </div>
+            <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);">
+              <div style="font-size: 0.75rem; color: var(--text-muted);">IP Address</div>
+              <div style="font-family: monospace;">${log.ipAddress || '-'}</div>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);">
+            <div style="font-size: 0.75rem; color: var(--text-muted);">User Agent Browser</div>
+            <div style="font-size: 0.8rem; font-family: monospace; color: #475569; word-break: break-all; margin-top: 0.25rem;">
+              ${log.userAgent || 'Mozilla/5.0'}
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Metadata Tambahan (JSON)</div>
+            <pre class="code-block">${JSON.stringify(log.metadata || {}, null, 2)}</pre>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detailModal').style.display = 'flex';
+    };
+
+    function closeModal() {
+      document.getElementById('detailModal').style.display = 'none';
+    }
+
+    document.getElementById('btnModalClose').onclick = closeModal;
+    document.getElementById('btnModalClose2').onclick = closeModal;
+    document.getElementById('detailModal').onclick = (e) => {
+      if (e.target.id === 'detailModal') closeModal();
+    };
+
+    // Filter listeners
+    document.getElementById('searchInput').addEventListener('input', debounce(loadLogs, 300));
+    document.getElementById('actionFilter').addEventListener('change', loadLogs);
+    document.getElementById('menuFilter').addEventListener('change', loadLogs);
+    document.getElementById('startDateFilter').addEventListener('change', loadLogs);
+    document.getElementById('endDateFilter').addEventListener('change', loadLogs);
+
+    document.getElementById('btnResetFilter').onclick = () => {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('actionFilter').value = '';
+      document.getElementById('menuFilter').value = '';
+      document.getElementById('startDateFilter').value = '';
+      document.getElementById('endDateFilter').value = '';
+      loadLogs();
+    };
+
+    document.getElementById('btnRefresh').onclick = () => {
+      loadStats();
+      loadLogs();
+    };
+
+    document.getElementById('btnExportCsv').onclick = () => {
+      if (!currentLogs.length) {
+        alert('Tidak ada data log yang dapat diunduh.');
+        return;
+      }
+
+      let csv = 'ID,Waktu,Pengguna,Role,Aksi,Modul,Deskripsi,IP Address\n';
+      currentLogs.forEach(l => {
+        const desc = (l.description || '').replace(/"/g, '""');
+        csv += `"${l.id}","${l.createdAt}","${l.userName}","${l.userRole || ''}","${l.action}","${l.menu}","${desc}","${l.ipAddress || ''}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `audit-log-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    function debounce(fn, delay) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    // Init
+    loadStats();
+    loadLogs();
+  </script>
+</body>
+</html>

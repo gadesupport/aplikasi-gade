@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengaturan Sistem & Profil - Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --rose: #e11d48;
+      --rose-light: #ffe4e6;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 1px solid transparent;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-color: #a7f3d0;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .page-header-text h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+
+    .page-header-text p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    /* Tabs Bar */
+    .tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    .tab-item {
+      padding: 0.85rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-item:hover {
+      color: var(--primary);
+    }
+
+    .tab-item.active {
+      color: var(--primary-dark);
+      border-bottom-color: var(--primary);
+      background: #ffffff;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    /* Tab Content Panes */
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafbfc;
+    }
+
+    .card-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .card-body {
+      padding: 1.75rem;
+    }
+
+    /* Form Styles */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .form-control {
+      padding: 0.65rem 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      outline: none;
+      font-family: inherit;
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    .form-control[disabled] {
+      background: #f1f5f9;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    .btn {
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-danger {
+      background: var(--rose-light);
+      color: var(--rose);
+      border-color: #fecdd3;
+    }
+
+    .btn-danger:hover {
+      background: #fecdd3;
+    }
+
+    /* Profile Specific */
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+    }
+
+    .avatar-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #ffffff;
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-info h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .profile-info p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .badge-role {
+      display: inline-block;
+      margin-top: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      font-size: 0.775rem;
+      font-weight: 700;
+    }
+
+    /* Users Table */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.725rem;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    td {
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: #334155;
+    }
+
+    tr:hover td {
+      background: #fdfdfd;
+    }
+
+    .table-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Roles & RBAC Matrix */
+    .roles-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .role-card-select {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-card-select:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .role-card-select.selected {
+      border-color: var(--primary);
+      background: #f0fdf4;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.15);
+    }
+
+    .role-card-select h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .role-card-select p {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      line-height: 1.3;
+    }
+
+    .matrix-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #0f172a;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 10000;
+      font-weight: 600;
+      font-size: 0.9rem;
+      animation: slideIn 0.2s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    .toast-success { background: #065f46; border-left: 5px solid #10b981; }
+    .toast-error { background: #881337; border-left: 5px solid #f43f5e; }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.5rem;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      max-width: 580px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">G</div>
+        <div class="brand-title">
+          <h1>Aplikasi Gade</h1>
+          <p>Sistem Pengadaan & Manajemen Lahan</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Bidang Tanah</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-secondary">⚖️ Legalitas</a>
+        <a href="/pembebasan.html" class="nav-btn nav-btn-secondary">💰 Pembebasan</a>
+        <a href="/pemetaan.html" class="nav-btn nav-btn-secondary">🗺️ Pemetaan</a>
+        <a href="/project.html" class="nav-btn nav-btn-secondary">🏗️ Project</a>
+        <a href="/arsip-legal.html" class="nav-btn nav-btn-secondary">📂 Arsip</a>
+        <a href="/bast.html" class="nav-btn nav-btn-secondary">📑 BAST</a>
+        <a href="/laporan.html" class="nav-btn nav-btn-secondary">📊 Laporan</a>
+        <a href="/generate-dokumen.html" class="nav-btn nav-btn-secondary">📄 Dokumen</a>
+        <a href="/audit-log.html" class="nav-btn nav-btn-secondary">📜 Audit Log</a>
+        <a href="/pengaturan.html" class="nav-btn nav-btn-active">⚙️ Pengaturan</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary">📖 API Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Header Banner -->
+    <div class="page-header">
+      <div class="page-header-text">
+        <h2>⚙️ Pengaturan Sistem & Profil Pengguna</h2>
+        <p>Kelola data akun profil Anda, manajemen akun pengguna sistem, dan pengaturan hak akses role (RBAC) modular.</p>
+      </div>
+    </div>
+
+    <!-- Tabs Header -->
+    <div class="tabs-bar">
+      <div class="tab-item active" data-tab="tab-profil">👤 Profil Saya</div>
+      <div class="tab-item" data-tab="tab-users">👥 Manajemen Pengguna</div>
+      <div class="tab-item" data-tab="tab-rbac">🛡️ Hak Akses Role (RBAC)</div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TAB 1: PROFIL SAYA -->
+    <!-- ============================================== -->
+    <div id="tab-profil" class="tab-pane active">
+      <div class="card">
+        <div class="card-header">
+          <h3>Informasi Akun Pribadi</h3>
+        </div>
+        <div class="card-body">
+          <!-- Profile Hero -->
+          <div class="profile-hero">
+            <div class="avatar-wrapper">
+              <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="avatar-img">
+            </div>
+            <div class="profile-info">
+              <h3 id="profileNameDisplay">Super Admin</h3>
+              <p id="profileEmailDisplay">admin@gade.id</p>
+              <span id="profileRoleBadge" class="badge-role">Super Admin</span>
+            </div>
+          </div>
+
+          <!-- Edit Profile Form -->
+          <form id="profileForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" id="profName" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Alamat Email</label>
+                <input type="email" id="profEmail" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nomor Handphone / WhatsApp</label>
+                <input type="text" id="profPhone" class="form-control" placeholder="08xxxxxxxxxx">
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Foto Profil (Avatar)</label>
+                <input type="text" id="profAvatar" class="form-control" placeholder="https://...">
+              </div>
+            </div>
+
+            <!-- Password Section -->
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+              <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Ganti Password</h4>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Biarkan kosong jika tidak ingin mengubah password akun Anda.</p>
+              
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Password Baru</label>
+                  <input type="password" id="profNewPass" class="form-control" placeholder="Minimal 6 karakter">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Konfirmasi Password Baru</label>
+                  <input type="password" id="profConfirmPass" class="form-control" placeholder="Ulangi password baru">
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary" id="btnSaveProfile">💾 Simpan Perubahan Profil</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TAB 2: MANAJEMEN USER -->
+    <!-- ============================================== -->
+    <div id="tab-users" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <h3>Daftar Pengguna Sistem</h3>
+          <button id="btnOpenAddUser" class="btn btn-primary">+ Tambah Pengguna</button>
+        </div>
+        <div class="card-body">
+          <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+            <input type="text" id="userSearchInput" class="form-control" style="max-width: 320px;" placeholder="Cari nama, email, no. telp...">
+            <select id="userRoleFilter" class="form-control" style="max-width: 200px;">
+              <option value="">Semua Role</option>
+              <option value="Super Admin">Super Admin</option>
+              <option value="Staff Legal">Staff Legal</option>
+              <option value="Surveyor">Surveyor</option>
+              <option value="Operator">Operator</option>
+              <option value="Viewer / Auditor">Viewer / Auditor</option>
+            </select>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 50px;">Foto</th>
+                  <th>Nama Lengkap</th>
+                  <th>Email</th>
+                  <th>No. Telp</th>
+                  <th>Role</th>
+                  <th>Tanggal Terdaftar</th>
+                  <th style="width: 140px; text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody">
+                <tr><td colspan="7" style="text-align: center; padding: 2rem;">Memuat data pengguna...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TAB 3: HAK AKSES ROLE (RBAC) -->
+    <!-- ============================================== -->
+    <div id="tab-rbac" class="tab-pane">
+      <!-- Role Selector Cards -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700;">Pilih Role Pengguna</h3>
+        <button id="btnOpenAddRole" class="btn btn-secondary">+ Tambah Role Baru</button>
+      </div>
+
+      <div class="roles-selector-grid" id="rolesGridContainer">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Permissions Matrix Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 id="activeRoleNameHeading">Matriks Hak Akses: Super Admin</h3>
+            <p id="activeRoleDescHeading" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem;">Akses penuh tanpa batas ke semua modul sistem</p>
+          </div>
+          <div>
+            <button id="btnSavePermissions" class="btn btn-primary">💾 Simpan Hak Akses</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="margin-bottom: 1rem; display: flex; gap: 0.75rem;">
+            <button id="btnCheckAll" class="btn btn-secondary" style="font-size: 0.775rem; padding: 0.4rem 0.8rem;">Pilih Semua</button>
+            <button id="btnUncheckAll" class="btn btn-secondary" style="font-size: 0.775rem; padding: 0.4rem 0.8rem;">Batalkan Semua</button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 250px;">Modul / Menu Sistem</th>
+                  <th style="width: 140px;">Kategori</th>
+                  <th style="text-align: center; width: 100px;">Lihat (View)</th>
+                  <th style="text-align: center; width: 100px;">Tambah (Create)</th>
+                  <th style="text-align: center; width: 100px;">Ubah (Edit)</th>
+                  <th style="text-align: center; width: 100px;">Hapus (Delete)</th>
+                </tr>
+              </thead>
+              <tbody id="matrixTableBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal User (Tambah / Edit) -->
+  <div id="userModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="userModalTitle">Tambah Pengguna Baru</h3>
+        <button id="btnUserModalClose" class="modal-close">&times;</button>
+      </div>
+      <form id="userForm">
+        <div class="modal-body">
+          <input type="hidden" id="modalUserId">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nama Lengkap *</label>
+            <input type="text" id="modalUserName" class="form-control" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Alamat Email *</label>
+            <input type="email" id="modalUserEmail" class="form-control" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" id="modalUserPassLabel">Password *</label>
+            <input type="password" id="modalUserPass" class="form-control">
+            <small id="modalUserPassHint" style="font-size: 0.75rem; color: var(--text-muted); display: none;">Kosongkan jika tidak ingin mengubah password.</small>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Role Akses *</label>
+            <select id="modalUserRole" class="form-control" required>
+              <option value="Super Admin">Super Admin</option>
+              <option value="Staff Legal">Staff Legal</option>
+              <option value="Surveyor">Surveyor</option>
+              <option value="Operator">Operator</option>
+              <option value="Viewer / Auditor">Viewer / Auditor</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nomor Telepon</label>
+            <input type="text" id="modalUserPhone" class="form-control" placeholder="08xxxxxxxxxx">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Avatar URL</label>
+            <input type="text" id="modalUserAvatar" class="form-control" placeholder="https://...">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btnUserModalCancel" class="btn btn-secondary">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveUser">Simpan User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Role -->
+  <div id="roleModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Tambah Role Baru</h3>
+        <button id="btnRoleModalClose" class="modal-close">&times;</button>
+      </div>
+      <form id="roleForm">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nama Role *</label>
+            <input type="text" id="modalRoleName" class="form-control" placeholder="Contoh: Tim Negosiator" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Deskripsi Role</label>
+            <textarea id="modalRoleDesc" class="form-control" rows="3" placeholder="Jelaskan cakupan wewenang role ini..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btnRoleModalCancel" class="btn btn-secondary">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Role</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMessage">Operasi berhasil</span>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-item').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        const targetId = tab.getAttribute('data-tab');
+        document.getElementById(targetId).classList.add('active');
+
+        if (targetId === 'tab-users') loadUsers();
+        if (targetId === 'tab-rbac') loadRoles();
+      });
+    });
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toastNotification');
+      toast.className = `toast ${isError ? 'toast-error' : 'toast-success'}`;
+      document.getElementById('toastIcon').textContent = isError ? '❌' : '✅';
+      document.getElementById('toastMessage').textContent = message;
+      toast.style.display = 'flex';
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    // ==========================================
+    // 1. PROFIL SAYA LOGIC
+    // ==========================================
+    async function loadProfile() {
+      try {
+        const res = await fetch('/api/profile');
+        const json = await res.json();
+        if (json.success && json.data) {
+          const user = json.data;
+          document.getElementById('profName').value = user.name || '';
+          document.getElementById('profEmail').value = user.email || '';
+          document.getElementById('profPhone').value = user.phone || '';
+          document.getElementById('profAvatar').value = user.avatar || '';
+
+          document.getElementById('profileNameDisplay').textContent = user.name || 'User';
+          document.getElementById('profileEmailDisplay').textContent = user.email || '-';
+          document.getElementById('profileRoleBadge').textContent = user.role || 'User';
+
+          if (user.avatar) {
+            document.getElementById('profileAvatarImg').src = user.avatar;
+          }
+        }
+      } catch (err) {
+        showToast('Gagal memuat profil: ' + err.message, true);
+      }
+    }
+
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('profName').value.trim();
+      const email = document.getElementById('profEmail').value.trim();
+      const phone = document.getElementById('profPhone').value.trim();
+      const avatar = document.getElementById('profAvatar').value.trim();
+      const newPass = document.getElementById('profNewPass').value;
+      const confirmPass = document.getElementById('profConfirmPass').value;
+
+      if (newPass && newPass !== confirmPass) {
+        showToast('Konfirmasi password baru tidak cocok!', true);
+        return;
+      }
+
+      const payload = { name, email, phone, avatar };
+      if (newPass) payload.newPassword = newPass;
+
+      try {
+        const res = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Profil Anda berhasil diperbarui!');
+          document.getElementById('profNewPass').value = '';
+          document.getElementById('profConfirmPass').value = '';
+          loadProfile();
+        } else {
+          showToast(json.message || 'Gagal memperbarui profil', true);
+        }
+      } catch (err) {
+        showToast('Terjadi kesalahan: ' + err.message, true);
+      }
+    });
+
+    // ==========================================
+    // 2. USER MANAGEMENT LOGIC
+    // ==========================================
+    let usersData = [];
+
+    async function loadUsers() {
+      const search = document.getElementById('userSearchInput').value.trim();
+      const role = document.getElementById('userRoleFilter').value;
+
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (role) params.append('role', role);
+
+      const tbody = document.getElementById('userTableBody');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Memuat data...</td></tr>';
+
+      try {
+        const res = await fetch(`/api/users?${params.toString()}`);
+        const json = await res.json();
+        if (json.success) {
+          usersData = json.data;
+          renderUsersTable(usersData);
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderUsersTable(list) {
+      const tbody = document.getElementById('userTableBody');
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">Tidak ada data pengguna yang sesuai.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(u => {
+        const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80';
+        const d = u.createdAt ? new Date(u.createdAt).toLocaleDateString('id-ID') : '-';
+        return `
+          <tr>
+            <td>
+              <img src="${u.avatar || defaultAvatar}" class="table-avatar" onerror="this.src='${defaultAvatar}'">
+            </td>
+            <td><strong style="color: #0f172a;">${u.name}</strong></td>
+            <td>${u.email}</td>
+            <td>${u.phone || '-'}</td>
+            <td><span class="badge-role">${u.role}</span></td>
+            <td>${d}</td>
+            <td style="text-align: center;">
+              <button class="btn btn-secondary" style="padding: 0.35rem 0.6rem; font-size: 0.775rem;" onclick="editUser(${u.id})">✏️ Edit</button>
+              ${u.id !== 1 ? `<button class="btn btn-danger" style="padding: 0.35rem 0.6rem; font-size: 0.775rem; margin-left: 0.35rem;" onclick="deleteUser(${u.id}, '${u.name}')">🗑️</button>` : ''}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('userSearchInput').addEventListener('input', debounce(loadUsers, 300));
+    document.getElementById('userRoleFilter').addEventListener('change', loadUsers);
+
+    // Modal Add / Edit User
+    const userModal = document.getElementById('userModal');
+    document.getElementById('btnOpenAddUser').onclick = () => {
+      document.getElementById('userModalTitle').textContent = 'Tambah Pengguna Baru';
+      document.getElementById('modalUserId').value = '';
+      document.getElementById('modalUserName').value = '';
+      document.getElementById('modalUserEmail').value = '';
+      document.getElementById('modalUserPass').value = '';
+      document.getElementById('modalUserPass').required = true;
+      document.getElementById('modalUserPassHint').style.display = 'none';
+      document.getElementById('modalUserRole').value = 'Operator';
+      document.getElementById('modalUserPhone').value = '';
+      document.getElementById('modalUserAvatar').value = '';
+      userModal.style.display = 'flex';
+    };
+
+    window.editUser = function(id) {
+      const u = usersData.find(x => x.id === id);
+      if (!u) return;
+
+      document.getElementById('userModalTitle').textContent = 'Edit Pengguna';
+      document.getElementById('modalUserId').value = u.id;
+      document.getElementById('modalUserName').value = u.name;
+      document.getElementById('modalUserEmail').value = u.email;
+      document.getElementById('modalUserPass').value = '';
+      document.getElementById('modalUserPass').required = false;
+      document.getElementById('modalUserPassHint').style.display = 'block';
+      document.getElementById('modalUserRole').value = u.role;
+      document.getElementById('modalUserPhone').value = u.phone || '';
+      document.getElementById('modalUserAvatar').value = u.avatar || '';
+      userModal.style.display = 'flex';
+    };
+
+    window.deleteUser = async function(id, name) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus akun pengguna "${name}"?`)) return;
+
+      try {
+        const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Pengguna berhasil dihapus');
+          loadUsers();
+        } else {
+          showToast(json.message || 'Gagal menghapus pengguna', true);
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, true);
+      }
+    };
+
+    document.getElementById('btnUserModalClose').onclick = () => userModal.style.display = 'none';
+    document.getElementById('btnUserModalCancel').onclick = () => userModal.style.display = 'none';
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('modalUserId').value;
+      const name = document.getElementById('modalUserName').value.trim();
+      const email = document.getElementById('modalUserEmail').value.trim();
+      const password = document.getElementById('modalUserPass').value;
+      const role = document.getElementById('modalUserRole').value;
+      const phone = document.getElementById('modalUserPhone').value.trim();
+      const avatar = document.getElementById('modalUserAvatar').value.trim();
+
+      const payload = { name, email, role, phone, avatar };
+      if (password) payload.password = password;
+
+      try {
+        const url = id ? `/api/users/${id}` : '/api/users';
+        const method = id ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Data pengguna berhasil disimpan');
+          userModal.style.display = 'none';
+          loadUsers();
+        } else {
+          showToast(json.message || 'Gagal menyimpan pengguna', true);
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, true);
+      }
+    });
+
+    // ==========================================
+    // 3. RBAC & ROLE PERMISSIONS LOGIC
+    // ==========================================
+    let rolesList = [];
+    let systemMenus = [];
+    let activeRoleId = 1;
+
+    async function loadRoles() {
+      try {
+        // Fetch menus
+        const menuRes = await fetch('/api/pengaturan/menus');
+        const menuJson = await menuRes.json();
+        if (menuJson.success) systemMenus = menuJson.data;
+
+        // Fetch roles
+        const res = await fetch('/api/roles');
+        const json = await res.json();
+        if (json.success) {
+          rolesList = json.data;
+          renderRolesGrid();
+          selectRole(activeRoleId);
+        }
+      } catch (err) {
+        showToast('Gagal memuat roles: ' + err.message, true);
+      }
+    }
+
+    function renderRolesGrid() {
+      const container = document.getElementById('rolesGridContainer');
+      container.innerHTML = rolesList.map(r => `
+        <div class="role-card-select ${r.id === activeRoleId ? 'selected' : ''}" onclick="selectRole(${r.id})">
+          <h4>
+            <span>${r.name}</span>
+            <small style="font-size: 0.7rem; font-weight: 600; color: #059669;">${r.userCount || 0} User</small>
+          </h4>
+          <p>${r.description || 'Tidak ada deskripsi'}</p>
+        </div>
+      `).join('');
+    }
+
+    window.selectRole = async function(id) {
+      activeRoleId = id;
+      renderRolesGrid();
+
+      const role = rolesList.find(r => r.id === id);
+      if (!role) return;
+
+      document.getElementById('activeRoleNameHeading').textContent = `Matriks Hak Akses: ${role.name}`;
+      document.getElementById('activeRoleDescHeading').textContent = role.description || '-';
+
+      try {
+        const res = await fetch(`/api/roles/${id}/permissions`);
+        const json = await res.json();
+        const perms = json.data || [];
+        renderPermissionsMatrix(perms);
+      } catch (err) {
+        showToast('Gagal mengambil permissions role', true);
+      }
+    };
+
+    function renderPermissionsMatrix(perms) {
+      const tbody = document.getElementById('matrixTableBody');
+      const permMap = new Map();
+      perms.forEach(p => permMap.set(p.menu, p));
+
+      tbody.innerHTML = systemMenus.map(m => {
+        const p = permMap.get(m.id) || { canView: true, canCreate: false, canEdit: false, canDelete: false };
+        return `
+          <tr data-menu="${m.id}">
+            <td>
+              <span style="font-size: 1.1rem; margin-right: 0.4rem;">${m.icon || '📌'}</span>
+              <strong style="color: #0f172a;">${m.name}</strong>
+              <small style="color: var(--text-muted); display: block; font-family: monospace;">${m.id}</small>
+            </td>
+            <td><span class="badge-role" style="background: #f1f5f9; color: #475569;">${m.category}</span></td>
+            <td style="text-align: center;">
+              <input type="checkbox" class="matrix-checkbox chk-view" ${p.canView ? 'checked' : ''}>
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" class="matrix-checkbox chk-create" ${p.canCreate ? 'checked' : ''}>
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" class="matrix-checkbox chk-edit" ${p.canEdit ? 'checked' : ''}>
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" class="matrix-checkbox chk-delete" ${p.canDelete ? 'checked' : ''}>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('btnCheckAll').onclick = () => {
+      document.querySelectorAll('.matrix-checkbox').forEach(cb => cb.checked = true);
+    };
+
+    document.getElementById('btnUncheckAll').onclick = () => {
+      document.querySelectorAll('.matrix-checkbox').forEach(cb => cb.checked = false);
+    };
+
+    document.getElementById('btnSavePermissions').onclick = async () => {
+      const rows = document.querySelectorAll('#matrixTableBody tr');
+      const updatedPermissions = [];
+
+      rows.forEach(row => {
+        const menu = row.getAttribute('data-menu');
+        const canView = row.querySelector('.chk-view').checked;
+        const canCreate = row.querySelector('.chk-create').checked;
+        const canEdit = row.querySelector('.chk-edit').checked;
+        const canDelete = row.querySelector('.chk-delete').checked;
+
+        updatedPermissions.push({ menu, canView, canCreate, canEdit, canDelete });
+      });
+
+      try {
+        const res = await fetch(`/api/roles/${activeRoleId}/permissions`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ permissions: updatedPermissions })
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Hak akses berhasil disimpan!');
+        } else {
+          showToast(json.message || 'Gagal menyimpan hak akses', true);
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, true);
+      }
+    };
+
+    // Role Modal
+    const roleModal = document.getElementById('roleModal');
+    document.getElementById('btnOpenAddRole').onclick = () => {
+      document.getElementById('modalRoleName').value = '';
+      document.getElementById('modalRoleDesc').value = '';
+      roleModal.style.display = 'flex';
+    };
+
+    document.getElementById('btnRoleModalClose').onclick = () => roleModal.style.display = 'none';
+    document.getElementById('btnRoleModalCancel').onclick = () => roleModal.style.display = 'none';
+
+    document.getElementById('roleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('modalRoleName').value.trim();
+      const description = document.getElementById('modalRoleDesc').value.trim();
+
+      try {
+        const res = await fetch('/api/roles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, description })
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Role baru berhasil dibuat!');
+          roleModal.style.display = 'none';
+          loadRoles();
+        } else {
+          showToast(json.message || 'Gagal membuat role', true);
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, true);
+      }
+    });
+
+    function debounce(fn, delay) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    // Init profile tab on load
+    loadProfile();
+  </script>
+</body>
+</html>

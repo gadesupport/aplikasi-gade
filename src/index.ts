@@ -17,6 +17,8 @@ import { arsipLegalRoutes } from './routes/arsip-legal';
 import { bastRoutes } from './routes/bast';
 import { laporanRoutes } from './routes/laporan';
 import { generateDokumenRoutes } from './routes/generate-dokumen';
+import { auditLogRoutes } from './routes/audit-log';
+import { pengaturanRoutes } from './routes/pengaturan';
 
 const app = new Elysia()
   .use(cors())
@@ -26,7 +28,7 @@ const app = new Elysia()
         info: {
           title: 'Aplikasi Gade API Documentation',
           version: '1.0.0',
-          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey, Pembahasan, Legalitas, Pembebasan, Pemetaan GIS, Project, Arsip Legal, BAST, Laporan & Generate Dokumen',
+          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey, Pembahasan, Legalitas, Pembebasan, Pemetaan GIS, Project, Arsip Legal, BAST, Laporan, Generate Dokumen, Audit Log & Pengaturan Pengguna',
         },
         tags: [
           { name: 'Lokasi', description: 'Endpoints untuk Pengelolaan Lokasi & Pemetaan Area' },
@@ -42,7 +44,8 @@ const app = new Elysia()
           { name: 'BAST', description: 'Endpoints untuk Berita Acara Serah Terima (Peminjaman, Pengembalian, Cetak PDF & QR Code)' },
           { name: 'Laporan', description: 'Endpoints untuk Rekapitulasi & Ekspor Laporan (PDF, Excel)' },
           { name: 'Generate Dokumen', description: 'Endpoints untuk Custom Dokumen, Template Mail Merge, Layout 2 Halaman Buku & Cetak PDF' },
-          { name: 'Users', description: 'Endpoints untuk Manajemen User' },
+          { name: 'Audit Log', description: 'Endpoints untuk Pencatatan dan Pelacakan Aktivitas Pengguna (Audit Trail)' },
+          { name: 'Pengaturan', description: 'Endpoints untuk Profil Pengguna, Manajemen User, dan Matriks Hak Akses Role (RBAC)' },
         ],
       },
     })
@@ -67,6 +70,8 @@ const app = new Elysia()
       bast: '/bast.html',
       laporan: '/laporan.html',
       generateDokumen: '/generate-dokumen.html',
+      auditLog: '/audit-log.html',
+      pengaturan: '/pengaturan.html',
     },
     timestamp: new Date().toISOString(),
   }))
@@ -87,29 +92,8 @@ const app = new Elysia()
   .use(bastRoutes)
   .use(laporanRoutes)
   .use(generateDokumenRoutes)
-
-  .group('/api', (app) =>
-    app.get('/users', async ({ db }) => {
-      try {
-        const allUsers = await db
-          .select({
-            id: users.id,
-            name: users.name,
-            email: users.email,
-            role: users.role,
-            createdAt: users.createdAt,
-          })
-          .from(users);
-        return { success: true, data: allUsers };
-      } catch (error: any) {
-        return {
-          success: false,
-          message: 'Database query failed or not connected yet',
-          error: error.message,
-        };
-      }
-    })
-  )
+  .use(auditLogRoutes)
+  .use(pengaturanRoutes)
   .listen(process.env.PORT || 3000);
 
 console.log(

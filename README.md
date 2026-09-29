@@ -211,5 +211,25 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/generate-dokumen/preview` - Live compilation pratinjau teks sebelum dicetak
 - `POST /api/generate-dokumen/cetak` - **Cetak PDF Dokumen**: Menghasilkan dokumen cetak resmi PDF sesuai orientasi, ukuran kertas, dan tata letak 2 halaman buku berdampingan dengan pembagi lipatan buku, nomor halaman buku, dan catatan kaki.
 
+### Endpoint API Modul Audit Log (`/api/audit-log`)
+- `GET /api/audit-log` - Mengambil daftar riwayat jejak audit log aktivitas (Mendukung filter `search`, `action`, `menu`, `startDate`, `endDate`, serta paginasi `limit` dan `offset`)
+- `GET /api/audit-log/stats` - Statistik agregat aktivitas sistem (total log, aktivitas hari ini, rincian per jenis aksi dan per modul)
+- `POST /api/audit-log` - Merekam aktivitas baru ke dalam log audit (otomatis mencatat IP address, user agent, dan metadata JSON)
+- `GET /api/audit-log/:id` - Mengambil detail lengkap entri log audit
 
-
+### Endpoint API Modul Pengaturan & Profil (`/api`)
+- `GET /api/profile` - Mengambil informasi profil akun yang sedang login (aman tanpa mengekspos hash password)
+- `PUT /api/profile` - Memperbarui nama, email, no telepon, foto avatar, dan ganti password akun aktif
+- `GET /api/users` - Mengambil daftar seluruh pengguna sistem (didukung pencarian teks dan filter berdasarkan role)
+- `POST /api/users` - Mendaftarkan akun pengguna baru dengan enkripsi password
+- `GET /api/users/:id` - Mengambil detail akun pengguna berdasarkan ID
+- `PUT /api/users/:id` - Memperbarui informasi akun pengguna (nama, email, role, telepon, avatar, password)
+- `DELETE /api/users/:id` - Menghapus akun pengguna (dilindungi proteksi akun Super Admin utama)
+- `GET /api/roles` - Mengambil daftar role pengguna beserta jumlah pengguna dan matriks hak akses
+- `POST /api/roles` - Menambahkan custom role baru ke dalam sistem
+- `GET /api/roles/:id` - Detail data role pengguna
+- `PUT /api/roles/:id` - Memperbarui nama dan deskripsi role
+- `DELETE /api/roles/:id` - Menghapus custom role (role sistem bawaan dilindungi)
+- `GET /api/roles/:id/permissions` - Mengambil daftar hak akses menu (Lihat, Tambah, Ubah, Hapus) untuk role tertentu
+- `PUT /api/roles/:id/permissions` - Memperbarui matriks hak akses permissions role secara batch
+- `GET /api/pengaturan/menus` - Mengambil daftar seluruh modul & menu resmi sistem yang terdaftar
