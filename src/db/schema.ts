@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, varchar, numeric, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, varchar, numeric, jsonb, integer } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -186,4 +186,54 @@ export const pembahasan = pgTable('pembahasan', {
 
 export type Pembahasan = typeof pembahasan.$inferSelect;
 export type NewPembahasan = typeof pembahasan.$inferInsert;
+
+export const jenisDokumenValues = [
+  'Sertifikat',
+  'SHM',
+  'SHGB',
+  'AJB',
+  'KTP',
+  'KK',
+  'PBB',
+  'SPPT',
+  'Girik',
+  'Letter C',
+  'Surat Waris',
+  'Akta Waris',
+  'Surat Kuasa',
+  'Dokumen Lainnya',
+] as const;
+
+export type JenisDokumen = (typeof jenisDokumenValues)[number];
+
+export const statusDokumenValues = [
+  'Ada',
+  'Belum Ada',
+  'Proses',
+  'Tidak Relevan',
+  'Perlu Verifikasi',
+] as const;
+
+export type StatusDokumen = (typeof statusDokumenValues)[number];
+
+export const legalitasTanah = pgTable('legalitas_tanah', {
+  id: serial('id').primaryKey(),
+  kodeTanah: varchar('kode_tanah', { length: 100 })
+    .notNull()
+    .references(() => bidangTanah.kodeTanah, { onDelete: 'cascade' }),
+  jenisDokumen: varchar('jenis_dokumen', { length: 100 }).notNull(),
+  status: varchar('status', { length: 50 })
+    .notNull()
+    .default('Belum Ada'), // 'Ada' | 'Belum Ada' | 'Proses' | 'Tidak Relevan' | 'Perlu Verifikasi'
+  nomorDokumen: varchar('nomor_dokumen', { length: 255 }),
+  tanggalDokumen: timestamp('tanggal_dokumen'),
+  penerbit: varchar('penerbit', { length: 255 }),
+  pihakId: integer('pihak_id').references(() => pihak.id, { onDelete: 'set null' }),
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type LegalitasTanah = typeof legalitasTanah.$inferSelect;
+export type NewLegalitasTanah = typeof legalitasTanah.$inferInsert;
 
