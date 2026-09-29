@@ -80,6 +80,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /pembebasan.html` - Antarmuka Web interaktif Kontrol Utama Rekap & Tracking Pembayaran Pembebasan Tanah
 - `GET /pemetaan.html` - **Antarmuka Web Kontrol Utama Pemetaan GIS**: Visualisasi spasial multi-layer (Induk, Batas Bidang, KKPR), Base Map Switcher, Snapping Presisi (Endpoint & Nearest), Digitasi Polygon, Interaksi Popup Detail Bidang saat Diklik, Import (GeoJSON, SHP ZIP, KML), serta Export Shapefile ZIP untuk upload OSS RBA
 - `GET /project.html` - **Antarmuka Web Manajemen Project**: Kontrol dan monitoring project lahan, rekap status (Perencanaan, Berjalan, Selesai, Dibatalkan), pencarian wilayah, dan form pengelolaan project
+- `GET /arsip-legal.html` - **Antarmuka Web Arsip Legal**: Katalog dokumen legalitas dan pelacakan lokasi penyimpanan fisik (Lemari, Rak, Bantek, Map/Folder) dengan wizard 2-step form dan filter status fisik
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -156,4 +157,13 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/projects` - Tambah data project baru (validasi kode, nama, lokasi, desa, kecamatan, kabupaten, status, keterangan)
 - `PUT /api/projects/:id` - Perbarui informasi project
 - `DELETE /api/projects/:id` - Hapus data project
+
+### Endpoint API Arsip Legal (`/api/arsip-legal`)
+- `GET /api/arsip-legal` - Daftar dokumen arsip legal (mendukung filter `?search=`, `?statusFisik=`, `?tipeRelasi=`, dan `?kategori=`) disertai ringkasan statistik status penyimpanan fisik
+- `GET /api/arsip-legal/options/relations` - Referensi daftar entitas berelasi (Project, Lokasi, Bidang Tanah) untuk kemudahan integrasi
+- `GET /api/arsip-legal/:id` - Detail satu dokumen arsip berdasarkan ID numerik atau Kode Arsip
+- `POST /api/arsip-legal` - Tambah dokumen arsip baru (Step 1 data utama dokumen & Step 2 lokasi penyimpanan fisik: lemari, rak, bantek, map, status fisik, catatan)
+- `PUT /api/arsip-legal/:id` - Perbarui informasi dokumen arsip atau lokasi fisik penyimpanan
+- `DELETE /api/arsip-legal/:id` - Hapus data dokumen arsip
+
 

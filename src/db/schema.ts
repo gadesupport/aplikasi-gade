@@ -360,3 +360,46 @@ export const projects = pgTable('projects', {
 
 export type Project = typeof projects.$inferSelect;
 export type NewProject = typeof projects.$inferInsert;
+
+export const tipeRelasiArsipValues = [
+  'Lokasi',
+  'Bidang',
+  'Project',
+  'Umum',
+] as const;
+
+export type TipeRelasiArsip = (typeof tipeRelasiArsipValues)[number];
+
+export const statusFisikArsipValues = [
+  'Tersedia',
+  'Dipinjam',
+  'Hilang',
+  'Diarsipkan',
+] as const;
+
+export type StatusFisikArsip = (typeof statusFisikArsipValues)[number];
+
+export const arsipLegal = pgTable('arsip_legal', {
+  id: serial('id').primaryKey(),
+  kodeArsip: varchar('kode_arsip', { length: 100 }).notNull().unique(),
+  namaDokumen: varchar('nama_dokumen', { length: 255 }).notNull(),
+  kategori: varchar('kategori', { length: 100 }).notNull(),
+  jenisDokumen: varchar('jenis_dokumen', { length: 100 }).notNull(),
+  nomorDokumen: varchar('nomor_dokumen', { length: 150 }).notNull(),
+  tanggalDokumen: timestamp('tanggal_dokumen').notNull(),
+  tipeRelasi: varchar('tipe_relasi', { length: 50 }).notNull().default('Umum'),
+  idRelasi: varchar('id_relasi', { length: 100 }),
+  // Lokasi Fisik
+  lemari: varchar('lemari', { length: 100 }),
+  rak: varchar('rak', { length: 100 }),
+  bantek: varchar('bantek', { length: 100 }),
+  folderMap: varchar('folder_map', { length: 100 }),
+  statusFisik: varchar('status_fisik', { length: 50 }).notNull().default('Tersedia'),
+  catatan: text('catatan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type ArsipLegal = typeof arsipLegal.$inferSelect;
+export type NewArsipLegal = typeof arsipLegal.$inferInsert;
+

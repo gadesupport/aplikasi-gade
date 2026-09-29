@@ -1,46 +1,84 @@
-# Implementasi Menu Project
+# Perencanaan Modul Arsip Legal
 
-**Deskripsi Tugas**
-Buatkan implementasi untuk menu "Project" yang berfungsi untuk mengelola data project di Aplikasi Gade. Fitur ini meliputi pembuatan tabel pada database, pembuatan API backend (CRUD), dan pembuatan tampilan frontend.
+Issue ini berisi perencanaan dan spesifikasi untuk mengimplementasikan modul **Arsip Legal**. Modul ini bertujuan untuk mendata dan melacak penyimpanan dokumen fisik maupun digital, beserta relasinya dengan entitas lain dalam aplikasi.
 
-**Spesifikasi Kolom / Inputan Data Project:**
-1. Kode Project (String/Varchar, Unique, Required)
-2. Nama Project (String/Varchar, Required)
-3. Lokasi (String/Varchar, Required)
-4. Desa (String/Varchar, Required)
-5. Kecamatan (String/Varchar, Required)
-6. Kabupaten (String/Varchar, Required)
-7. Status (Enum/String: 'Perencanaan', 'Berjalan', 'Selesai', 'Dibatalkan', Default: 'Perencanaan')
-8. Keterangan (Text, Optional)
+Implementasikan fitur ini menggunakan stack yang sudah ada: Bun, ElysiaJS, Drizzle ORM, PostgreSQL, dan HTML/CSS/JS statis.
 
-**Langkah-langkah Implementasi:**
+## 1. Skema Database (Drizzle ORM)
 
-### 1. Update Skema Database (`src/db/schema.ts`)
-- Tambahkan tabel `projects` menggunakan Drizzle ORM dengan spesifikasi kolom di atas.
-- Jangan lupa tambahkan tipe inferensi untuk Select dan Insert.
-- Export skema `projects`.
+Tambahkan skema `arsipLegal` di `src/db/schema.ts`. Skema ini harus mencakup data utama arsip dan detail lokasi fisiknya.
 
-### 2. Buat Route API (`src/routes/project.ts`)
-- Buat file route baru menggunakan ElysiaJS.
-- Implementasikan endpoint berikut:
-  - `GET /api/projects`: Mengambil semua data project.
-  - `GET /api/projects/:id`: Mengambil data project berdasarkan ID.
-  - `POST /api/projects`: Menambahkan data project baru (lakukan validasi input).
-  - `PUT /api/projects/:id`: Mengubah data project (beserta status, dll).
-  - `DELETE /api/projects/:id`: Menghapus data project.
-- Implementasikan in-memory array fallback (menggunakan list sementara di memori) jika database utama tidak dapat terhubung, mengikuti pola file route lainnya.
+**Tabel `arsip_legal`**
+- `id` (serial / uuid, primary key)
+- `kodeArsip` (varchar, unique, wajib)
+- `namaDokumen` (varchar, wajib)
+- `kategori` (varchar, wajib)
+- `jenisDokumen` (varchar, wajib)
+- `nomorDokumen` (varchar, wajib)
+- `tanggalDokumen` (date, wajib)
+- `tipeRelasi` (enum/varchar: 'Lokasi', 'Bidang', 'Project', 'Umum', wajib)
+- `idRelasi` (integer/uuid, nullable - untuk menyimpan ID referensi dari entitas relasi jika ada)
 
-### 3. Registrasi Route (`src/index.ts`)
-- Import dan daftarkan `projectRoutes` ke dalam instance Elysia utama di `src/index.ts`.
+**Data Lokasi Fisik (Bisa digabung dalam tabel `arsip_legal` atau dipisah ke tabel `lokasi_fisik_arsip`)**
+Jika digabung dalam `arsip_legal`, tambahkan field berikut:
+- `lemari` (varchar, nullable)
+- `rak` (varchar, nullable)
+- `bantek` (varchar, nullable)
+- `folderMap` (varchar, nullable)
+- `statusFisik` (enum/varchar: 'Tersedia', 'Dipinjam', 'Hilang', 'Diarsipkan', default: 'Tersedia')
+- `catatan` (text, nullable)
+- `createdAt` (timestamp, default now)
+- `updatedAt` (timestamp, default now)
 
-### 4. Buat Tampilan Frontend (`public/project.html`)
-- Buat file HTML baru untuk halaman Manajemen Project.
-- Implementasikan tabel untuk menampilkan data project.
-- Buat form / modal untuk menambahkan dan mengedit data project dengan field-field yang diminta (termasuk dropdown status).
-- Pastikan tampilan rapi, menggunakan CSS Vanilla atau styling bawaan yang sudah ada.
-- Perbarui navigasi utama (Navbar/Sidebar) di dalam `project.html` dan juga file `.html` lainnya (`index.html`, `pembebasan.html`, `pemetaan.html`, dll) agar memiliki link yang mengarah ke `project.html`.
+Jangan lupa mendefinisikan array konstan untuk enum seperti `TipeRelasiValues` dan `StatusFisikValues` untuk keperluan validasi.
 
-### 5. Testing (`test/project.test.ts`)
-- Buat file test menggunakan Bun Test.
-- Pastikan semua endpoint CRUD (Create, Read, Update, Delete) teruji.
-- Pastikan tes berjalan dengan lancar ketika dijalankan menggunakan `bun test`.
+## 2. API Backend (ElysiaJS)
+
+Buat file route baru di `src/routes/arsip-legal.ts` dan daftarkan di `src/index.ts`.
+
+**Endpoint yang dibutuhkan:**
+1. `GET /api/arsip-legal` - Mengambil semua data arsip legal.
+2. `GET /api/arsip-legal/:id` - Mengambil detail satu arsip legal.
+3. `POST /api/arsip-legal` - Menambahkan arsip legal baru.
+4. `PUT /api/arsip-legal/:id` - Memperbarui data arsip legal.
+5. `DELETE /api/arsip-legal/:id` - Menghapus data arsip legal.
+
+**Kebutuhan Khusus Backend:**
+- **In-Memory Fallback:** Sesuai arsitektur sistem saat ini, implementasikan penyimpanan Map fallback jika koneksi database tidak tersedia (gunakan fungsi `checkDbConnection()`).
+- **Validasi:** Gunakan `t.Object` dari Elysia (TypeBox) untuk memvalidasi body request pada endpoint POST dan PUT.
+- **Relasi (Opsional):** Saat GET arsip, jika `tipeRelasi` bukan 'Umum' dan `idRelasi` terisi, idealnya API dapat memberikan info tambahan tentang relasi tersebut (misal: nama project jika `tipeRelasi` = 'Project').
+
+## 3. Antarmuka Web (Frontend)
+
+Buat antarmuka web di `public/arsip-legal.html`. Gunakan gaya UI modern yang selaras dengan halaman lainnya.
+
+**Komponen UI Utama:**
+1. **Header & Navigasi:** Sertakan navbar yang sama dengan halaman lain dan pastikan menu "Arsip Legal" aktif (highlighted). Jangan lupa memperbarui navbar di file `.html` lain untuk memasukkan link ke Arsip Legal.
+2. **Statistik Ringkas (Cards):** Tampilkan metrik seperti Total Dokumen, Tersedia, Dipinjam, dsb.
+3. **Tabel Data:** Tabel responsif untuk menampilkan daftar arsip dengan kolom: Kode, Nama Dokumen, Jenis, Tanggal, Tipe Relasi, Status Fisik, dan Aksi.
+4. **Formulir (Modal):** Buat modal untuk Tambah dan Edit data. Karena inputnya cukup banyak, bagi form menjadi dua bagian/step menggunakan layout *Wizard* atau dua kolom:
+   - **Bagian 1: Data Utama:** Kode Arsip, Nama Dokumen, Kategori, Jenis, Nomor, Tanggal, Tipe Relasi.
+   - **Bagian 2: Lokasi Fisik:** Lemari, Rak, Bantek, Folder/Map, Status Fisik, Catatan.
+5. **Modal Detail:** Menampilkan seluruh informasi arsip beserta lokasi fisiknya dalam layout yang rapi.
+6. **Notifikasi:** Gunakan sistem toast/alert yang sudah ada untuk memberikan umpan balik aksi sukses/gagal.
+
+## 4. Pengujian (Unit Tests)
+
+Buat file test di `test/arsip-legal.test.ts` menggunakan Bun test runner.
+Pastikan mencakup skenario berikut:
+- Operasi CRUD dasar (Create, Read, Update, Delete).
+- Validasi gagal untuk input yang wajib tetapi kosong.
+- Validasi constraint (misal: nilai status fisik harus sesuai dengan enum).
+- Pastikan in-memory fallback berfungsi dengan baik saat database dimatikan/di-mock.
+
+## Langkah Pengerjaan
+
+1. Definisikan skema database dan jalankan perintah generasi migrasi Drizzle.
+2. Buat API endpoints beserta logika fallback memory-nya.
+3. Buat UI Frontend dan pastikan terhubung dengan API.
+4. Tulis dan jalankan unit tests.
+5. Perbarui `README.md` untuk memasukkan deskripsi modul Arsip Legal.
+6. Perbarui file HTML lainnya untuk menambahkan menu Arsip Legal di navigasi.
+
+---
+Silakan selesaikan issue ini dan buka Pull Request jika semua komponen sudah siap dan lolos pengujian.

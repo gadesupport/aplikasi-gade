@@ -1,0 +1,20 @@
+CREATE TABLE "arsip_legal" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"kode_arsip" varchar(100) NOT NULL,
+	"nama_dokumen" varchar(255) NOT NULL,
+	"kategori" varchar(100) NOT NULL,
+	"jenis_dokumen" varchar(100) NOT NULL,
+	"nomor_dokumen" varchar(150) NOT NULL,
+	"tanggal_dokumen" timestamp NOT NULL,
+	"tipe_relasi" varchar(50) DEFAULT 'Umum' NOT NULL,
+	"id_relasi" varchar(100),
+	"lemari" varchar(100),
+	"rak" varchar(100),
+	"bantek" varchar(100),
+	"folder_map" varchar(100),
+	"status_fisik" varchar(50) DEFAULT 'Tersedia' NOT NULL,
+	"catatan" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "arsip_legal_kode_arsip_unique" UNIQUE("kode_arsip")
+);
