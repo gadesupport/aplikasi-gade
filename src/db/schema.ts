@@ -335,5 +335,28 @@ export const kkpr = pgTable('kkpr', {
 export type Kkpr = typeof kkpr.$inferSelect;
 export type NewKkpr = typeof kkpr.$inferInsert;
 
+export const statusProjectValues = [
+  'Perencanaan',
+  'Berjalan',
+  'Selesai',
+  'Dibatalkan',
+] as const;
 
+export type StatusProject = (typeof statusProjectValues)[number];
 
+export const projects = pgTable('projects', {
+  id: serial('id').primaryKey(),
+  kodeProject: varchar('kode_project', { length: 100 }).notNull().unique(),
+  namaProject: varchar('nama_project', { length: 255 }).notNull(),
+  lokasi: varchar('lokasi', { length: 255 }).notNull(),
+  desa: varchar('desa', { length: 100 }).notNull(),
+  kecamatan: varchar('kecamatan', { length: 100 }).notNull(),
+  kabupaten: varchar('kabupaten', { length: 100 }).notNull(),
+  status: varchar('status', { length: 50 }).notNull().default('Perencanaan'),
+  keterangan: text('keterangan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Project = typeof projects.$inferSelect;
+export type NewProject = typeof projects.$inferInsert;

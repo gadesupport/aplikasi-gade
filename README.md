@@ -79,6 +79,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /legalitas.html` - Antarmuka Web interaktif Legalitas Tanah & Dokumen Alas Hak Terintegrasi
 - `GET /pembebasan.html` - Antarmuka Web interaktif Kontrol Utama Rekap & Tracking Pembayaran Pembebasan Tanah
 - `GET /pemetaan.html` - **Antarmuka Web Kontrol Utama Pemetaan GIS**: Visualisasi spasial multi-layer (Induk, Batas Bidang, KKPR), Base Map Switcher, Snapping Presisi (Endpoint & Nearest), Digitasi Polygon, Interaksi Popup Detail Bidang saat Diklik, Import (GeoJSON, SHP ZIP, KML), serta Export Shapefile ZIP untuk upload OSS RBA
+- `GET /project.html` - **Antarmuka Web Manajemen Project**: Kontrol dan monitoring project lahan, rekap status (Perencanaan, Berjalan, Selesai, Dibatalkan), pencarian wilayah, dan form pengelolaan project
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -149,7 +150,10 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `POST /api/pemetaan/import` - Import data spasial berformat GeoJSON, KML, atau Shapefile (ZIP) dan langsung diklasifikasikan ke layer target
 - `GET /api/pemetaan/export` - Export data spasial (mendukung format `?format=shp` (ESRI Shapefile dikemas .ZIP untuk upload OSS), `?format=geojson`, dan `?format=kml` untuk Google Earth)
 
-
-
-
+### Endpoint API Project Lahan (`/api/projects`)
+- `GET /api/projects` - Daftar semua project lahan (mendukung pencarian `?search=`, filter `?status=`, dan ringkasan statistik `summary`)
+- `GET /api/projects/:id` - Detail project berdasarkan ID numerik atau Kode Project
+- `POST /api/projects` - Tambah data project baru (validasi kode, nama, lokasi, desa, kecamatan, kabupaten, status, keterangan)
+- `PUT /api/projects/:id` - Perbarui informasi project
+- `DELETE /api/projects/:id` - Hapus data project
 
