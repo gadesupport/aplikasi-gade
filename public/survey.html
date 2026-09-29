@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Survey Lahan | Aplikasi Gade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent: #0ea5e9;
+      --accent-dark: #0284c7;
+      --accent-light: #e0f2fe;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --purple: #8b5cf6;
+      --purple-light: #f3e8ff;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(14, 165, 233, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      border: 1px solid #bae6fd;
+    }
+
+    .nav-btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: 0 2px 6px rgba(14, 165, 233, 0.3);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .stat-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #0f172a;
+    }
+
+    .stat-lbl {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* Filter & Controls Card */
+    .controls-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .input-control, .select-control {
+      padding: 0.6rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-control:focus, .select-control:focus {
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    }
+
+    .input-search {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .btn-action-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.6rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #475569;
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      border-radius: 6px;
+    }
+
+    .btn-danger {
+      background: var(--danger-light);
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Main Table */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-header-title {
+      padding: 1.15rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-header-title h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #f8fafc;
+      padding: 0.85rem 1.15rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 1rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: #334155;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #fcfdfe;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-sesuai { background: var(--primary-light); color: var(--primary-dark); border: 1px solid #6ee7b7; }
+    .badge-penyesuaian { background: var(--warning-light); color: var(--warning); border: 1px solid #fcd34d; }
+    .badge-tidak { background: var(--danger-light); color: var(--danger); border: 1px solid #fca5a5; }
+    .badge-default { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+    .target-badge {
+      display: inline-block;
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: monospace;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .target-lokasi { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .target-bidang { background: var(--purple-light); color: var(--purple); border: 1px solid #d8b4fe; }
+
+    .empty-state {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .empty-state span {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Modal Form */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 10;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.35rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+    .form-row > .form-group {
+      flex: 1;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group label span.req {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .form-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      background: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .input-group .form-control {
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #f8fafc;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">S</div>
+        <div class="brand-title">
+          <h1>Aplikasi Gade</h1>
+          <p>Catatan Riwayat & Hasil Survey Lapangan</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Menu Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Menu Bidang</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak / Pemilik</a>
+        <a href="/survey.html" class="nav-btn nav-btn-active">📋 Data Survey</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
+        <button id="btnOpenAddModal" class="nav-btn nav-btn-primary">+ Entri Survey</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <div class="container">
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--accent-light); color: var(--accent-dark);">📋</div>
+        <div>
+          <div class="stat-val" id="statTotal">0</div>
+          <div class="stat-lbl">Total Riwayat Survey</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: #eff6ff; color: #1d4ed8;">📍</div>
+        <div>
+          <div class="stat-val" id="statLokasi">0</div>
+          <div class="stat-lbl">Target Lokasi</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--purple-light); color: var(--purple);">🏞️</div>
+        <div>
+          <div class="stat-val" id="statBidang">0</div>
+          <div class="stat-lbl">Target Bidang Tanah</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls / Filters -->
+    <div class="controls-card">
+      <div class="controls-bar">
+        <div class="filter-group">
+          <!-- Filter Target -->
+          <select id="filterTarget" class="select-control">
+            <option value="Semua">Semua Target</option>
+            <option value="Lokasi">Lokasi</option>
+            <option value="Bidang">Bidang Tanah</option>
+          </select>
+
+          <!-- Filter Referensi -->
+          <select id="filterRef" class="select-control" style="min-width: 200px;">
+            <option value="Semua">Semua Kode Referensi</option>
+          </select>
+
+          <!-- Search Input -->
+          <input type="text" id="searchKeyword" class="input-control input-search" placeholder="Cari PIC, hasil, catatan...">
+        </div>
+
+        <div class="btn-action-group">
+          <button id="btnRefresh" class="btn btn-outline" title="Refresh Data">🔄 Muat Ulang</button>
+          <button id="btnFilterReset" class="btn btn-outline" title="Reset Filter">Bersihkan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="table-card">
+      <div class="table-header-title">
+        <div>
+          <h2>Daftar Riwayat Survey Lapangan</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Catatan hasil peninjauan lahan oleh surveyor</p>
+        </div>
+        <span id="dataCountBadge" style="font-size: 0.8rem; font-weight: 700; background: #f1f5f9; padding: 0.3rem 0.75rem; border-radius: 999px; color: #475569;">0 Survey</span>
+      </div>
+
+      <div class="table-responsive">
+        <table id="surveyTable">
+          <thead>
+            <tr>
+              <th>Tgl Survey & PIC</th>
+              <th>Target & Referensi</th>
+              <th>Hasil Survey</th>
+              <th>Catatan</th>
+              <th>Koordinat</th>
+              <th style="text-align: right;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="6" class="empty-state">
+                <span>⏳</span>
+                Memuat data survey...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Form Add/Edit -->
+  <div class="modal-overlay" id="formModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Entri Data Survey</h3>
+        <button class="modal-close" onclick="closeFormModal()">&times;</button>
+      </div>
+      <form id="surveyForm">
+        <div class="modal-body">
+          <input type="hidden" id="surveyId" value="">
+
+          <div class="form-row">
+            <!-- Target Survey -->
+            <div class="form-group">
+              <label for="formTarget">Target Survey <span class="req">*</span></label>
+              <select id="formTarget" class="form-control" required onchange="handleFormTargetChange()">
+                <option value="">-- Pilih Target --</option>
+                <option value="Lokasi">Lokasi (Peninjauan Awal)</option>
+                <option value="Bidang">Bidang Tanah (Detail Persil)</option>
+              </select>
+            </div>
+            
+            <!-- Tanggal Survey -->
+            <div class="form-group">
+              <label for="formTanggal">Tanggal Pelaksanaan</label>
+              <input type="date" id="formTanggal" class="form-control">
+            </div>
+          </div>
+
+          <!-- Kode Referensi -->
+          <div class="form-group">
+            <label for="formRef">Kode Referensi (Lokasi/Bidang) <span class="req">*</span></label>
+            <select id="formRef" class="form-control" required disabled>
+              <option value="">-- Pilih Target Terlebih Dahulu --</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <!-- PIC Survey -->
+            <div class="form-group">
+              <label for="formPic">PIC / Petugas Survey</label>
+              <input type="text" id="formPic" class="form-control" placeholder="Nama petugas/tim">
+            </div>
+
+            <!-- Hasil Survey -->
+            <div class="form-group">
+              <label for="formHasil">Hasil Evaluasi</label>
+              <select id="formHasil" class="form-control">
+                <option value="">-- Pilih Hasil --</option>
+                <option value="Sesuai Kriteria">Sesuai Kriteria</option>
+                <option value="Butuh Penyesuaian">Butuh Penyesuaian</option>
+                <option value="Tidak Layak">Tidak Layak</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Koordinat -->
+          <div class="form-group">
+            <label for="formKoordinat">Koordinat GPS (Lat, Lng)</label>
+            <div class="input-group">
+              <input type="text" id="formKoordinat" class="form-control" placeholder="-6.200000, 106.816666">
+              <button type="button" class="btn btn-outline" onclick="getCurrentLocation()" title="Ambil Lokasi Saat Ini">📍 Dapatkan</button>
+            </div>
+          </div>
+
+          <!-- Catatan -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="formCatatan">Catatan Survey</label>
+            <textarea id="formCatatan" class="form-control" placeholder="Tulis rincian kondisi lapangan, kendala, kelayakan akses, dsb..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeFormModal()">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitForm">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Konfirmasi Hapus -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>Hapus Riwayat Survey</h3>
+        <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Apakah Anda yakin ingin menghapus data survey referensi <strong id="deleteTargetRef">-</strong>?</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Data riwayat yang dihapus tidak dapat dikembalikan.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeDeleteModal()">Batal</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDelete">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Script -->
+  <script>
+    // State
+    let surveys = [];
+    let listLokasi = [];
+    let listBidang = [];
+    let activeDeleteId = null;
+
+    // Elements
+    const tableBody = document.getElementById('tableBody');
+    const filterTarget = document.getElementById('filterTarget');
+    const filterRef = document.getElementById('filterRef');
+    const searchKeyword = document.getElementById('searchKeyword');
+    
+    const formModal = document.getElementById('formModal');
+    const deleteModal = document.getElementById('deleteModal');
+    const surveyForm = document.getElementById('surveyForm');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    const formTarget = document.getElementById('formTarget');
+    const formRef = document.getElementById('formRef');
+    const toast = document.getElementById('toast');
+
+    // Show Toast
+    function showToast(msg, isError = false) {
+      toast.textContent = msg;
+      toast.style.background = isError ? '#dc2626' : '#0f172a';
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    // Init Data
+    async function init() {
+      // Setup dates (today)
+      document.getElementById('formTanggal').valueAsDate = new Date();
+
+      // Pre-fill filter from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const preTarget = urlParams.get('target');
+      const preRef = urlParams.get('ref');
+      
+      if (preTarget) filterTarget.value = preTarget;
+      
+      await Promise.all([
+        fetchLokasi(),
+        fetchBidang()
+      ]);
+
+      populateFilterRef();
+      if (preRef) filterRef.value = preRef;
+
+      await loadSurveys();
+
+      // Listeners
+      filterTarget.addEventListener('change', () => {
+        populateFilterRef();
+        loadSurveys();
+      });
+      filterRef.addEventListener('change', loadSurveys);
+      searchKeyword.addEventListener('input', debounce(loadSurveys, 300));
+      document.getElementById('btnRefresh').addEventListener('click', loadSurveys);
+      document.getElementById('btnFilterReset').addEventListener('click', () => {
+        filterTarget.value = 'Semua';
+        populateFilterRef();
+        searchKeyword.value = '';
+        loadSurveys();
+      });
+
+      document.getElementById('btnOpenAddModal').addEventListener('click', () => openFormModal());
+      surveyForm.addEventListener('submit', handleFormSubmit);
+      document.getElementById('btnConfirmDelete').addEventListener('click', executeDelete);
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    async function fetchLokasi() {
+      try {
+        const res = await fetch('/api/lokasi');
+        const json = await res.json();
+        if (json.success) listLokasi = json.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function fetchBidang() {
+      try {
+        const res = await fetch('/api/bidang-tanah');
+        const json = await res.json();
+        if (json.success) listBidang = json.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function populateFilterRef() {
+      const target = filterTarget.value;
+      let html = '<option value="Semua">Semua Kode Referensi</option>';
+      
+      if (target === 'Lokasi' || target === 'Semua') {
+        if (target === 'Semua') html += '<optgroup label="Lokasi">';
+        listLokasi.forEach(l => {
+          html += `<option value="${l.kodeLokasi}">${l.kodeLokasi} - ${l.namaLokasi}</option>`;
+        });
+        if (target === 'Semua') html += '</optgroup>';
+      }
+      
+      if (target === 'Bidang' || target === 'Semua') {
+        if (target === 'Semua') html += '<optgroup label="Bidang Tanah">';
+        listBidang.forEach(b => {
+          html += `<option value="${b.kodeTanah}">${b.kodeTanah}</option>`;
+        });
+        if (target === 'Semua') html += '</optgroup>';
+      }
+      
+      filterRef.innerHTML = html;
+    }
+
+    function handleFormTargetChange() {
+      const target = formTarget.value;
+      if (!target) {
+        formRef.innerHTML = '<option value="">-- Pilih Target Terlebih Dahulu --</option>';
+        formRef.disabled = true;
+        return;
+      }
+
+      formRef.disabled = false;
+      let html = '<option value="">-- Pilih Referensi --</option>';
+
+      if (target === 'Lokasi') {
+        listLokasi.forEach(l => {
+          html += `<option value="${l.kodeLokasi}">${l.kodeLokasi} - ${l.namaLokasi}</option>`;
+        });
+      } else {
+        listBidang.forEach(b => {
+          html += `<option value="${b.kodeTanah}">${b.kodeTanah} (${b.nomorBidang || '-'})</option>`;
+        });
+      }
+      formRef.innerHTML = html;
+    }
+
+    // Load Surveys
+    async function loadSurveys() {
+      const target = filterTarget.value;
+      const ref = filterRef.value;
+      const search = searchKeyword.value.trim();
+
+      let url = '/api/survey?';
+      const params = new URLSearchParams();
+      if (target && target !== 'Semua') params.append('targetSurvey', target);
+      if (ref && ref !== 'Semua') params.append('referensiId', ref);
+      if (search) params.append('search', search);
+
+      url += params.toString();
+
+      tableBody.innerHTML = `<tr><td colspan="6" class="empty-state"><span>⏳</span>Memuat data survey...</td></tr>`;
+
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+
+        if (json.success) {
+          surveys = json.data;
+          renderTable(surveys);
+          updateStats(surveys);
+        } else {
+          tableBody.innerHTML = `<tr><td colspan="6" class="empty-state"><span>⚠️</span>Gagal memuat: ${json.message}</td></tr>`;
+        }
+      } catch (err) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="empty-state"><span>❌</span>Koneksi error: ${err.message}</td></tr>`;
+      }
+    }
+
+    function updateStats(items) {
+      document.getElementById('statTotal').textContent = items.length;
+      document.getElementById('statLokasi').textContent = items.filter(i => i.targetSurvey === 'Lokasi').length;
+      document.getElementById('statBidang').textContent = items.filter(i => i.targetSurvey === 'Bidang').length;
+      document.getElementById('dataCountBadge').textContent = `${items.length} Survey`;
+    }
+
+    function renderTable(items) {
+      if (!items || items.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="empty-state">
+              <span>📋</span>
+              Belum ada data survey yang sesuai.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = items.map(item => {
+        let badgeClass = 'badge-default';
+        let hasil = item.hasilSurvey || 'Belum Dievaluasi';
+        
+        if (hasil.toLowerCase().includes('sesuai')) badgeClass = 'badge-sesuai';
+        else if (hasil.toLowerCase().includes('tidak')) badgeClass = 'badge-tidak';
+        else if (hasil.toLowerCase().includes('butuh') || hasil.toLowerCase().includes('penyesuaian')) badgeClass = 'badge-penyesuaian';
+
+        const tgl = item.tanggalSurvey ? new Date(item.tanggalSurvey).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
+        const targetClass = item.targetSurvey === 'Lokasi' ? 'target-lokasi' : 'target-bidang';
+        
+        // Link to respective details page
+        let linkHref = item.targetSurvey === 'Lokasi' ? `/lokasi.html?kodeLokasi=${item.referensiId}` : `/bidang-tanah.html?kodeTanah=${item.referensiId}`;
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.2rem;">📅 ${tgl}</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">PIC: <span style="color:#334155; font-weight: 600;">${escapeHtml(item.picSurvey || '-')}</span></div>
+            </td>
+            <td>
+              <div style="margin-bottom: 0.25rem;"><span class="target-badge ${targetClass}">${item.targetSurvey}</span></div>
+              <a href="${linkHref}" style="font-weight: 600; color: var(--accent-dark); text-decoration: none; font-size: 0.85rem;" title="Lihat detail target">
+                ${escapeHtml(item.referensiId)}
+              </a>
+            </td>
+            <td>
+              <span class="badge-pill ${badgeClass}">
+                ${escapeHtml(hasil)}
+              </span>
+            </td>
+            <td style="max-width: 250px; font-size: 0.8rem; color: #475569;">
+              ${item.catatan ? escapeHtml(item.catatan) : '<span style="color: var(--text-muted);">-</span>'}
+            </td>
+            <td>
+              ${item.koordinat ? `
+                <a href="https://maps.google.com/?q=${encodeURIComponent(item.koordinat)}" target="_blank" class="btn btn-sm btn-outline" style="text-decoration:none;" title="Lihat di Google Maps">
+                  📍 Map
+                </a>
+              ` : '<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>'}
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="btn btn-sm btn-outline" onclick="openEditModal(${item.id})">✏️ Edit</button>
+              <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${item.id}, '${escapeJs(item.referensiId)}')">🗑️</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+    function escapeJs(str) {
+      if (!str) return '';
+      return String(str).replace(/'/g, "\\'");
+    }
+
+    function getCurrentLocation() {
+      if ("geolocation" in navigator) {
+        const btn = document.querySelector('button[onclick="getCurrentLocation()"]');
+        btn.textContent = '⏳ ...';
+        btn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude.toFixed(6);
+            const lng = position.coords.longitude.toFixed(6);
+            document.getElementById('formKoordinat').value = `${lat}, ${lng}`;
+            btn.textContent = '📍 Dapatkan';
+            btn.disabled = false;
+            showToast('Koordinat berhasil didapatkan');
+          },
+          (error) => {
+            btn.textContent = '📍 Dapatkan';
+            btn.disabled = false;
+            showToast(`Gagal: ${error.message}`, true);
+          },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      } else {
+        showToast('Browser tidak mendukung Geolocation', true);
+      }
+    }
+
+    // Modals
+    function openFormModal(item = null) {
+      surveyForm.reset();
+      formRef.innerHTML = '<option value="">-- Pilih Target Terlebih Dahulu --</option>';
+      formRef.disabled = true;
+
+      if (item) {
+        modalTitle.textContent = 'Edit Riwayat Survey';
+        document.getElementById('surveyId').value = item.id;
+        formTarget.value = item.targetSurvey;
+        handleFormTargetChange();
+        formRef.value = item.referensiId;
+        
+        if (item.tanggalSurvey) {
+          const dt = new Date(item.tanggalSurvey);
+          document.getElementById('formTanggal').valueAsDate = dt;
+        }
+        
+        document.getElementById('formPic').value = item.picSurvey || '';
+        
+        // Handle Hasil dropdown if custom
+        const formHasil = document.getElementById('formHasil');
+        if (item.hasilSurvey && !Array.from(formHasil.options).map(o => o.value).includes(item.hasilSurvey)) {
+           formHasil.value = 'Lainnya'; // Can't perfectly restore custom text without a separate input, sticking to options for simplicity in this demo. Or append option.
+           const newOpt = document.createElement('option');
+           newOpt.value = item.hasilSurvey;
+           newOpt.text = item.hasilSurvey;
+           formHasil.add(newOpt);
+           formHasil.value = item.hasilSurvey;
+        } else {
+           formHasil.value = item.hasilSurvey || '';
+        }
+
+        document.getElementById('formKoordinat').value = item.koordinat || '';
+        document.getElementById('formCatatan').value = item.catatan || '';
+      } else {
+        modalTitle.textContent = 'Entri Data Survey Baru';
+        document.getElementById('surveyId').value = '';
+        document.getElementById('formTanggal').valueAsDate = new Date();
+        
+        if (filterTarget.value && filterTarget.value !== 'Semua') {
+          formTarget.value = filterTarget.value;
+          handleFormTargetChange();
+          if (filterRef.value && filterRef.value !== 'Semua') {
+            formRef.value = filterRef.value;
+          }
+        }
+      }
+      formModal.style.display = 'flex';
+    }
+
+    function closeFormModal() {
+      formModal.style.display = 'none';
+    }
+
+    function openEditModal(id) {
+      const item = surveys.find(s => s.id === id);
+      if (item) openFormModal(item);
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('surveyId').value;
+      const isEdit = Boolean(id);
+
+      const target = formTarget.value;
+      const ref = formRef.value;
+      
+      if (!target || !ref) {
+        showToast('Target dan Kode Referensi wajib diisi', true);
+        return;
+      }
+
+      const payload = {
+        targetSurvey: target,
+        referensiId: ref,
+        tanggalSurvey: document.getElementById('formTanggal').value || null,
+        picSurvey: document.getElementById('formPic').value.trim() || null,
+        hasilSurvey: document.getElementById('formHasil').value || null,
+        koordinat: document.getElementById('formKoordinat').value.trim() || null,
+        catatan: document.getElementById('formCatatan').value.trim() || null,
+      };
+
+      const submitBtn = document.getElementById('btnSubmitForm');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Menyimpan...';
+
+      try {
+        const url = isEdit ? `/api/survey/${id}` : '/api/survey';
+        const method = isEdit ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Data berhasil disimpan!');
+          closeFormModal();
+          loadSurveys();
+        } else {
+          showToast(`Gagal: ${json.message}`, true);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`, true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Simpan Data';
+      }
+    }
+
+    function openDeleteModal(id, ref) {
+      activeDeleteId = id;
+      document.getElementById('deleteTargetRef').textContent = ref;
+      deleteModal.style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      activeDeleteId = null;
+      deleteModal.style.display = 'none';
+    }
+
+    async function executeDelete() {
+      if (!activeDeleteId) return;
+      const btn = document.getElementById('btnConfirmDelete');
+      btn.disabled = true;
+      btn.textContent = 'Menghapus...';
+
+      try {
+        const res = await fetch(`/api/survey/${activeDeleteId}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Survey berhasil dihapus');
+          closeDeleteModal();
+          loadSurveys();
+        } else {
+          showToast(`Gagal: ${json.message}`, true);
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Ya, Hapus';
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeFormModal();
+        closeDeleteModal();
+      }
+    });
+    formModal.addEventListener('click', (e) => { if (e.target === formModal) closeFormModal(); });
+    deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+
+    // Start
+    init();
+  </script>
+</body>
+</html>
