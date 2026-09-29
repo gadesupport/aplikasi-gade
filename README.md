@@ -72,6 +72,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 
 ### Antarmuka Web & Dokumentasi
 - `GET /` & `GET /lokasi.html` - Antarmuka Web interaktif Menu Lokasi (Step 1 Formulir + Step 2 Peta Leaflet Polygon)
+- `GET /bidang-tanah.html` - Antarmuka Web interaktif Menu Bidang Tanah (Step 1 Finansial + Step 2 Peta Polygon & Checklist Legalitas)
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -82,4 +83,14 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `PUT /api/lokasi/:kodeLokasi` - Perbarui informasi lokasi (Step 1)
 - `PATCH /api/lokasi/:kodeLokasi/batas` - Perbarui batas pemetaan polygon, luas induk, dan bidang terpetakan (Step 2)
 - `DELETE /api/lokasi/:kodeLokasi` - Hapus data lokasi
+
+### Endpoint API Bidang Tanah (`/api/bidang-tanah`)
+- `GET /api/bidang-tanah` - Daftar bidang tanah (mendukung query `?kodeLokasi=`, `?status=`, dan `?search=`)
+- `GET /api/bidang-tanah/:kodeTanah` - Detail data bidang tanah
+- `GET /api/bidang-tanah/rekap/:kodeLokasi` - Ringkasan luas induk, total bidang, sisa luas, dan sebaran status
+- `POST /api/bidang-tanah` - Tambah bidang tanah baru (Step 1)
+- `PUT /api/bidang-tanah/:kodeTanah` - Perbarui informasi bidang tanah (Step 1)
+- `PATCH /api/bidang-tanah/:kodeTanah/polygon` - Perbarui polygon batas bidang & checklist legalitas (Step 2)
+- `DELETE /api/bidang-tanah/:kodeTanah` - Hapus data bidang tanah
+
 
