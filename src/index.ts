@@ -11,6 +11,7 @@ import { surveyRoutes } from './routes/survey';
 import { pembahasanRoutes } from './routes/pembahasan';
 import { legalitasTanahRoutes } from './routes/legalitasTanah';
 import { pembebasanRoutes } from './routes/pembebasan';
+import { pemetaanRoutes } from './routes/pemetaan';
 
 const app = new Elysia()
   .use(cors())
@@ -20,7 +21,7 @@ const app = new Elysia()
         info: {
           title: 'Aplikasi Gade API Documentation',
           version: '1.0.0',
-          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey, Pembahasan, Legalitas & Pembebasan Tanah',
+          description: 'API untuk Pengadaan dan Manajemen Lokasi, Bidang Tanah, Pihak, Survey, Pembahasan, Legalitas, Pembebasan & Pemetaan GIS Lahan',
         },
         tags: [
           { name: 'Lokasi', description: 'Endpoints untuk Pengelolaan Lokasi & Pemetaan Area' },
@@ -30,6 +31,7 @@ const app = new Elysia()
           { name: 'Pembahasan', description: 'Endpoints untuk Pengelolaan Notulensi & Keputusan Pembahasan Lahan' },
           { name: 'Legalitas Tanah', description: 'Endpoints untuk Pengelolaan Dokumen & Status Legalitas Bidang Tanah' },
           { name: 'Pembebasan', description: 'Endpoints untuk Rekap & Tracking Transaksi Pembayaran Pembebasan Lahan' },
+          { name: 'Pemetaan', description: 'Endpoints untuk Modul Pemetaan GIS, Layer Batas, Digitasi & KKPR' },
           { name: 'Users', description: 'Endpoints untuk Manajemen User' },
         ],
       },
@@ -49,6 +51,7 @@ const app = new Elysia()
       pembahasan: '/pembahasan.html',
       legalitas: '/legalitas.html',
       pembebasan: '/pembebasan.html',
+      pemetaan: '/pemetaan.html',
     },
     timestamp: new Date().toISOString(),
   }))
@@ -63,6 +66,7 @@ const app = new Elysia()
   .use(pembahasanRoutes)
   .use(legalitasTanahRoutes)
   .use(pembebasanRoutes)
+  .use(pemetaanRoutes)
 
   .group('/api', (app) =>
     app.get('/users', async ({ db }) => {

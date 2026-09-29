@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aplikasi Gade - Kontrol Utama Pemetaan GIS & KKPR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS & Draw CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #d1fae5;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --purple: #8b5cf6;
+      --purple-light: #ede9fe;
+      --bg-main: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --info: #0284c7;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #059669 0%, #2563eb 100%);
+      color: #fff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .nav-btn-active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #a7f3d0;
+    }
+
+    .nav-btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+    }
+
+    .nav-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Main Workspace */
+    .gis-workspace {
+      max-width: 1560px;
+      margin: 1rem auto;
+      padding: 0 1.25rem;
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Stats Overview */
+    .gis-stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .stat-pill {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .stat-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .stat-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Map & Sidebar Layout */
+    .map-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1rem;
+      min-height: calc(100vh - 220px);
+    }
+
+    @media (max-width: 1024px) {
+      .map-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Control Sidebar */
+    .gis-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .card-panel {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 0.5rem;
+    }
+
+    .panel-header h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .layer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.65rem;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      margin-bottom: 0.45rem;
+      transition: background 0.15s;
+    }
+
+    .layer-item:hover {
+      background: #f1f5f9;
+    }
+
+    .layer-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .color-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .badge-count {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 10px;
+      font-weight: 700;
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    /* Snapping Box */
+    .snap-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .snap-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+      color: #1e40af;
+      cursor: pointer;
+    }
+
+    /* Map Container */
+    .map-wrapper {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      min-height: 600px;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      min-height: 600px;
+      z-index: 10;
+    }
+
+    /* Floating Toolbar inside Map */
+    .map-top-bar {
+      position: absolute;
+      top: 12px;
+      left: 60px;
+      z-index: 1000;
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(6px);
+      padding: 0.4rem 0.65rem;
+      border-radius: 10px;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: var(--shadow-md);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-tool {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+    }
+
+    .btn-tool:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-tool-active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .btn-tool-active:hover {
+      background: var(--primary-dark);
+      color: #ffffff;
+    }
+
+    /* Payment Status Legend on Map */
+    .map-legend {
+      position: absolute;
+      bottom: 25px;
+      left: 15px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(6px);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      font-size: 0.76rem;
+      max-width: 250px;
+    }
+
+    .legend-title {
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .legend-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* Details Popup */
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .leaflet-popup-content {
+      margin: 0;
+      line-height: 1.4;
+      width: 310px !important;
+    }
+
+    .popup-card {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .popup-header {
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .popup-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .popup-body {
+      padding: 0.85rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    .popup-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.25rem;
+    }
+
+    .popup-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.4rem;
+    }
+
+    .popup-table td {
+      padding: 0.25rem 0;
+      vertical-align: top;
+    }
+
+    .popup-table td:first-child {
+      color: var(--text-muted);
+      width: 42%;
+      font-weight: 500;
+    }
+
+    .popup-table td:last-child {
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .popup-footer {
+      padding: 0.6rem 1rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    /* Modal Styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-container {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+
+    .modal-header h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background: #f8fafc;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      background: #ffffff;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    /* Drag Drop Area */
+    .drop-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .drop-zone-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 9999;
+      display: none;
+      animation: slideIn 0.25s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Snapping Indicator Circle */
+    .snap-marker-dot {
+      background-color: #3b82f6;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">🗺️</div>
+        <div class="brand-title">
+          <h1>Modul Pemetaan GIS Lahan</h1>
+          <p>Kontrol Spasial, Visualisasi Layer, Snapping & KKPR OSS</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/lokasi.html" class="nav-btn nav-btn-secondary">📍 Lokasi</a>
+        <a href="/bidang-tanah.html" class="nav-btn nav-btn-secondary">🏞️ Bidang</a>
+        <a href="/pihak.html" class="nav-btn nav-btn-secondary">👥 Pihak</a>
+        <a href="/survey.html" class="nav-btn nav-btn-secondary">📋 Survey</a>
+        <a href="/pembahasan.html" class="nav-btn nav-btn-secondary">🤝 Pembahasan</a>
+        <a href="/legalitas.html" class="nav-btn nav-btn-secondary">⚖️ Legalitas</a>
+        <a href="/pembebasan.html" class="nav-btn nav-btn-secondary">💰 Pembebasan</a>
+        <a href="/pemetaan.html" class="nav-btn nav-btn-active">🗺️ Pemetaan</a>
+        <a href="/swagger" target="_blank" class="nav-btn nav-btn-secondary" title="API Docs">📖 API</a>
+        <button id="btnOpenImportModal" class="nav-btn nav-btn-primary">📥 Import GIS</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <div class="gis-workspace">
+
+    <!-- Top Stats Overview Bar -->
+    <div class="gis-stats-bar">
+      <div class="stat-pill">
+        <div class="stat-icon" style="background: #e0f2fe; color: #0284c7;">🗺️</div>
+        <div>
+          <div id="statTotalPoligon" class="stat-val">0</div>
+          <div class="stat-desc">Total Objek Spasial</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-icon" style="background: #d1fae5; color: #059669;">🏞️</div>
+        <div>
+          <div id="statTotalBidang" class="stat-val">0</div>
+          <div class="stat-desc">Batas Bidang Tanah</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-icon" style="background: #ede9fe; color: #7c3aed;">📐</div>
+        <div>
+          <div id="statTotalKkpr" class="stat-val">0</div>
+          <div class="stat-desc">Perencanaan KKPR (OSS)</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-icon" style="background: #fef3c7; color: #d97706;">💵</div>
+        <div>
+          <div id="statStatusBayarSummary" class="stat-val">0 / 0</div>
+          <div class="stat-desc">Bidang Lunas / Parsial</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map & Control Sidebar Grid -->
+    <div class="map-grid">
+
+      <!-- Sidebar -->
+      <div class="gis-sidebar">
+
+        <!-- 1. Layer Visibility & Filter -->
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>📑 Layer Peta (Visualisasi)</h3>
+            <button id="btnRefreshLayers" class="btn-tool" title="Segarkan Data Spasial">🔄</button>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label style="font-size: 0.75rem; text-transform: uppercase;">Filter Lokasi Induk</label>
+            <select id="filterLokasiSelect" class="form-control" onchange="loadSpatialLayers()">
+              <option value="Semua">Semua Lokasi Proyek</option>
+            </select>
+          </div>
+
+          <!-- Layer Induk -->
+          <div class="layer-item">
+            <label class="layer-info" style="cursor: pointer;">
+              <input type="checkbox" id="chkLayerInduk" checked onchange="toggleLayerVisibility('induk')">
+              <span class="color-swatch" style="background: #10b981;"></span>
+              <span>Layer Batas Induk</span>
+            </label>
+            <span id="badgeCountInduk" class="badge-count">0</span>
+          </div>
+
+          <!-- Layer Bidang Tanah -->
+          <div class="layer-item">
+            <label class="layer-info" style="cursor: pointer;">
+              <input type="checkbox" id="chkLayerBidang" checked onchange="toggleLayerVisibility('bidang')">
+              <span class="color-swatch" style="background: #ef4444;"></span>
+              <span>Layer Batas Bidang</span>
+            </label>
+            <span id="badgeCountBidang" class="badge-count">0</span>
+          </div>
+
+          <!-- Layer KKPR -->
+          <div class="layer-item">
+            <label class="layer-info" style="cursor: pointer;">
+              <input type="checkbox" id="chkLayerKkpr" checked onchange="toggleLayerVisibility('kkpr')">
+              <span class="color-swatch" style="background: #8b5cf6;"></span>
+              <span>Layer KKPR (Rencana OSS)</span>
+            </label>
+            <span id="badgeCountKkpr" class="badge-count">0</span>
+          </div>
+        </div>
+
+        <!-- 2. Digitasi & Tools Mapping -->
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>✍️ Digitasi & Snapping Tools</h3>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.6rem;">
+            <label style="font-size: 0.75rem;">Target Layer Digitasi</label>
+            <select id="digitasiTargetLayer" class="form-control">
+              <option value="kkpr">🟪 Layer KKPR (Perencanaan Izin Lahan)</option>
+              <option value="bidang">🟧 Layer Batas Bidang Tanah</option>
+              <option value="induk">🟩 Layer Batas Lokasi Induk</option>
+            </select>
+          </div>
+
+          <!-- Snapping Configuration -->
+          <div class="snap-box" style="margin-bottom: 0.75rem;">
+            <div style="font-weight: 700; color: #1e3a8a; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+              <span>🧲 Fitur Snapping Presisi</span>
+            </div>
+            <label class="snap-option">
+              <input type="checkbox" id="chkEndpointSnap" checked>
+              <span>Endpoint Snap (Titik Sudut / Node)</span>
+            </label>
+            <label class="snap-option">
+              <input type="checkbox" id="chkNearestSnap" checked>
+              <span>Nearest Snap (Garis Batas / Edge)</span>
+            </label>
+            <div style="font-size: 0.72rem; color: #3b82f6; margin-top: 0.25rem;">
+              *Kursor otomatis merekat pada titik dan garis bidang terdekat.
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+            <button id="btnStartDraw" class="btn-tool" style="justify-content: center; background: #059669; color: #fff; border: none; padding: 0.55rem;">
+              + Digitasi Baru
+            </button>
+            <button id="btnToggleEdit" class="btn-tool" style="justify-content: center; padding: 0.55rem;">
+              ✏️ Edit Vertex
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Export GIS & OSS -->
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3>📦 Export Spasial</h3>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+            <button onclick="downloadExport('kkpr', 'shp')" class="btn-tool" style="justify-content: space-between; background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe;">
+              <span>📂 <b>SHP ZIP</b> (Untuk Upload OSS KKPR)</span>
+              <span>⬇️</span>
+            </button>
+            <button onclick="downloadExport('bidang', 'geojson')" class="btn-tool" style="justify-content: space-between;">
+              <span>🌐 <b>GeoJSON</b> (Batas Bidang Lengkap)</span>
+              <span>⬇️</span>
+            </button>
+            <button onclick="downloadExport('all', 'kml')" class="btn-tool" style="justify-content: space-between;">
+              <span>📍 <b>KML</b> (Google Earth Semua Layer)</span>
+              <span>⬇️</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Map Viewport -->
+      <div class="map-wrapper" id="mapWrapper">
+
+        <!-- Top Floating Map Controls -->
+        <div class="map-top-bar">
+          <button id="btnToggleFullscreen" class="btn-tool" title="Layar Penuh (Fullscreen)">
+            ⛶ Fullscreen
+          </button>
+          <button id="btnFitBounds" class="btn-tool" title="Fokus ke Seluruh Objek">
+            🎯 Zoom ke Lahan
+          </button>
+
+          <!-- Base Map Selector -->
+          <div style="display: flex; align-items: center; gap: 0.3rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">Peta:</span>
+            <select id="baseMapSelect" class="form-control" style="padding: 0.25rem 0.5rem; font-size: 0.78rem; width: auto;" onchange="switchBaseMap(this.value)">
+              <option value="osm">OpenStreetMap</option>
+              <option value="satellite" selected>Satelit / Imagery (Esri)</option>
+              <option value="topo">Topografi / Kontur</option>
+              <option value="carto">Carto Positron (Bersih)</option>
+            </select>
+          </div>
+
+          <button id="btnOpenKkprModal" class="btn-tool btn-tool-active" style="margin-left: auto;">
+            + Entri Data KKPR
+          </button>
+        </div>
+
+        <!-- Leaflet Map Container -->
+        <div id="map"></div>
+
+        <!-- Legend for Payment Status -->
+        <div class="map-legend">
+          <div class="legend-title">
+            <span>🎨 Status Pembayaran Bidang</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-box" style="background: #10b981;"></span>
+            <span>Lunas (100% Pembayaran)</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-box" style="background: #f59e0b;"></span>
+            <span>Parsial / Pembayaran Bertahap</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-box" style="background: #ef4444;"></span>
+            <span>Belum Dibayar / Transaksi</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-box" style="background: #8b5cf6;"></span>
+            <span>Perencanaan Batas KKPR OSS</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Modal: Import Spasial (GeoJSON, SHP ZIP, KML) -->
+  <div id="importModal" class="modal-backdrop">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>📥 Import Data Spasial (GeoJSON, SHP ZIP, KML)</h3>
+        <button class="modal-close" onclick="closeImportModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Target Kategori Layer Hasil Import</label>
+          <select id="importCategorySelect" class="form-control">
+            <option value="kkpr">Layer KKPR (Rencana Izin Pemanfaatan Ruang)</option>
+            <option value="bidang">Layer Batas Bidang Tanah</option>
+            <option value="induk">Layer Batas Lokasi Induk</option>
+          </select>
+        </div>
+
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInputGis').click()">
+          <div class="drop-zone-icon">📁</div>
+          <h4 style="font-size: 0.95rem; color: #1e293b; margin-bottom: 0.25rem;">Klik atau Tarik File Spasial ke Sini</h4>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Mendukung format <b>.geojson, .json, .kml, dan .zip (Shapefile)</b></p>
+          <input type="file" id="fileInputGis" style="display: none;" accept=".geojson,.json,.kml,.zip" onchange="handleFileSelected(event)">
+        </div>
+
+        <div id="importPreviewStatus" style="margin-top: 1rem; font-size: 0.82rem; color: #334155; display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="nav-btn nav-btn-secondary" onclick="closeImportModal()">Tutup</button>
+        <button id="btnExecuteImport" class="nav-btn nav-btn-primary" onclick="processImportFile()" disabled>Proses Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Tambah / Edit KKPR -->
+  <div id="kkprModal" class="modal-backdrop">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="kkprModalTitle">📋 Tambah Perencanaan KKPR (OSS)</h3>
+        <button class="modal-close" onclick="closeKkprModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="kkprForm" onsubmit="event.preventDefault(); saveKkprData();">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+            <div class="form-group">
+              <label>Kode KKPR *</label>
+              <input type="text" id="kkprKode" class="form-control" required placeholder="Contoh: KKPR-2026-003">
+            </div>
+            <div class="form-group">
+              <label>Kategori Kegiatan *</label>
+              <select id="kkprKategori" class="form-control">
+                <option value="Industri & Pergudangan">Industri & Pergudangan</option>
+                <option value="Perumahan & Permukiman">Perumahan & Permukiman</option>
+                <option value="Komersial & Jasa">Komersial & Jasa</option>
+                <option value="Infrastruktur & Utilitas">Infrastruktur & Utilitas</option>
+                <option value="Pariwisata">Pariwisata</option>
+                <option value="Pertanian & Perkebunan">Pertanian & Perkebunan</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nama Rencana Kegiatan / Usaha *</label>
+            <input type="text" id="kkprNamaKegiatan" class="form-control" required placeholder="Contoh: Pembangunan Fasilitas Pergudangan Modern">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+            <div class="form-group">
+              <label>Nama Pemohon / Perusahaan</label>
+              <input type="text" id="kkprPemohon" class="form-control" placeholder="Contoh: PT Gade Logistik">
+            </div>
+            <div class="form-group">
+              <label>Nomor Izin / OSS RBA</label>
+              <input type="text" id="kkprNomorIzin" class="form-control" placeholder="Contoh: OSS-KKPR-91203912">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+            <div class="form-group">
+              <label>Luas Rencana (m²)</label>
+              <input type="number" step="0.01" id="kkprLuasRencana" class="form-control" placeholder="0.00">
+            </div>
+            <div class="form-group">
+              <label>Status Permohonan</label>
+              <select id="kkprStatus" class="form-control">
+                <option value="Draft">Draft</option>
+                <option value="Diajukan">Diajukan</option>
+                <option value="Ditinjau">Ditinjau</option>
+                <option value="Disetujui">Disetujui</option>
+                <option value="Ditolak">Ditolak</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Catatan / Keterangan Kesesuaian Tata Ruang</label>
+            <textarea id="kkprCatatan" class="form-control" rows="2" placeholder="Catatan analisis tata ruang atau tindak lanjut..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="nav-btn nav-btn-secondary" onclick="closeKkprModal()">Batal</button>
+        <button class="nav-btn nav-btn-primary" onclick="saveKkprData()">Simpan Data KKPR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast"></div>
+
+  <!-- Leaflet JS & Draw JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+  <script>
+    // Global GIS Application State
+    let map = null;
+    let baseTileLayer = null;
+    let baseTileLayers = {};
+
+    let layerIndukGroup = null;
+    let layerBidangGroup = null;
+    let layerKkprGroup = null;
+    let drawnItems = null;
+    let drawControl = null;
+
+    let isEditMode = false;
+    let allVertexPoints = []; // for snapping
+    let allLineSegments = []; // for nearest snapping
+
+    let selectedImportFile = null;
+    let currentEditingKkprId = null;
+    let activeDrawnLayer = null;
+
+    // Toast Function
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.background = isError ? '#dc2626' : '#0f172a';
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    }
+
+    // Initialize Leaflet Map
+    function initMap() {
+      // Default view on project location (Bogor / Cibinong area)
+      map = L.map('map', {
+        zoomControl: true,
+        attributionControl: true,
+      }).setView([-6.4162, 106.8315], 16);
+
+      // Define Base Tile Layers
+      baseTileLayers = {
+        osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }),
+        satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19,
+          attribution: '&copy; Esri, Maxar, Earthstar Geographics'
+        }),
+        topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+          maxZoom: 17,
+          attribution: '&copy; OpenTopoMap contributors'
+        }),
+        carto: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          maxZoom: 19,
+          attribution: '&copy; CartoDB'
+        }),
+      };
+
+      // Default: Satellite for rich GIS view
+      baseTileLayers.satellite.addTo(map);
+      baseTileLayer = baseTileLayers.satellite;
+
+      // Layer Groups
+      layerIndukGroup = L.featureGroup().addTo(map);
+      layerBidangGroup = L.featureGroup().addTo(map);
+      layerKkprGroup = L.featureGroup().addTo(map);
+      drawnItems = L.featureGroup().addTo(map);
+
+      // Leaflet Draw Control
+      drawControl = new L.Control.Draw({
+        edit: {
+          featureGroup: drawnItems,
+          remove: true,
+        },
+        draw: {
+          polygon: {
+            allowIntersection: false,
+            showArea: true,
+            shapeOptions: {
+              color: '#8b5cf6',
+              fillColor: '#a78bfa',
+              fillOpacity: 0.45,
+              weight: 3,
+            }
+          },
+          rectangle: false,
+          circle: false,
+          circlemarker: false,
+          marker: false,
+          polyline: false,
+        }
+      });
+      map.addControl(drawControl);
+
+      // Snapping Engine Integration
+      setupSnappingListeners();
+
+      // Draw Events
+      map.on(L.Draw.Event.CREATED, function (e) {
+        const layer = e.layer;
+        drawnItems.addLayer(layer);
+        activeDrawnLayer = layer;
+        promptSaveDrawnPolygon(layer);
+      });
+
+      map.on(L.Draw.Event.EDITED, function (e) {
+        e.layers.eachLayer(l => {
+          activeDrawnLayer = l;
+          promptSaveDrawnPolygon(l, true);
+        });
+      });
+
+      map.on(L.Draw.Event.DELETED, function () {
+        activeDrawnLayer = null;
+        showToast('Objek gambar dihapus.');
+      });
+
+      // Load dropdowns and data
+      loadLokasiDropdown();
+      loadSpatialLayers();
+    }
+
+    // Switch Base Map
+    function switchBaseMap(type) {
+      if (baseTileLayers[type]) {
+        map.removeLayer(baseTileLayer);
+        baseTileLayers[type].addTo(map);
+        baseTileLayer = baseTileLayers[type];
+      }
+    }
+
+    // Fullscreen Toggle
+    document.getElementById('btnToggleFullscreen').addEventListener('click', () => {
+      const elem = document.getElementById('mapWrapper');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => {
+          showToast('Fullscreen tidak diizinkan: ' + err.message, true);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Zoom to Fit All Layers
+    document.getElementById('btnFitBounds').addEventListener('click', () => {
+      fitMapToAllLayers();
+    });
+
+    function fitMapToAllLayers() {
+      const bounds = L.latLngBounds([]);
+      if (layerIndukGroup.getLayers().length > 0) bounds.extend(layerIndukGroup.getBounds());
+      if (layerBidangGroup.getLayers().length > 0) bounds.extend(layerBidangGroup.getBounds());
+      if (layerKkprGroup.getLayers().length > 0) bounds.extend(layerKkprGroup.getBounds());
+      if (drawnItems.getLayers().length > 0) bounds.extend(drawnItems.getBounds());
+
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [35, 35] });
+      } else {
+        map.setView([-6.4162, 106.8315], 16);
+      }
+    }
+
+    // ==================== SNAPPING ENGINE ====================
+    // Rebuilds lookup structures for Endpoint Snap & Nearest Snap
+    function updateSnappingIndex() {
+      allVertexPoints = [];
+      allLineSegments = [];
+
+      function extractPointsAndSegments(layer) {
+        if (!layer.getLatLngs) return;
+        const latlngs = layer.getLatLngs();
+        const rings = Array.isArray(latlngs[0]) ? latlngs[0] : latlngs;
+
+        for (let i = 0; i < rings.length; i++) {
+          const pt = rings[i];
+          allVertexPoints.push(pt);
+          const nextPt = rings[(i + 1) % rings.length];
+          allLineSegments.push([pt, nextPt]);
+        }
+      }
+
+      layerIndukGroup.eachLayer(extractPointsAndSegments);
+      layerBidangGroup.eachLayer(extractPointsAndSegments);
+      layerKkprGroup.eachLayer(extractPointsAndSegments);
+      drawnItems.eachLayer(extractPointsAndSegments);
+    }
+
+    function setupSnappingListeners() {
+      let snapIndicator = null;
+
+      map.on('mousemove', function (e) {
+        const endpointEnabled = document.getElementById('chkEndpointSnap').checked;
+        const nearestEnabled = document.getElementById('chkNearestSnap').checked;
+        if (!endpointEnabled && !nearestEnabled) {
+          if (snapIndicator) { map.removeLayer(snapIndicator); snapIndicator = null; }
+          return;
+        }
+
+        const mouseLatLng = e.latlng;
+        const mousePoint = map.latLngToLayerPoint(mouseLatLng);
+        const snapDistanceThreshold = 18; // 18 pixels radius tolerance
+
+        let snappedLatLng = null;
+
+        // 1. Try Endpoint Snap First (Highest Priority)
+        if (endpointEnabled && allVertexPoints.length > 0) {
+          let minVertexDist = Infinity;
+          for (const v of allVertexPoints) {
+            const vPoint = map.latLngToLayerPoint(v);
+            const dist = mousePoint.distanceTo(vPoint);
+            if (dist < snapDistanceThreshold && dist < minVertexDist) {
+              minVertexDist = dist;
+              snappedLatLng = v;
+            }
+          }
+        }
+
+        // 2. If no endpoint snapped, try Nearest Snap (Edge Line)
+        if (!snappedLatLng && nearestEnabled && allLineSegments.length > 0) {
+          let minSegDist = Infinity;
+          for (const [p1, p2] of allLineSegments) {
+            const pt1 = map.latLngToLayerPoint(p1);
+            const pt2 = map.latLngToLayerPoint(p2);
+            const closest = L.LineUtil.closestPointOnSegment(mousePoint, pt1, pt2);
+            const dist = mousePoint.distanceTo(closest);
+            if (dist < snapDistanceThreshold && dist < minSegDist) {
+              minSegDist = dist;
+              snappedLatLng = map.layerPointToLatLng(closest);
+            }
+          }
+        }
+
+        // Render Snap Indicator Dot
+        if (snappedLatLng) {
+          if (!snapIndicator) {
+            snapIndicator = L.circleMarker(snappedLatLng, {
+              radius: 6,
+              fillColor: '#2563eb',
+              color: '#ffffff',
+              weight: 2,
+              fillOpacity: 0.9,
+              interactive: false,
+            }).addTo(map);
+          } else {
+            snapIndicator.setLatLng(snappedLatLng);
+          }
+        } else {
+          if (snapIndicator) {
+            map.removeLayer(snapIndicator);
+            snapIndicator = null;
+          }
+        }
+      });
+    }
+
+    // ==================== LOAD & RENDER LAYERS ====================
+    async function loadSpatialLayers() {
+      const filterLokasi = document.getElementById('filterLokasiSelect').value;
+      let url = '/api/pemetaan/layers';
+      if (filterLokasi && filterLokasi !== 'Semua') {
+        url += `?kodeLokasi=${encodeURIComponent(filterLokasi)}`;
+      }
+
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        if (!json.success || !json.layers) {
+          showToast('Gagal memuat layer spasial', true);
+          return;
+        }
+
+        // Clear existing
+        layerIndukGroup.clearLayers();
+        layerBidangGroup.clearLayers();
+        layerKkprGroup.clearLayers();
+
+        // 1. Render Layer Induk
+        const indukData = json.layers.induk;
+        document.getElementById('badgeCountInduk').textContent = indukData.total;
+        if (indukData.features) {
+          L.geoJSON(indukData, {
+            style: {
+              color: '#059669',
+              fillColor: '#10b981',
+              fillOpacity: 0.12,
+              weight: 3,
+              dashArray: '6, 6',
+            },
+            onEachFeature: (feature, layer) => {
+              layer.on('click', () => showIndukPopup(feature, layer));
+            }
+          }).addTo(layerIndukGroup);
+        }
+
+        // 2. Render Layer Batas Bidang (With Color-Coded Payment Status)
+        const bidangData = json.layers.bidang;
+        document.getElementById('badgeCountBidang').textContent = bidangData.total;
+        document.getElementById('statTotalBidang').textContent = bidangData.total;
+
+        if (bidangData.features) {
+          L.geoJSON(bidangData, {
+            style: (feature) => {
+              const statusBayar = feature.properties?.statusBayar;
+              let color = '#ef4444'; // Belum Bayar (Merah)
+              if (statusBayar === 'Lunas') color = '#10b981'; // Lunas (Hijau)
+              else if (statusBayar === 'Parsial') color = '#f59e0b'; // Parsial (Kuning)
+              else if (statusBayar === 'Belum Deal') color = '#64748b'; // Belum Deal (Abu-abu)
+
+              return {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.45,
+                weight: 2,
+              };
+            },
+            onEachFeature: (feature, layer) => {
+              layer.on('click', () => showBidangPopup(feature, layer));
+            }
+          }).addTo(layerBidangGroup);
+        }
+
+        // Update Payment Stats
+        if (bidangData.rekapStatusBayar) {
+          const r = bidangData.rekapStatusBayar;
+          document.getElementById('statStatusBayarSummary').textContent = `${r.lunas} / ${r.parsial}`;
+        }
+
+        // 3. Render Layer KKPR (Perencanaan OSS)
+        const kkprData = json.layers.kkpr;
+        document.getElementById('badgeCountKkpr').textContent = kkprData.total;
+        document.getElementById('statTotalKkpr').textContent = kkprData.total;
+
+        if (kkprData.features) {
+          L.geoJSON(kkprData, {
+            style: {
+              color: '#7c3aed',
+              fillColor: '#8b5cf6',
+              fillOpacity: 0.4,
+              weight: 2.5,
+            },
+            onEachFeature: (feature, layer) => {
+              layer.on('click', () => showKkprPopup(feature, layer));
+            }
+          }).addTo(layerKkprGroup);
+        }
+
+        // Update overall summary
+        document.getElementById('statTotalPoligon').textContent = json.summary.totalPolygons;
+
+        // Refresh snapping lookup
+        updateSnappingIndex();
+        fitMapToAllLayers();
+      } catch (err) {
+        console.error('Error fetching spatial layers:', err);
+        showToast('Error koneksi peta: ' + err.message, true);
+      }
+    }
+
+    // Toggle layer visibility
+    function toggleLayerVisibility(layerType) {
+      if (layerType === 'induk') {
+        const checked = document.getElementById('chkLayerInduk').checked;
+        if (checked) map.addLayer(layerIndukGroup);
+        else map.removeLayer(layerIndukGroup);
+      } else if (layerType === 'bidang') {
+        const checked = document.getElementById('chkLayerBidang').checked;
+        if (checked) map.addLayer(layerBidangGroup);
+        else map.removeLayer(layerBidangGroup);
+      } else if (layerType === 'kkpr') {
+        const checked = document.getElementById('chkLayerKkpr').checked;
+        if (checked) map.addLayer(layerKkprGroup);
+        else map.removeLayer(layerKkprGroup);
+      }
+    }
+
+    // ==================== POPUP DETAILS ON CLICK ====================
+    // 1. Popup Bidang Tanah (Details, Status Bayar, Finansial)
+    function showBidangPopup(feature, layer) {
+      const p = feature.properties || {};
+      const formatRupiah = (val) => val ? 'Rp ' + Number(val).toLocaleString('id-ID') : '-';
+      const luasM2 = p.luas ? Number(p.luas).toLocaleString('id-ID') + ' m²' : '-';
+
+      let statusBadgeColor = '#ef4444';
+      if (p.statusBayar === 'Lunas') statusBadgeColor = '#10b981';
+      else if (p.statusBayar === 'Parsial') statusBadgeColor = '#f59e0b';
+      else if (p.statusBayar === 'Belum Deal') statusBadgeColor = '#64748b';
+
+      const html = `
+        <div class="popup-card">
+          <div class="popup-header">
+            <span class="popup-tag" style="background: #e0f2fe; color: #0284c7;">BIDANG TANAH</span>
+            <span class="popup-tag" style="background: ${statusBadgeColor}20; color: ${statusBadgeColor}; font-weight:800;">
+              ${p.statusBayar || 'Belum Bayar'}
+            </span>
+          </div>
+          <div class="popup-body">
+            <div class="popup-title">${p.kodeTanah}</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+              No. Bidang: <b>${p.nomorBidang || '-'}</b> | Hak: <b>${p.jenisHak || '-'}</b>
+            </div>
+
+            <table class="popup-table">
+              <tr>
+                <td>Pemilik / Pihak</td>
+                <td>: ${p.pemilik || 'Belum Terdata'}</td>
+              </tr>
+              <tr>
+                <td>Luas Bidang</td>
+                <td>: ${luasM2}</td>
+              </tr>
+              <tr>
+                <td>Status Lahan</td>
+                <td>: ${p.statusPembebasan || '-'}</td>
+              </tr>
+              <tr>
+                <td>Harga Deal</td>
+                <td>: ${formatRupiah(p.hargaKesepakatan)}</td>
+              </tr>
+              <tr>
+                <td>Total Dibayar</td>
+                <td>: <span style="color: #10b981;">${formatRupiah(p.totalBayar)}</span></td>
+              </tr>
+            </table>
+
+            ${p.catatan ? `<div style="margin-top:0.4rem; font-size:0.75rem; background:#f8fafc; padding:0.35rem 0.5rem; border-radius:6px; color:#475569;">${p.catatan}</div>` : ''}
+          </div>
+          <div class="popup-footer">
+            <a href="/pembebasan.html?bidang=${encodeURIComponent(p.kodeTanah)}" class="btn-tool" style="font-size:0.75rem; background:#059669; color:#fff; border:none; text-decoration:none;">
+              💰 Transaksi
+            </a>
+            <a href="/bidang-tanah.html" class="btn-tool" style="font-size:0.75rem; text-decoration:none;">
+              🏞️ Buka Bidang
+            </a>
+          </div>
+        </div>
+      `;
+
+      layer.bindPopup(html, { offset: [0, -5] }).openPopup();
+    }
+
+    // 2. Popup Lokasi Induk
+    function showIndukPopup(feature, layer) {
+      const p = feature.properties || {};
+      const formatNum = (val) => val ? Number(val).toLocaleString('id-ID') + ' m²' : '-';
+
+      const html = `
+        <div class="popup-card">
+          <div class="popup-header">
+            <span class="popup-tag" style="background: #d1fae5; color: #047857;">LOKASI INDUK</span>
+            <span class="popup-tag" style="background: #e2e8f0; color: #334155;">${p.status || 'Aktif'}</span>
+          </div>
+          <div class="popup-body">
+            <div class="popup-title">${p.namaLokasi || p.kodeLokasi}</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+              ${p.desa || ''}, Kec. ${p.kecamatan || ''}, ${p.kabupaten || ''}
+            </div>
+
+            <table class="popup-table">
+              <tr>
+                <td>Luas Induk</td>
+                <td>: ${formatNum(p.luasInduk)}</td>
+              </tr>
+              <tr>
+                <td>Terpetakan</td>
+                <td>: ${formatNum(p.totalLuasBidang)}</td>
+              </tr>
+              <tr>
+                <td>Sisa Luas</td>
+                <td>: ${formatNum(p.sisaLuas)}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="popup-footer">
+            <a href="/lokasi.html" class="btn-tool" style="font-size:0.75rem; text-decoration:none;">
+              📍 Buka Lokasi Induk
+            </a>
+          </div>
+        </div>
+      `;
+
+      layer.bindPopup(html, { offset: [0, -5] }).openPopup();
+    }
+
+    // 3. Popup KKPR
+    function showKkprPopup(feature, layer) {
+      const p = feature.properties || {};
+      const formatNum = (val) => val ? Number(val).toLocaleString('id-ID') + ' m²' : '-';
+
+      const html = `
+        <div class="popup-card">
+          <div class="popup-header">
+            <span class="popup-tag" style="background: #ede9fe; color: #7c3aed;">KKPR (OSS RBA)</span>
+            <span class="popup-tag" style="background: #dbeafe; color: #1e40af;">${p.status || 'Draft'}</span>
+          </div>
+          <div class="popup-body">
+            <div class="popup-title">${p.namaKegiatan || p.kodeKkpr}</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+              Kode: <b>${p.kodeKkpr}</b> | No. Izin: <b>${p.nomorIzin || '-'}</b>
+            </div>
+
+            <table class="popup-table">
+              <tr>
+                <td>Kategori</td>
+                <td>: ${p.kategori || '-'}</td>
+              </tr>
+              <tr>
+                <td>Pemohon</td>
+                <td>: ${p.pemohon || '-'}</td>
+              </tr>
+              <tr>
+                <td>Luas Rencana</td>
+                <td>: ${formatNum(p.luasRencana)}</td>
+              </tr>
+            </table>
+
+            ${p.catatan ? `<div style="margin-top:0.4rem; font-size:0.75rem; background:#f8fafc; padding:0.35rem 0.5rem; border-radius:6px; color:#475569;">${p.catatan}</div>` : ''}
+          </div>
+          <div class="popup-footer">
+            <button onclick="downloadExport('kkpr', 'shp', '${p.id || p.kodeKkpr}')" class="btn-tool" style="font-size:0.75rem; background:#7c3aed; color:#fff; border:none;">
+              📦 Download SHP OSS
+            </button>
+            <button onclick="deleteKkprRecord(${p.id})" class="btn-tool" style="font-size:0.75rem; color:#dc2626;">
+              🗑️ Hapus
+            </button>
+          </div>
+        </div>
+      `;
+
+      layer.bindPopup(html, { offset: [0, -5] }).openPopup();
+    }
+
+    // ==================== DIGITASI TRIGGER & SAVE ====================
+    document.getElementById('btnStartDraw').addEventListener('click', () => {
+      const polygonDrawer = new L.Draw.Polygon(map, drawControl.options.draw.polygon);
+      polygonDrawer.enable();
+      showToast('Mode gambar aktif. Klik pada peta untuk membuat titik polygon.');
+    });
+
+    document.getElementById('btnToggleEdit').addEventListener('click', () => {
+      isEditMode = !isEditMode;
+      const btn = document.getElementById('btnToggleEdit');
+      if (isEditMode) {
+        btn.classList.add('btn-tool-active');
+        btn.textContent = '💾 Selesai Edit';
+        drawnItems.eachLayer(l => { if (l.editing) l.editing.enable(); });
+        layerKkprGroup.eachLayer(l => { if (l.editing) l.editing.enable(); });
+        showToast('Mode edit vertex aktif. Geser titik sudut untuk menyesuaikan batas.');
+      } else {
+        btn.classList.remove('btn-tool-active');
+        btn.textContent = '✏️ Edit Vertex';
+        drawnItems.eachLayer(l => { if (l.editing) l.editing.disable(); });
+        layerKkprGroup.eachLayer(l => { if (l.editing) l.editing.disable(); });
+        showToast('Mode edit dinonaktifkan.');
+      }
+    });
+
+    // Prompt Save Polygon
+    function promptSaveDrawnPolygon(layer, isUpdate = false) {
+      const targetLayer = document.getElementById('digitasiTargetLayer').value;
+      const geojson = layer.toGeoJSON().geometry;
+
+      if (targetLayer === 'kkpr') {
+        // Open KKPR Modal with geometry prefilled
+        currentEditingKkprId = null;
+        document.getElementById('kkprForm').reset();
+        document.getElementById('kkprKode').value = `KKPR-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`;
+        document.getElementById('kkprModalTitle').textContent = '📋 Simpan Hasil Digitasi KKPR (OSS)';
+
+        // Estimate Area in m2
+        if (layer.getLatLngs) {
+          const areaM2 = L.GeometryUtil ? L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) : 0;
+          if (areaM2 > 0) {
+            document.getElementById('kkprLuasRencana').value = areaM2.toFixed(2);
+          }
+        }
+
+        document.getElementById('kkprModal').classList.add('show');
+      } else {
+        const id = prompt(`Masukkan Kode ${targetLayer === 'bidang' ? 'Bidang Tanah (Contoh: BDT-2026-001)' : 'Lokasi Induk (Contoh: LOK-2026-001)'} untuk menyimpan polygon:`);
+        if (!id) return;
+
+        fetch('/api/pemetaan/polygon', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            target: targetLayer,
+            id: id.trim(),
+            geojson,
+          })
+        })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            showToast(res.message || 'Polygon berhasil disimpan!');
+            drawnItems.clearLayers();
+            loadSpatialLayers();
+          } else {
+            showToast(res.message || 'Gagal menyimpan polygon', true);
+          }
+        })
+        .catch(e => showToast('Error: ' + e.message, true));
+      }
+    }
+
+    // ==================== KKPR CRUD MODAL ====================
+    document.getElementById('btnOpenKkprModal').addEventListener('click', () => {
+      currentEditingKkprId = null;
+      document.getElementById('kkprForm').reset();
+      document.getElementById('kkprKode').value = `KKPR-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`;
+      document.getElementById('kkprModalTitle').textContent = '📋 Tambah Perencanaan KKPR (OSS)';
+      document.getElementById('kkprModal').classList.add('show');
+    });
+
+    function closeKkprModal() {
+      document.getElementById('kkprModal').classList.remove('show');
+    }
+
+    async function saveKkprData() {
+      const kodeKkpr = document.getElementById('kkprKode').value.trim();
+      const namaKegiatan = document.getElementById('kkprNamaKegiatan').value.trim();
+      if (!kodeKkpr || !namaKegiatan) {
+        showToast('Kode KKPR dan Nama Kegiatan wajib diisi', true);
+        return;
+      }
+
+      let geojson = null;
+      if (activeDrawnLayer) {
+        geojson = activeDrawnLayer.toGeoJSON().geometry;
+      }
+
+      const payload = {
+        kodeKkpr,
+        namaKegiatan,
+        kategori: document.getElementById('kkprKategori').value,
+        pemohon: document.getElementById('kkprPemohon').value.trim() || null,
+        nomorIzin: document.getElementById('kkprNomorIzin').value.trim() || null,
+        luasRencana: parseFloat(document.getElementById('kkprLuasRencana').value) || 0,
+        status: document.getElementById('kkprStatus').value,
+        catatan: document.getElementById('kkprCatatan').value.trim() || null,
+        ...(geojson ? { geojson } : {}),
+      };
+
+      try {
+        const res = await fetch('/api/pemetaan/kkpr', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Data KKPR berhasil disimpan!');
+          closeKkprModal();
+          drawnItems.clearLayers();
+          activeDrawnLayer = null;
+          loadSpatialLayers();
+        } else {
+          showToast(json.message || 'Gagal menyimpan KKPR', true);
+        }
+      } catch (err) {
+        showToast('Error koneksi: ' + err.message, true);
+      }
+    }
+
+    async function deleteKkprRecord(id) {
+      if (!confirm('Apakah Anda yakin ingin menghapus data KKPR ini?')) return;
+      try {
+        const res = await fetch(`/api/pemetaan/kkpr/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('Data KKPR berhasil dihapus.');
+          loadSpatialLayers();
+        } else {
+          showToast(json.message || 'Gagal menghapus KKPR', true);
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message, true);
+      }
+    }
+
+    // ==================== EXPORT & DOWNLOAD ====================
+    function downloadExport(layer = 'kkpr', format = 'shp', id = '') {
+      let url = `/api/pemetaan/export?layer=${encodeURIComponent(layer)}&format=${encodeURIComponent(format)}`;
+      if (id) url += `&id=${encodeURIComponent(id)}`;
+
+      showToast(`Mempersiapkan download file ${format.toUpperCase()}...`);
+      window.location.href = url;
+    }
+
+    // ==================== IMPORT MODAL & LOGIC ====================
+    document.getElementById('btnOpenImportModal').addEventListener('click', () => {
+      selectedImportFile = null;
+      document.getElementById('importPreviewStatus').style.display = 'none';
+      document.getElementById('btnExecuteImport').disabled = true;
+      document.getElementById('importModal').classList.add('show');
+    });
+
+    function closeImportModal() {
+      document.getElementById('importModal').classList.remove('show');
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      selectedImportFile = file;
+
+      const preview = document.getElementById('importPreviewStatus');
+      preview.style.display = 'block';
+      preview.innerHTML = `File terpilih: <b>${file.name}</b> (${(file.size / 1024).toFixed(1)} KB)`;
+      document.getElementById('btnExecuteImport').disabled = false;
+    }
+
+    // Drag and Drop
+    const dropZone = document.getElementById('dropZone');
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        selectedImportFile = e.dataTransfer.files[0];
+        const preview = document.getElementById('importPreviewStatus');
+        preview.style.display = 'block';
+        preview.innerHTML = `File terpilih: <b>${selectedImportFile.name}</b> (${(selectedImportFile.size / 1024).toFixed(1)} KB)`;
+        document.getElementById('btnExecuteImport').disabled = false;
+      }
+    });
+
+    async function processImportFile() {
+      if (!selectedImportFile) return;
+
+      const layerCategory = document.getElementById('importCategorySelect').value;
+      const fileName = selectedImportFile.name.toLowerCase();
+      let format = 'geojson';
+
+      if (fileName.endsWith('.kml')) format = 'kml';
+      else if (fileName.endsWith('.zip')) format = 'shp';
+
+      const btn = document.getElementById('btnExecuteImport');
+      btn.disabled = true;
+      btn.textContent = 'Memproses...';
+
+      try {
+        let content;
+        if (format === 'shp') {
+          // Read as Base64 for ZIP Shapefile
+          content = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(selectedImportFile);
+          });
+        } else {
+          // Read as text for GeoJSON or KML
+          content = await selectedImportFile.text();
+        }
+
+        const res = await fetch('/api/pemetaan/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            format,
+            layerCategory,
+            content,
+            fileName: selectedImportFile.name,
+          })
+        });
+
+        const json = await res.json();
+        if (json.success) {
+          showToast(`Berhasil mengimport ${json.featureCount} polygon spasial ke ${layerCategory.toUpperCase()}!`);
+          closeImportModal();
+          loadSpatialLayers();
+        } else {
+          showToast(json.message || 'Gagal memproses file import', true);
+        }
+      } catch (err) {
+        showToast('Error parsing file: ' + err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Proses Import';
+      }
+    }
+
+    // Load Lokasi dropdown
+    async function loadLokasiDropdown() {
+      try {
+        const res = await fetch('/api/lokasi');
+        const json = await res.json();
+        if (json.success && json.data) {
+          const select = document.getElementById('filterLokasiSelect');
+          select.innerHTML = '<option value="Semua">Semua Lokasi Proyek</option>' +
+            json.data.map(l => `<option value="${l.kodeLokasi}">${l.kodeLokasi} - ${l.namaLokasi}</option>`).join('');
+        }
+      } catch (e) {
+        console.warn('Failed loading lokasi select:', e);
+      }
+    }
+
+    // Initialize Map on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initMap();
+    });
+  </script>
+</body>
+</html>
