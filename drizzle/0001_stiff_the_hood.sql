@@ -1,0 +1,23 @@
+CREATE TABLE "lokasi" (
+	"kode_lokasi" varchar(100) PRIMARY KEY NOT NULL,
+	"nama_lokasi" varchar(255) NOT NULL,
+	"alamat" text,
+	"desa" varchar(100),
+	"kecamatan" varchar(100),
+	"kabupaten" varchar(100),
+	"peruntukan" varchar(150),
+	"kondisi_lahan" text,
+	"kondisi_pasar" text,
+	"luas_target" numeric(14, 2),
+	"luas_teridentifikasi" numeric(14, 2),
+	"luas_deal" numeric(14, 2),
+	"status" varchar(50) DEFAULT 'Survey' NOT NULL,
+	"catatan" text,
+	"geojson" jsonb,
+	"luas_induk" numeric(14, 2),
+	"total_luas_bidang" numeric(14, 2) DEFAULT '0',
+	"sisa_luas" numeric(14, 2),
+	"bidang_terpetakan" jsonb,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
