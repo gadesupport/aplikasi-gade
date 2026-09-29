@@ -81,8 +81,18 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `GET /pemetaan.html` - **Antarmuka Web Kontrol Utama Pemetaan GIS**: Visualisasi spasial multi-layer (Induk, Batas Bidang, KKPR), Base Map Switcher, Snapping Presisi (Endpoint & Nearest), Digitasi Polygon, Interaksi Popup Detail Bidang saat Diklik, Import (GeoJSON, SHP ZIP, KML), serta Export Shapefile ZIP untuk upload OSS RBA
 - `GET /project.html` - **Antarmuka Web Manajemen Project**: Kontrol dan monitoring project lahan, rekap status (Perencanaan, Berjalan, Selesai, Dibatalkan), pencarian wilayah, dan form pengelolaan project
 - `GET /arsip-legal.html` - **Antarmuka Web Arsip Legal**: Katalog dokumen legalitas dan pelacakan lokasi penyimpanan fisik (Lemari, Rak, Bantek, Map/Folder) dengan wizard 2-step form dan filter status fisik
+- `GET /bast.html` - **Antarmuka Web BAST (Berita Acara Serah Terima)**: Rekapitulasi serah terima peminjaman & pengembalian berkas dokumen fisik, multi-dokumen selector, validasi QR Code & TTD Digital, serta cetak langsung ke format PDF resmi
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
+
+### Endpoint API BAST & Cetak Dokumen (`/api/bast`)
+- `GET /api/bast` - Daftar rekapitulasi BAST (mendukung pencarian `?search=`, filter kategori `?jenis=`, dan statistik ringkasan total, peminjaman, pengembalian, berkas fisik)
+- `GET /api/bast/arsip-options` - Daftar dokumen arsip legal beserta status fisik terkini untuk pemilihan multi-dokumen
+- `GET /api/bast/:id` - Detail lengkap BAST beserta daftar item dokumen yang diserah-terimakan
+- `POST /api/bast` - Buat Berita Acara Serah Terima baru (mendukung single atau multi dokumen, otomatis memperbarui status fisik dokumen pada modul Arsip Legal)
+- `DELETE /api/bast/:id` - Hapus catatan BAST
+- `GET /api/bast/:id/cetak` - **Cetak BAST Format PDF**: Menghasilkan dokumen resmi PDF secara on-the-fly dengan tata letak kop surat, nomor registrasi, pihak penyerah & penerima, tabel rincian dokumen, kolom tanda tangan, serta **QR Code Tervalidasi Sistem** untuk verifikasi digital keaslian dokumen
+
 
 ### Endpoint API Lokasi (`/api/lokasi`)
 - `GET /api/lokasi` - Daftar lokasi (mendukung query `?search=` dan `?status=`)

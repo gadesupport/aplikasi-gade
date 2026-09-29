@@ -403,3 +403,39 @@ export const arsipLegal = pgTable('arsip_legal', {
 export type ArsipLegal = typeof arsipLegal.$inferSelect;
 export type NewArsipLegal = typeof arsipLegal.$inferInsert;
 
+export const jenisBastValues = [
+  'Peminjaman',
+  'Pengembalian',
+] as const;
+
+export type JenisBast = (typeof jenisBastValues)[number];
+
+export const bast = pgTable('bast', {
+  id: serial('id').primaryKey(),
+  nomorBast: varchar('nomor_bast', { length: 100 }).notNull().unique(),
+  tanggal: timestamp('tanggal').notNull(),
+  jenis: varchar('jenis', { length: 50 }).notNull().default('Peminjaman'), // 'Peminjaman' | 'Pengembalian'
+  pihakPenyerah: varchar('pihak_penyerah', { length: 255 }).notNull(),
+  pihakPenerima: varchar('pihak_penerima', { length: 255 }).notNull(),
+  keterangan: text('keterangan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Bast = typeof bast.$inferSelect;
+export type NewBast = typeof bast.$inferInsert;
+
+export const bastDetail = pgTable('bast_detail', {
+  id: serial('id').primaryKey(),
+  idBast: integer('id_bast')
+    .notNull()
+    .references(() => bast.id, { onDelete: 'cascade' }),
+  idArsipLegal: integer('id_arsip_legal')
+    .notNull()
+    .references(() => arsipLegal.id, { onDelete: 'cascade' }),
+  catatan: text('catatan'),
+});
+
+export type BastDetail = typeof bastDetail.$inferSelect;
+export type NewBastDetail = typeof bastDetail.$inferInsert;
+

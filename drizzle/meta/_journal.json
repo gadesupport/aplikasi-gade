@@ -71,6 +71,13 @@
       "when": 1790703249712,
       "tag": "0009_huge_dust",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790704962325,
+      "tag": "0010_open_silhouette",
+      "breakpoints": true
     }
   ]
 }
