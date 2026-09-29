@@ -73,6 +73,7 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 ### Antarmuka Web & Dokumentasi
 - `GET /` & `GET /lokasi.html` - Antarmuka Web interaktif Menu Lokasi (Step 1 Formulir + Step 2 Peta Leaflet Polygon)
 - `GET /bidang-tanah.html` - Antarmuka Web interaktif Menu Bidang Tanah (Step 1 Finansial + Step 2 Peta Polygon & Checklist Legalitas)
+- `GET /pihak.html` - Antarmuka Web interaktif Manajemen Pihak / Pemilik Lahan Terintegrasi
 - `GET /swagger` - Dokumentasi API interaktif Swagger / OpenAPI
 - `GET /health` - Health check status API
 
@@ -92,5 +93,13 @@ Backend service dibangun menggunakan **Bun**, **ElysiaJS**, **Drizzle ORM**, dan
 - `PUT /api/bidang-tanah/:kodeTanah` - Perbarui informasi bidang tanah (Step 1)
 - `PATCH /api/bidang-tanah/:kodeTanah/polygon` - Perbarui polygon batas bidang & checklist legalitas (Step 2)
 - `DELETE /api/bidang-tanah/:kodeTanah` - Hapus data bidang tanah
+
+### Endpoint API Pihak / Pemilik (`/api/pihak`)
+- `GET /api/pihak` - Daftar seluruh pihak/pemilik (mendukung query `?kodeTanah=`, `?tipePihak=`, dan `?search=`)
+- `GET /api/pihak/:id` - Detail pihak/pemilik berdasarkan ID
+- `GET /api/pihak/by-bidang/:kodeTanah` - Daftar semua pihak yang berelasi dengan bidang tanah tertentu beserta rekap tipe
+- `POST /api/pihak` - Tambah data pihak/pemilik baru
+- `PUT /api/pihak/:id` - Perbarui informasi pihak/pemilik
+- `DELETE /api/pihak/:id` - Hapus data pihak/pemilik
 
 
