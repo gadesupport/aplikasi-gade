@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, varchar, numeric, jsonb, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, varchar, numeric, jsonb, integer, boolean } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -6,6 +6,8 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 255 }).notNull().unique(),
   password: text('password').notNull(),
   role: varchar('role', { length: 50 }).notNull().default('user'),
+  phone: varchar('phone', { length: 50 }),
+  avatar: text('avatar'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -502,5 +504,94 @@ export const dokumenCetakLog = pgTable('dokumen_cetak_log', {
 
 export type DokumenCetakLog = typeof dokumenCetakLog.$inferSelect;
 export type NewDokumenCetakLog = typeof dokumenCetakLog.$inferInsert;
+
+// ==========================================
+// MODUL AUDIT LOG
+// ==========================================
+
+export const actionAuditLogValues = [
+  'CREATE',
+  'UPDATE',
+  'DELETE',
+  'LOGIN',
+  'LOGOUT',
+  'CETAK',
+  'EXPORT',
+  'IMPORT',
+  'VIEW',
+] as const;
+export type ActionAuditLog = (typeof actionAuditLogValues)[number];
+
+export const auditLogs = pgTable('audit_logs', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id'),
+  userName: varchar('user_name', { length: 255 }).default('System'),
+  userRole: varchar('user_role', { length: 50 }).default('Admin'),
+  action: varchar('action', { length: 50 }).notNull(), // 'CREATE' | 'UPDATE' | 'DELETE' | etc.
+  menu: varchar('menu', { length: 100 }).notNull(), // 'Lokasi', 'Bidang Tanah', 'Audit Log', etc.
+  description: text('description').notNull(),
+  entityId: varchar('entity_id', { length: 100 }),
+  ipAddress: varchar('ip_address', { length: 50 }),
+  userAgent: text('user_agent'),
+  metadata: jsonb('metadata'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type NewAuditLog = typeof auditLogs.$inferInsert;
+
+// ==========================================
+// MODUL PENGATURAN (ROLES & PERMISSIONS)
+// ==========================================
+
+export const menuListValues = [
+  'dashboard',
+  'lokasi',
+  'bidang',
+  'pihak',
+  'survey',
+  'pembahasan',
+  'legalitas',
+  'pembebasan',
+  'pemetaan',
+  'project',
+  'arsip',
+  'bast',
+  'laporan',
+  'dokumen',
+  'audit-log',
+  'pengaturan',
+] as const;
+export type MenuList = (typeof menuListValues)[number];
+
+export const roles = pgTable('roles', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  description: text('description'),
+  isSystem: boolean('is_system').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type Role = typeof roles.$inferSelect;
+export type NewRole = typeof roles.$inferInsert;
+
+export const rolePermissions = pgTable('role_permissions', {
+  id: serial('id').primaryKey(),
+  roleId: integer('role_id')
+    .notNull()
+    .references(() => roles.id, { onDelete: 'cascade' }),
+  menu: varchar('menu', { length: 100 }).notNull(),
+  canView: boolean('can_view').default(true).notNull(),
+  canCreate: boolean('can_create').default(false).notNull(),
+  canEdit: boolean('can_edit').default(false).notNull(),
+  canDelete: boolean('can_delete').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type RolePermission = typeof rolePermissions.$inferSelect;
+export type NewRolePermission = typeof rolePermissions.$inferInsert;
+
 
 
